@@ -47,6 +47,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
             catch (Exception ex)
             {
+                Log.Fatal(ex,"讀取使用者資料失敗");
+
                 MessageBox.Show(ex.Message);
             }
         }
