@@ -16,6 +16,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static Volo.Abp.Identity.IdentityPermissions;
 using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+//using Microsoft.Extensions.Logging;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
@@ -32,31 +33,54 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             _identityUserAppService = serviceProvider.GetRequiredService<IIdentityUserAppService>();
             _accountAppService = serviceProvider.GetRequiredService<IAccountAppService>();
             _demo = serviceProvider.GetRequiredService<ClientDemoService>();
-            
+
             InitializeComponent();
         }
         private async void btnGetProfile_Click(object sender, EventArgs e)
         {
-            var profile = await _profileAppService.GetAsync();
-            MessageBox.Show($"UserName: {profile.UserName}\nEmail: {profile.Email}");
+            try
+            {
+                var profile = await _profileAppService.GetAsync();
+                MessageBox.Show($"UserName: {profile.UserName}\nEmail: {profile.Email}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private async void btnGetUsers_Click(object sender, EventArgs e)
         {
-            var users = await _identityUserAppService.GetListAsync(new GetIdentityUsersInput());
-            MessageBox.Show($"Total users: {users.TotalCount}");
+            try
+            {
+                var users = await _identityUserAppService.GetListAsync(new GetIdentityUsersInput());
+                MessageBox.Show($"Total users: {users.TotalCount}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private async void btnLogin_Click(object sender, EventArgs e)
         {
-            var userLoginInfo = new UserLoginInfo()
+            try
             {
-                UserNameOrEmailAddress = "admin",
-                Password = "1q2w3E*",
-                RememberMe = true
-            };
+                var userLoginInfo = new UserLoginInfo()
+                {
+                    UserNameOrEmailAddress = "admin",
+                    Password = "1q2w3E*",
+                    RememberMe = true
+                };
 
-            var loginResult =  await _demo.LoginAsync(userLoginInfo);
+                var loginResult = await _demo.LoginAsync(userLoginInfo);
+
+                MessageBox.Show(loginResult == null? "loginResult is null" : loginResult.Description);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
     }
