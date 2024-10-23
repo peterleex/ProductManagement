@@ -16,6 +16,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static Volo.Abp.Identity.IdentityPermissions;
 using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+using Serilog.Core;
+using Serilog;
 //using Microsoft.Extensions.Logging;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -75,7 +77,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 var loginResult = await _demo.LoginAsync(userLoginInfo);
 
-                MessageBox.Show(loginResult == null? "loginResult is null" : loginResult.Description);
+                MessageBox.Show(loginResult == null ? "loginResult is null" : loginResult.Description);
             }
             catch (Exception ex)
             {
@@ -83,5 +85,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
+        private void btnLog_Click(object sender, EventArgs e)
+        {
+            Log.Information("Hello World");
+        }
     }
 }

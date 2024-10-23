@@ -11,6 +11,8 @@ using Volo.Abp.Identity.AspNetCore;
 using Autofac.Core;
 using Volo.Abp.Identity;
 using Volo.Abp.Account.Web;
+using Microsoft.Extensions.Configuration;
+using Serilog.Settings.Configuration;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 
@@ -25,18 +27,20 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        //context.Services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
-        //context.Services.AddTransient<IIdentityUserRepository, IdentityUserRepository>();
-        //context.Services.AddTransient<IOrganizationUnitRepository, OrganizationUnitRepository>();
-        //context.Services.AddTransient<IIdentityLinkUserRepository, IdentityLinkUserRepository>();
+        // Configure Serilog
+        Log.Logger = new LoggerConfiguration()
+                        //.MinimumLevel.Debug()
+                        //.WriteTo.File("Logs/龍騰數位題庫應用程式-.log", rollingInterval: RollingInterval.Day)
+                        .ReadFrom.Configuration(new ConfigurationBuilder()
+                            .AddJsonFile("appsettings.json")
+                            .Build())
+                        .CreateLogger();
 
         // Configure logging
         context.Services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.ClearProviders();
-            loggingBuilder.AddConsole();
             loggingBuilder.AddSerilog();
-            //loggingBuilder.AddFile("Logs/app-{Date}.txt"); // Requires Serilog or other file logging provider
         });
 
         PreConfigure<AbpHttpClientBuilderOptions>(options =>
