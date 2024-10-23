@@ -8,19 +8,28 @@ using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Modularity;
 using Serilog;
 using Volo.Abp.Identity.AspNetCore;
+using Autofac.Core;
+using Volo.Abp.Identity;
+using Volo.Abp.Account.Web;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 
 [DependsOn(
     typeof(AbpAutofacModule),
     typeof(ProductManagementHttpApiClientModule),
+    typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpHttpClientIdentityModelModule)
     )]
-[DependsOn(typeof(AbpIdentityAspNetCoreModule))]
+    [DependsOn(typeof(AbpAccountWebModule))]
     public class ProductManagementWinFormApiClientModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        //context.Services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
+        //context.Services.AddTransient<IIdentityUserRepository, IdentityUserRepository>();
+        //context.Services.AddTransient<IOrganizationUnitRepository, OrganizationUnitRepository>();
+        //context.Services.AddTransient<IIdentityLinkUserRepository, IdentityLinkUserRepository>();
+
         // Configure logging
         context.Services.AddLogging(loggingBuilder =>
         {

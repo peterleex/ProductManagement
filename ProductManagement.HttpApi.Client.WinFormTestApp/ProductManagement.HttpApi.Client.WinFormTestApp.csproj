@@ -31,6 +31,7 @@
     <PackageReference Include="Serilog" Version="4.0.2" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="Volo.Abp.Account.Web" Version="8.3.1" />
     <PackageReference Include="Volo.Abp.Autofac" Version="8.3.1" />
     <PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="8.3.1" />
     <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="8.3.1" />

@@ -7,7 +7,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Users;
 using System.Net.Http.Json;
-using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 
@@ -19,14 +19,12 @@ public class ClientDemoService : ITransientDependency
     private readonly ICurrentUser _currentUser;
     private readonly IAccountAppService _accountAppService;
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly AbpSignInManager _abpSignInManager;
     public ClientDemoService(
         IProfileAppService profileAppService,
         IIdentityUserAppService identityUserAppService,
         ILogger<ClientDemoService> logger,
         ICurrentUser currentUser,
         IAccountAppService accountAppService,
-        //AbpSignInManager abpSignInManager,
         IHttpClientFactory httpClientFactory
         )
     {
@@ -36,25 +34,19 @@ public class ClientDemoService : ITransientDependency
         _currentUser = currentUser;
         _accountAppService = accountAppService;
         _httpClientFactory = httpClientFactory;
-        //_abpSignInManager = abpSignInManager;
     }
 
-    //public async Task LoginAsync(string username, string password)
-    //{
-    //    var client = _httpClientFactory.CreateClient();
-    //    var loginInput = new
-    //    {
-    //        UserNameOrEmailAddress = username,
-    //        Password = password
-    //    };
+    public async Task<AbpLoginResult?> LoginAsync(UserLoginInfo userLoginInfo)
+    {
+        var client = _httpClientFactory.CreateClient();
 
-    //    var response = await client.PostAsJsonAsync("https://localhost:44362/api/account/login", loginInput);
-    //    response.EnsureSuccessStatusCode();
+        var response = await client.PostAsJsonAsync("https://localhost:44362/api/account/login", userLoginInfo);
+        response.EnsureSuccessStatusCode();
 
-    //    var loginResult = await response.Content.ReadFromJsonAsync<LoginResult>();
+        var loginResult = await response.Content.ReadFromJsonAsync<AbpLoginResult>();
 
-    //    var result = $"result : {loginResult?.result} , discription:  {loginResult?.description}";
-    //}
+        return loginResult;
+    }
 
     public async Task LogoutAsync()
     {
@@ -62,12 +54,6 @@ public class ClientDemoService : ITransientDependency
 
         var response = await client.GetAsync("https://localhost:44362/api/account/logout");
         response.EnsureSuccessStatusCode();
-    }
-
-    public async Task LoginAsync(string username, string password)
-    {
-        //var signInResult = await _abpSignInManager.PasswordSignInAsync(
-        //    username, password, isPersistent:true, lockoutOnFailure:false);
     }
 
     private class LoginResult

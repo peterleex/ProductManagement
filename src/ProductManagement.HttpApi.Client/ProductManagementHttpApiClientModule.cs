@@ -18,7 +18,6 @@ namespace ProductManagement;
     typeof(AbpAccountHttpApiClientModule),
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpTenantManagementHttpApiClientModule),
-    typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpSettingManagementHttpApiClientModule)
 )]
 [DependsOn(typeof(AbpIdentityAspNetCoreModule))]
