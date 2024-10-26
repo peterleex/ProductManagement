@@ -13,6 +13,10 @@ using Volo.Abp.Identity;
 using Volo.Abp.Account.Web;
 using Microsoft.Extensions.Configuration;
 using Serilog.Settings.Configuration;
+using System.Reflection;
+using Asp.Versioning;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 
@@ -27,13 +31,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        // Get application version
+        var appVersion = GetAppFileVersion();
+
         // Configure Serilog
         Log.Logger = new LoggerConfiguration()
-                        //.MinimumLevel.Debug()
-                        //.WriteTo.File("Logs/龍騰數位題庫應用程式-.log", rollingInterval: RollingInterval.Day)
                         .ReadFrom.Configuration(new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
                             .Build())
+                        .Enrich.WithProperty("AppVersion", appVersion)
                         .CreateLogger();
 
         // Configure logging
@@ -52,5 +58,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp;
                 );
             });
         });
+    }
+
+    public static string GetAppFileVersion()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+        return fileVersionInfo.FileVersion!;
     }
 }
