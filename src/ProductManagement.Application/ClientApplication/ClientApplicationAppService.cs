@@ -12,17 +12,20 @@ namespace ProductManagement.ClientApplication
     public class ClientApplicationAppService : ProductManagementAppService, IClientApplicationAppService
     {
         private readonly ClientApplicaionOptions _clientAppSettings;
-
-        public ClientApplicationAppService(IOptions<ClientApplicaionOptions> clientAppSettings)
+        private readonly IOptionsMonitor<ClientApplicaionOptions> _clientAppSettingsMonitor;
+        public ClientApplicationAppService(
+            IOptions<ClientApplicaionOptions> clientAppSettings,
+            IOptionsMonitor<ClientApplicaionOptions> clientAppSettingsMonitor)
         {
             _clientAppSettings = clientAppSettings.Value;
+            _clientAppSettingsMonitor = clientAppSettingsMonitor;
         }
 
 
         public async Task<ClientApplicaionOptions> GetAsync()
         {
             //var clientSetting = new ClientApplicaionSettingDto { ClientAppFilePath = "C:", ClientAppVersion = "1.0.0" };
-            return await Task.FromResult(_clientAppSettings);
+            return await Task.FromResult(_clientAppSettingsMonitor.CurrentValue);
         }
     }
 }
