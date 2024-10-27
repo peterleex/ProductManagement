@@ -1,4 +1,5 @@
-﻿using ProductManagement;
+﻿using Microsoft.Extensions.Options;
+using ProductManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,18 @@ namespace ProductManagement.ClientApplication
 {
     public class ClientApplicationAppService : ProductManagementAppService, IClientApplicationAppService
     {
-        public async Task<ClientApplicaionSettingDto> GetAsync()
+        private readonly ClientApplicaionOptions _clientAppSettings;
+
+        public ClientApplicationAppService(IOptions<ClientApplicaionOptions> clientAppSettings)
         {
-            var clientSetting = new ClientApplicaionSettingDto { ClientAppFilePath = "C:", ClientAppVersion = "1.0.0" };
-            return await Task.FromResult(clientSetting);
+            _clientAppSettings = clientAppSettings.Value;
+        }
+
+
+        public async Task<ClientApplicaionOptions> GetAsync()
+        {
+            //var clientSetting = new ClientApplicaionSettingDto { ClientAppFilePath = "C:", ClientAppVersion = "1.0.0" };
+            return await Task.FromResult(_clientAppSettings);
         }
     }
 }

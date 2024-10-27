@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProductManagement.ClientApplication
 {
-    public class ClientApplicaionSettingDto
+    public class ClientApplicaionOptions
     {
         public string ClientAppVersion { get; set; } = "";
         public string ClientAppFilePath { get; set; } = "";

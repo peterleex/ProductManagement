@@ -10,6 +10,6 @@ namespace ProductManagement.ClientApplication
 {
     public interface IClientApplicationAppService: IApplicationService
     {
-        Task<ClientApplicaionSettingDto> GetAsync();
+        Task<ClientApplicaionOptions> GetAsync();
     }
 }

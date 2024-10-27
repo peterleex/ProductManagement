@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProductManagement.ClientApplication;
 using Serilog;
 using Serilog.Events;
 
@@ -34,7 +35,9 @@ public class Program
                         .WriteTo.Async(c => c.Console())
                         .WriteTo.Async(c => c.AbpStudio(services));
                 });
+
             builder.Services.Configure<ClientApplicaionOptions>(builder.Configuration.GetSection("ClientAppSettings"));
+
             await builder.AddApplicationAsync<ProductManagementWebModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
