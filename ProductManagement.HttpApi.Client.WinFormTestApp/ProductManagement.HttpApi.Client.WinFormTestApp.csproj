@@ -9,6 +9,8 @@
 		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
 		<AssemblyVersion></AssemblyVersion>
 		<FileVersion>1.0.0.2</FileVersion>
+		<SatelliteResourceLanguages>zh-Hant</SatelliteResourceLanguages>
+		<AssemblyName>龍騰數位題庫應用程式</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

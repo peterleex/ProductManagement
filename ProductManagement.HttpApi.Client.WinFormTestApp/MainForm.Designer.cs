@@ -33,6 +33,7 @@
             btnLogin = new Button();
             btnLog = new Button();
             btnClientApplication = new Button();
+            btnRunUpdator = new Button();
             SuspendLayout();
             // 
             // btnGetProfile
@@ -81,15 +82,26 @@
             btnClientApplication.Name = "btnClientApplication";
             btnClientApplication.Size = new Size(154, 43);
             btnClientApplication.TabIndex = 3;
-            btnClientApplication.Text = "ClientApplication";
+            btnClientApplication.Text = "與 Server 比較版本號";
             btnClientApplication.UseVisualStyleBackColor = true;
             btnClientApplication.Click += btnClientApplication_Click;
+            // 
+            // btnRunUpdator
+            // 
+            btnRunUpdator.Location = new Point(461, 112);
+            btnRunUpdator.Name = "btnRunUpdator";
+            btnRunUpdator.Size = new Size(154, 43);
+            btnRunUpdator.TabIndex = 4;
+            btnRunUpdator.Text = "執行更新程式";
+            btnRunUpdator.UseVisualStyleBackColor = true;
+            btnRunUpdator.Click += btnRunUpdator_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnRunUpdator);
             Controls.Add(btnClientApplication);
             Controls.Add(btnLog);
             Controls.Add(btnLogin);
@@ -107,5 +119,6 @@
         private Button btnLogin;
         private Button btnLog;
         private Button btnClientApplication;
+        private Button btnRunUpdator;
     }
 }

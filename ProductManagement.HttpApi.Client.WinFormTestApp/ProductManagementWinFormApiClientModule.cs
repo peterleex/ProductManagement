@@ -31,15 +31,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp;
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        // Get application version
-        var appFileVersion = GetAppFileVersion();
-
         // Configure Serilog
         Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
                             .Build())
-                        .Enrich.WithProperty("AppFileVersion", appFileVersion)
+                        .Enrich.WithProperty("AppFileVersion", CurrentAppInfo.FileVer)
                         .CreateLogger();
 
         // Configure logging
@@ -58,12 +55,5 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp;
                 );
             });
         });
-    }
-
-    public static string GetAppFileVersion()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-        return fileVersionInfo.FileVersion!;
     }
 }

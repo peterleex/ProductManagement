@@ -19,6 +19,8 @@ using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Serilog.Core;
 using Serilog;
 using ProductManagement.ClientApplication;
+using Microsoft.AspNetCore.Hosting.Server;
+using System.Diagnostics;
 //using Microsoft.Extensions.Logging;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -98,10 +100,31 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private async void btnClientApplication_Click(object sender, EventArgs e)
         {
-            var clientApplication = await _clientApplicationAppService.GetAsync();
+            try
+            {
+                MessageBox.Show(await IsUpdateAvailable() ? $"Server Is Newer" : "Client is newest");
 
-            MessageBox.Show($"ClientAppVersion: {clientApplication.ClientAppVersion}\n ClientAppFilePath: {clientApplication.ClientAppFilePath}");
+            }
+            catch (Exception ex)
+            {
+                var errorStr = "與 Server 比較小程式版本失敗！";
+                MessageBox.Show(errorStr);
+                Log.Error(ex, errorStr);
+            }
+        }
 
+        private async Task<bool> IsUpdateAvailable()
+        {
+            var clientApp = await _clientApplicationAppService.GetAsync();
+            var result = CurrentAppInfo.CompareVersion(clientApp.ClientAppVersion);
+            return result < 0;
+        }
+
+        private const string _updatorFilePath = @"D:\SOURCE\LQSystem\Code\Training\ABP\ProductManagement\LQClientAppUpdator\bin\Debug\net8.0-windows\龍騰數位題庫應用程式更新程式.exe";
+        private void btnRunUpdator_Click(object sender, EventArgs e)
+        {
+            Process.Start(_updatorFilePath);
+            Application.Exit();
         }
     }
 }
