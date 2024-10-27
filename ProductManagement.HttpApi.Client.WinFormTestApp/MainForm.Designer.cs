@@ -32,6 +32,7 @@
             btnGetUsers = new Button();
             btnLogin = new Button();
             btnLog = new Button();
+            btnClientApplication = new Button();
             SuspendLayout();
             // 
             // btnGetProfile
@@ -74,11 +75,22 @@
             btnLog.UseVisualStyleBackColor = true;
             btnLog.Click += btnLog_Click;
             // 
+            // btnClientApplication
+            // 
+            btnClientApplication.Location = new Point(301, 112);
+            btnClientApplication.Name = "btnClientApplication";
+            btnClientApplication.Size = new Size(154, 43);
+            btnClientApplication.TabIndex = 3;
+            btnClientApplication.Text = "ClientApplication";
+            btnClientApplication.UseVisualStyleBackColor = true;
+            btnClientApplication.Click += btnClientApplication_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnClientApplication);
             Controls.Add(btnLog);
             Controls.Add(btnLogin);
             Controls.Add(btnGetUsers);
@@ -94,5 +106,6 @@
         private Button btnGetUsers;
         private Button btnLogin;
         private Button btnLog;
+        private Button btnClientApplication;
     }
 }

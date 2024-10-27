@@ -18,6 +18,7 @@ using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Serilog.Core;
 using Serilog;
+using ProductManagement.ClientApplication;
 //using Microsoft.Extensions.Logging;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -28,6 +29,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private readonly IIdentityUserAppService _identityUserAppService;
         private readonly IAccountAppService _accountAppService;
         private readonly ClientDemoService _demo;
+        private readonly IClientApplicationAppService _clientApplicationAppService;
+
 
         public MainForm(IServiceProvider serviceProvider)
         {
@@ -35,6 +38,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             _identityUserAppService = serviceProvider.GetRequiredService<IIdentityUserAppService>();
             _accountAppService = serviceProvider.GetRequiredService<IAccountAppService>();
             _demo = serviceProvider.GetRequiredService<ClientDemoService>();
+            _clientApplicationAppService = serviceProvider.GetRequiredService<IClientApplicationAppService>();
 
             InitializeComponent();
         }
@@ -47,7 +51,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex,"讀取使用者資料失敗");
+                Log.Fatal(ex, "讀取使用者資料失敗");
 
                 MessageBox.Show(ex.Message);
             }
@@ -90,6 +94,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void btnLog_Click(object sender, EventArgs e)
         {
             Log.Information("Hello World");
+        }
+
+        private async void btnClientApplication_Click(object sender, EventArgs e)
+        {
+            var clientApplication = await _clientApplicationAppService.GetAsync();
+
+            MessageBox.Show($"ClientAppVersion: {clientApplication.ClientAppVersion}\n ClientAppFilePath: {clientApplication.ClientAppFilePath}");
+
         }
     }
 }
