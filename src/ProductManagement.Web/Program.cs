@@ -34,6 +34,7 @@ public class Program
                         .WriteTo.Async(c => c.Console())
                         .WriteTo.Async(c => c.AbpStudio(services));
                 });
+            builder.Services.Configure<ClientApplicaionOptions>(builder.Configuration.GetSection("ClientAppSettings"));
             await builder.AddApplicationAsync<ProductManagementWebModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
