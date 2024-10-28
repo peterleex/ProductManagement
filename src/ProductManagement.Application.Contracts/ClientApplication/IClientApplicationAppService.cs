@@ -11,5 +11,6 @@ namespace ProductManagement.ClientApplication
     public interface IClientApplicationAppService: IApplicationService
     {
         Task<ClientApplicaionOptions> GetAsync();
+        Task<string> GetDownloadClientAppUrlAsync();
     }
 }
