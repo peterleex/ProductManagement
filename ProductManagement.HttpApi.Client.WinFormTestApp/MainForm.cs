@@ -7,6 +7,7 @@ using ProductManagement.ClientApplication;
 using System.Diagnostics;
 using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 using System.Security.Policy;
+using System.IO.Compression;
 
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -183,12 +184,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             try
             {
                 var url = await GetClientAppDownloadUrl();
-                await DownloadAsync(url);
-                return ClientDownloadResult.Successful;
+                return await DownloadAndUpdateAsync(url);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, LQMessage(LQCode.C0001));
+                Log.Error(ex, LQMessage(LQCode.C0007));
                 return ClientDownloadResult.Error;
             }
         }
@@ -201,13 +201,70 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private async Task DownloadAsync(string url)
+        private async Task<ClientDownloadResult> DownloadAndUpdateAsync(string url)
         {
             var downloadFilePath = LQHelper.GetDownloadFilePath(url);
             await DownloadFileAsync(url, downloadFilePath);
+            var extractPath = UnzipDownloadFile(downloadFilePath);
+            UpdateFiles(extractPath);
+            return ClientDownloadResult.Successful;
         }
 
-        private async Task DownloadFileAsync(string url, string destinationPath)
+        private static void UpdateFiles(string extractPath)
+        {
+            try
+            {
+                var files = Directory.GetFiles(extractPath, UpdateExeName, SearchOption.AllDirectories);
+
+                if (files.Length > 0)
+                {
+                    var updateExePath = files[0];
+                    Process.Start(updateExePath);
+                    Application.Exit();
+                }
+                else
+                {
+                    Log.Error("Update executable not found in the extracted files.");
+                    MessageBox.Show("Update executable not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error while updating files.");
+                MessageBox.Show("Error while updating files: " + ex.Message);
+            }
+        }
+
+        private string UnzipDownloadFile(string downloadFilePath)
+        {
+            try
+            {
+                string extractPath = LQHelper.GetExtractPath(downloadFilePath);
+
+                using ZipArchive archive = ZipFile.OpenRead(downloadFilePath);
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    string destinationPath = Path.Combine(extractPath, entry.FullName);
+                    if (string.IsNullOrEmpty(entry.Name))
+                    {
+                        Directory.CreateDirectory(destinationPath);
+                    }
+                    else
+                    {
+                        entry.ExtractToFile(destinationPath);
+                    }
+                }
+
+                return extractPath;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, LQMessage(LQCode.C0006));
+                throw;
+            }
+        }
+
+        private async Task DownloadFileAsync(string url, string downloadFilePath)
         {
             using var httpClient = new HttpClient();
             using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
@@ -217,8 +274,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var canReportProgress = totalBytes != 0;
 
             using var contentStream = await response.Content.ReadAsStreamAsync();
-            using var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
-            var buffer = new byte[8192];
+            using var fileStream = new FileStream(downloadFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+            var buffer = new byte[DownloadBufferSize];
             long totalRead = 0;
             int bytesRead;
 

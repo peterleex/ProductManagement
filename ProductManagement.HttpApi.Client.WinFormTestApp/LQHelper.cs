@@ -61,5 +61,19 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
             return downloadFilePath;
         }
+
+        public static string GetExtractPath(string downloadFilePath)
+        {
+            var extractPath = Path.Combine(Path.GetDirectoryName(downloadFilePath)!, LQDefine.ExtractPath);
+            if (Directory.Exists(extractPath))
+            {
+                Directory.Delete(extractPath, true);
+            }
+            Directory.CreateDirectory(extractPath);
+
+            Log.Information($"解壓縮檔案路徑：{extractPath}");
+
+            return extractPath;
+        }
     }
 }

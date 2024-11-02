@@ -50,4 +50,10 @@
     <ProjectReference Include="..\src\ProductManagement.HttpApi.Client\ProductManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
+	<Target Name="PostPublishActions" AfterTargets="Publish">
+		<ItemGroup>
+			<PublishedFiles Include="$(PublishDir)龍騰數位題庫應用程式.exe" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PublishedFiles)" DestinationFiles="@(PublishedFiles->'$(PublishDir)龍騰數位題庫應用程式更新程式.exe')" />
+	</Target>
 </Project>
