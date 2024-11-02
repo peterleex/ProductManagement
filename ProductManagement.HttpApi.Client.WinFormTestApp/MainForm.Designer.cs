@@ -31,9 +31,9 @@
             btnGetProfile = new Button();
             btnGetUsers = new Button();
             btnLogin = new Button();
-            btnLog = new Button();
-            btnClientApplication = new Button();
             btnRunUpdator = new Button();
+            btnDownloadClientApp = new Button();
+            progressBarDownload = new ProgressBar();
             SuspendLayout();
             // 
             // btnGetProfile
@@ -44,7 +44,7 @@
             btnGetProfile.TabIndex = 0;
             btnGetProfile.Text = "GetProfile";
             btnGetProfile.UseVisualStyleBackColor = true;
-            btnGetProfile.Click += btnGetProfile_Click;
+            btnGetProfile.Click += BtnGetProfile_Click;
             // 
             // btnGetUsers
             // 
@@ -54,7 +54,7 @@
             btnGetUsers.TabIndex = 1;
             btnGetUsers.Text = "GetUsers";
             btnGetUsers.UseVisualStyleBackColor = true;
-            btnGetUsers.Click += btnGetUsers_Click;
+            btnGetUsers.Click += BtnGetUsers_Click;
             // 
             // btnLogin
             // 
@@ -64,27 +64,7 @@
             btnLogin.TabIndex = 1;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
-            btnLogin.Click += btnLogin_Click;
-            // 
-            // btnLog
-            // 
-            btnLog.Location = new Point(141, 112);
-            btnLog.Name = "btnLog";
-            btnLog.Size = new Size(154, 43);
-            btnLog.TabIndex = 2;
-            btnLog.Text = "Log";
-            btnLog.UseVisualStyleBackColor = true;
-            btnLog.Click += btnLog_Click;
-            // 
-            // btnClientApplication
-            // 
-            btnClientApplication.Location = new Point(301, 112);
-            btnClientApplication.Name = "btnClientApplication";
-            btnClientApplication.Size = new Size(154, 43);
-            btnClientApplication.TabIndex = 3;
-            btnClientApplication.Text = "與 Server 比較版本號";
-            btnClientApplication.UseVisualStyleBackColor = true;
-            btnClientApplication.Click += btnClientApplication_Click;
+            btnLogin.Click += BtnLogin_Click;
             // 
             // btnRunUpdator
             // 
@@ -94,16 +74,33 @@
             btnRunUpdator.TabIndex = 4;
             btnRunUpdator.Text = "執行更新程式";
             btnRunUpdator.UseVisualStyleBackColor = true;
-            btnRunUpdator.Click += btnRunUpdator_Click;
+            btnRunUpdator.Click += BtnRunUpdator_Click;
+            // 
+            // btnDownloadClientApp
+            // 
+            btnDownloadClientApp.Location = new Point(141, 189);
+            btnDownloadClientApp.Name = "btnDownloadClientApp";
+            btnDownloadClientApp.Size = new Size(154, 43);
+            btnDownloadClientApp.TabIndex = 5;
+            btnDownloadClientApp.Text = "下載更新程式";
+            btnDownloadClientApp.UseVisualStyleBackColor = true;
+            btnDownloadClientApp.Click += BtnDownloadClientApp_Click;
+            // 
+            // progressBarDownload
+            // 
+            progressBarDownload.Location = new Point(141, 238);
+            progressBarDownload.Name = "progressBarDownload";
+            progressBarDownload.Size = new Size(100, 23);
+            progressBarDownload.TabIndex = 6;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(progressBarDownload);
+            Controls.Add(btnDownloadClientApp);
             Controls.Add(btnRunUpdator);
-            Controls.Add(btnClientApplication);
-            Controls.Add(btnLog);
             Controls.Add(btnLogin);
             Controls.Add(btnGetUsers);
             Controls.Add(btnGetProfile);
@@ -117,8 +114,8 @@
         private Button btnGetProfile;
         private Button btnGetUsers;
         private Button btnLogin;
-        private Button btnLog;
-        private Button btnClientApplication;
         private Button btnRunUpdator;
+        private Button btnDownloadClientApp;
+        private ProgressBar progressBarDownload;
     }
 }

@@ -1,27 +1,13 @@
-﻿//using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.AspNetCore;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using static Volo.Abp.Identity.IdentityPermissions;
-using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
-using Serilog.Core;
 using Serilog;
 using ProductManagement.ClientApplication;
-using Microsoft.AspNetCore.Hosting.Server;
 using System.Diagnostics;
-//using Microsoft.Extensions.Logging;
+using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
+using System.Security.Policy;
+
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
@@ -29,22 +15,25 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
     {
         private readonly IProfileAppService _profileAppService;
         private readonly IIdentityUserAppService _identityUserAppService;
-        private readonly IAccountAppService _accountAppService;
         private readonly ClientDemoService _demo;
         private readonly IClientApplicationAppService _clientApplicationAppService;
-
 
         public MainForm(IServiceProvider serviceProvider)
         {
             _profileAppService = serviceProvider.GetRequiredService<IProfileAppService>();
             _identityUserAppService = serviceProvider.GetRequiredService<IIdentityUserAppService>();
-            _accountAppService = serviceProvider.GetRequiredService<IAccountAppService>();
             _demo = serviceProvider.GetRequiredService<ClientDemoService>();
             _clientApplicationAppService = serviceProvider.GetRequiredService<IClientApplicationAppService>();
 
             InitializeComponent();
+            InitializeCustomComponents();
         }
-        private async void btnGetProfile_Click(object sender, EventArgs e)
+
+        private void InitializeCustomComponents()
+        {
+            WindowState = FormWindowState.Maximized;
+        }
+        private async void BtnGetProfile_Click(object sender, EventArgs e)
         {
             try
             {
@@ -59,7 +48,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private async void btnGetUsers_Click(object sender, EventArgs e)
+        private async void BtnGetUsers_Click(object sender, EventArgs e)
         {
             try
             {
@@ -72,7 +61,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private async void btnLogin_Click(object sender, EventArgs e)
+        private async void BtnLogin_Click(object sender, EventArgs e)
         {
             try
             {
@@ -93,38 +82,158 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private void btnLog_Click(object sender, EventArgs e)
-        {
-            Log.Information("Hello World");
-        }
-
-        private async void btnClientApplication_Click(object sender, EventArgs e)
+        private async Task<bool> IsUpdateAvailable()
         {
             try
             {
-                MessageBox.Show(await IsUpdateAvailable() ? $"Server Is Newer" : "Client is newest");
-
+                var clientApp = await _clientApplicationAppService.GetAsync();
+                var result = CurrentAppInfo.CompareVersion(clientApp.ClientAppVersion);
+                return result < 0;
             }
             catch (Exception ex)
             {
-                var errorStr = "與 Server 比較小程式版本失敗！";
-                MessageBox.Show(errorStr);
-                Log.Error(ex, errorStr);
+                Log.Error(ex, LQMessage(LQCode.C0000));
+                throw;
             }
         }
-
-        private async Task<bool> IsUpdateAvailable()
+        private async Task<string> GetClientAppDownloadUrl()
         {
-            var clientApp = await _clientApplicationAppService.GetAsync();
-            var result = CurrentAppInfo.CompareVersion(clientApp.ClientAppVersion);
-            return result < 0;
+            var clientAppUrl = await _clientApplicationAppService.GetDownloadClientAppUrlAsync();
+            return clientAppUrl;
         }
 
         private const string _updatorFilePath = @"D:\SOURCE\LQSystem\Code\Training\ABP\ProductManagement\LQClientAppUpdator\bin\Debug\net8.0-windows\龍騰數位題庫應用程式更新程式.exe";
-        private void btnRunUpdator_Click(object sender, EventArgs e)
+        private void BtnRunUpdator_Click(object sender, EventArgs e)
         {
             Process.Start(_updatorFilePath);
             Application.Exit();
         }
+
+        private async void BtnDownloadClientApp_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                SetControlsEnabled(false);
+
+                LQWaiting.Instance.CenterTo(this);
+
+                LQWaiting.Instance.ShowMessage(LQMessage(LQCode.C0005));
+
+                var result = await ClientUpdateCheck();
+
+                if (result == CanEnterSystemResult.No)
+                {
+                    LQHelper.ErrorMessage("you can't enter system.");
+                    Application.Exit();
+                }
+
+                LQHelper.InfoMessage("you can enter the system.");
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                LQWaiting.Instance.Release();
+                SetControlsEnabled(true);
+            }
+        }
+
+        private async Task<CanEnterSystemResult> ClientUpdateCheck()
+        {
+            var result = await CheckUpdate();
+            if (result == ClientCheckResult.CheckUpdateError)
+            {
+                LQHelper.InfoMessage(LQMessage(LQCode.C0000));
+            }
+            else if (result == ClientCheckResult.UpdateAvailable)
+            {
+                if (DialogResult.Cancel == LQHelper.ConfirmMessage(LQMessage(LQCode.C0002), LQMessage(LQCode.C0003)))
+                    return CanEnterSystemResult.No;
+
+                while (ClientDownloadResult.Error == await DownloadClientApp())
+                {
+                    if (DialogResult.Cancel == LQHelper.ConfirmMessage(LQMessage(LQCode.C0004), LQMessage(LQCode.C0003)))
+                        return CanEnterSystemResult.No;
+                }
+            }
+            return CanEnterSystemResult.Yes;
+        }
+
+        private async Task<ClientCheckResult> CheckUpdate()
+        {
+            try
+            {
+                var isUpdateAvailable = await IsUpdateAvailable();
+
+                if (!isUpdateAvailable)
+                    return ClientCheckResult.NoUpdate;
+                else
+                    return ClientCheckResult.UpdateAvailable;
+            }
+            catch (Exception)
+            {
+                return ClientCheckResult.CheckUpdateError;
+            }
+        }
+
+        private async Task<ClientDownloadResult> DownloadClientApp()
+        {
+            try
+            {
+                var url = await GetClientAppDownloadUrl();
+                await DownloadAsync(url);
+                return ClientDownloadResult.Successful;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, LQMessage(LQCode.C0001));
+                return ClientDownloadResult.Error;
+            }
+        }
+
+        private void SetControlsEnabled(bool enabled)
+        {
+            foreach (Control control in Controls)
+            {
+                control.Enabled = enabled;
+            }
+        }
+
+        private async Task DownloadAsync(string url)
+        {
+            var downloadFilePath = LQHelper.GetDownloadFilePath(url);
+            await DownloadFileAsync(url, downloadFilePath);
+        }
+
+        private async Task DownloadFileAsync(string url, string destinationPath)
+        {
+            using var httpClient = new HttpClient();
+            using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            var totalBytes = response.Content.Headers.ContentLength ?? 0L;
+            var canReportProgress = totalBytes != 0;
+
+            using var contentStream = await response.Content.ReadAsStreamAsync();
+            using var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+            var buffer = new byte[8192];
+            long totalRead = 0;
+            int bytesRead;
+
+            while ((bytesRead = await contentStream.ReadAsync(buffer)) != 0)
+            {
+                await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
+                totalRead += bytesRead;
+
+                if (canReportProgress)
+                {
+                    var progress = (int)((totalRead * 100) / totalBytes);
+                    progressBarDownload.Value = progress;
+                }
+            }
+        }
+
     }
 }

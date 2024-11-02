@@ -1,0 +1,65 @@
+﻿using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Shell;
+
+namespace ProductManagement.HttpApi.Client.WinFormTestApp
+{
+    public class LQHelper
+    {
+        public static void InfoMessage(string message, string title = "")
+        {
+            MessageBox.Show(
+               message, title,
+               MessageBoxButtons.OK,
+               MessageBoxIcon.Information);
+        }
+
+        public static void ErrorMessage(string message, string title = "")
+        {
+            MessageBox.Show(
+               message, title,
+               MessageBoxButtons.OK,
+               MessageBoxIcon.Error);
+        }
+
+        public static DialogResult ConfirmMessage(string message, string title = "")
+        {
+            return MessageBox.Show(
+                message, title,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button1);
+        }
+
+        public static void LogAndShowError(Exception ex, string message, string title = "錯誤")
+        {
+            Log.Error(ex, message);
+            ErrorMessage($"{message}\n{ex.Message}", title);
+        }
+
+        public static string GetTempPath()
+        {
+            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            if (!Directory.Exists(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+            }
+            return tempPath;
+        }
+
+        public static string GetDownloadFilePath(string url)
+        {
+            var fileName = Path.GetFileName(url);
+            var tempPath = GetTempPath();
+            var downloadFilePath = Path.Combine(tempPath, fileName);
+
+            Log.Information($"下載URL：{url}，下載檔案路徑：{downloadFilePath}");
+
+            return downloadFilePath;
+        }
+    }
+}

@@ -12,27 +12,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace ProductManagement.ClientApplication
 {
-    public class ClientApplicationAppService : ProductManagementAppService, IClientApplicationAppService
+    public class ClientApplicationAppService(
+        IOptionsMonitor<ClientApplicaionOptions> clientAppSettingsMonitor) : ProductManagementAppService, IClientApplicationAppService
     {
-        private readonly ClientApplicaionOptions _clientAppSettings;
-        private readonly IOptionsMonitor<ClientApplicaionOptions> _clientAppSettingsMonitor;
-        private readonly string _selfUrl;
-
-        public ClientApplicationAppService(
-            IOptions<ClientApplicaionOptions> clientAppSettings,
-            IConfiguration configuration,
-            IOptionsMonitor<ClientApplicaionOptions> clientAppSettingsMonitor)
-        {
-            _clientAppSettings = clientAppSettings.Value;
-            _clientAppSettingsMonitor = clientAppSettingsMonitor;
-            _selfUrl = configuration["App:SelfUrl"]!;
-        }
+        private readonly IOptionsMonitor<ClientApplicaionOptions> _clientAppSettingsMonitor = clientAppSettingsMonitor;
 
         public async Task<string> GetDownloadClientAppUrlAsync()
         {
-            var clientAppFilePath = _clientAppSettings.ClientAppFilePath;
-            
-            var fileUrl = new Uri(new Uri(_selfUrl), clientAppFilePath).ToString();
+            var clientAppFilePath = _clientAppSettingsMonitor.CurrentValue.ClientAppFilePath;
+
+            var fileUrl = new Uri(clientAppFilePath).ToString();
 
             return await Task.FromResult(fileUrl);
         }
