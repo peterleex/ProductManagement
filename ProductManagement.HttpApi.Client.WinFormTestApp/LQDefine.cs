@@ -12,6 +12,8 @@
             C0005,
             C0006,
             C0007,
+            C0008,
+            C0009,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -24,6 +26,8 @@
                     {LQCode.C0005, "正在檢查更新，請稍候..." },
                     {LQCode.C0006, "解壓檔案失敗" },
                     {LQCode.C0007, "下載檔案失敗" },
+                    {LQCode.C0008, "正在解壓：" },
+                    {LQCode.C0009, "正在下載：" },
                 };
 
         public static string LQMessage(LQCode code)

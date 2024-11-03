@@ -34,6 +34,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitializeCustomComponents()
         {
             WindowState = FormWindowState.Maximized;
+            percentageLabel.Text = string.Empty;    
         }
         private async void BtnGetProfile_Click(object sender, EventArgs e)
         {
@@ -220,7 +221,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 if (files.Length > 0)
                 {
                     var updateExePath = files[0];
-                    Process.Start(updateExePath);
+                    // 命令行參數是當前進程所在的目錄
+                    var path = Environment.ProcessPath!;
+
+                    // 執行 updateExePath，命令行參數是 path
+                    Process.Start(updateExePath, path);
+
                     Application.Exit();
                 }
                 else
@@ -236,17 +242,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private static string UnzipDownloadFile(string downloadFilePath)
+        private string UnzipDownloadFile(string downloadFilePath)
         {
             try
             {
                 string extractPath = LQHelper.GetExtractPath(downloadFilePath);
-
+                int count = 0;
                 // 處理檔名中含中文字會出現亂碼的問題
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 using FileStream fs = File.OpenRead(downloadFilePath);
                 using ZipArchive archive = new (fs, ZipArchiveMode.Read, false, Encoding.GetEncoding(950));
-                //using ZipArchive archive = ZipFile.OpenRead(downloadFilePath);
+
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
                     string destinationPath = Path.Combine(extractPath, entry.FullName);
@@ -258,6 +264,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {
                         entry.ExtractToFile(destinationPath);
                     }
+                    var progress = (int)((++count * 100) / (float)archive.Entries.Count);
+
+                    progressBarDownload.Value = progress;
+                    UpdateProgressLabel(LQMessage(LQCode.C0008));
                 }
 
                 return extractPath;
@@ -267,6 +277,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Log.Error(ex, LQMessage(LQCode.C0006));
                 throw;
             }
+        }
+
+        private void UpdateProgressLabel(string info)
+        {
+            percentageLabel.Text = $"{info}{progressBarDownload.Value * 100 / progressBarDownload.Maximum}%";
         }
 
         private async Task DownloadFileAsync(string url, string downloadFilePath)
@@ -293,6 +308,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 {
                     var progress = (int)((totalRead * 100) / totalBytes);
                     progressBarDownload.Value = progress;
+                    UpdateProgressLabel(LQMessage(LQCode.C0009));
                 }
             }
         }

@@ -57,6 +57,7 @@
             Controls.Add(progressBarUpdate);
             Name = "LQUpdator";
             Text = "LQUpdator";
+            Load += LQUpdator_Load;
             ResumeLayout(false);
             PerformLayout();
         }

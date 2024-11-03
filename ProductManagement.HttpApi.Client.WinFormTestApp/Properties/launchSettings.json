@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "ProductManagement.HttpApi.Client.WinFormTestApp": {
+      "commandName": "Project"
+    }
+  }
+}

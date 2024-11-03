@@ -34,6 +34,7 @@
             btnRunUpdator = new Button();
             btnDownloadClientApp = new Button();
             progressBarDownload = new ProgressBar();
+            percentageLabel = new Label();
             SuspendLayout();
             // 
             // btnGetProfile
@@ -88,16 +89,26 @@
             // 
             // progressBarDownload
             // 
-            progressBarDownload.Location = new Point(141, 238);
+            progressBarDownload.Location = new Point(211, 310);
             progressBarDownload.Name = "progressBarDownload";
-            progressBarDownload.Size = new Size(100, 23);
+            progressBarDownload.Size = new Size(284, 23);
             progressBarDownload.TabIndex = 6;
+            // 
+            // percentageLabel
+            // 
+            percentageLabel.AutoSize = true;
+            percentageLabel.Location = new Point(504, 314);
+            percentageLabel.Name = "percentageLabel";
+            percentageLabel.Size = new Size(42, 15);
+            percentageLabel.TabIndex = 7;
+            percentageLabel.Text = "label1";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(percentageLabel);
             Controls.Add(progressBarDownload);
             Controls.Add(btnDownloadClientApp);
             Controls.Add(btnRunUpdator);
@@ -107,6 +118,7 @@
             Name = "MainForm";
             Text = "MainForm";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -117,5 +129,6 @@
         private Button btnRunUpdator;
         private Button btnDownloadClientApp;
         private ProgressBar progressBarDownload;
+        private Label percentageLabel;
     }
 }
