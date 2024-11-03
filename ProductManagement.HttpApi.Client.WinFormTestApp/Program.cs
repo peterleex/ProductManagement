@@ -32,7 +32,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 ApplicationConfiguration.Initialize();
 
-                if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdateFileName ||
+                if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
                     Environment.GetCommandLineArgs().Length > 1)
                 {
                     Application.Run(new LQUpdator(serviceProvider));

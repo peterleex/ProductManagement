@@ -33,7 +33,7 @@
             btnLogin = new Button();
             btnRunUpdator = new Button();
             btnDownloadClientApp = new Button();
-            progressBarDownload = new ProgressBar();
+            progressBar = new ProgressBar();
             percentageLabel = new Label();
             SuspendLayout();
             // 
@@ -89,10 +89,10 @@
             // 
             // progressBarDownload
             // 
-            progressBarDownload.Location = new Point(211, 310);
-            progressBarDownload.Name = "progressBarDownload";
-            progressBarDownload.Size = new Size(284, 23);
-            progressBarDownload.TabIndex = 6;
+            progressBar.Location = new Point(211, 310);
+            progressBar.Name = "progressBarDownload";
+            progressBar.Size = new Size(284, 23);
+            progressBar.TabIndex = 6;
             // 
             // percentageLabel
             // 
@@ -109,7 +109,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(percentageLabel);
-            Controls.Add(progressBarDownload);
+            Controls.Add(progressBar);
             Controls.Add(btnDownloadClientApp);
             Controls.Add(btnRunUpdator);
             Controls.Add(btnLogin);
@@ -128,7 +128,7 @@
         private Button btnLogin;
         private Button btnRunUpdator;
         private Button btnDownloadClientApp;
-        private ProgressBar progressBarDownload;
+        private ProgressBar progressBar;
         private Label percentageLabel;
     }
 }

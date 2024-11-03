@@ -75,5 +75,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
             return extractPath;
         }
+
+        public static string CurrentProcessDirectory => Path.GetDirectoryName(Environment.ProcessPath)!;
     }
 }

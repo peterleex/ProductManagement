@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblProgress = new Label();
-            progressBarUpdate = new ProgressBar();
+            percentageLabel = new Label();
+            progressBar = new ProgressBar();
             SuspendLayout();
             // 
-            // lblProgress
+            // percentageLabel
             // 
-            lblProgress.AutoSize = true;
-            lblProgress.Location = new Point(315, 214);
-            lblProgress.Name = "lblProgress";
-            lblProgress.Size = new Size(42, 15);
-            lblProgress.TabIndex = 3;
-            lblProgress.Text = "label1";
+            percentageLabel.AutoSize = true;
+            percentageLabel.Location = new Point(526, 218);
+            percentageLabel.Name = "percentageLabel";
+            percentageLabel.Size = new Size(42, 15);
+            percentageLabel.TabIndex = 9;
+            percentageLabel.Text = "label1";
             // 
-            // progressBarUpdate
+            // progressBar
             // 
-            progressBarUpdate.Location = new Point(385, 214);
-            progressBarUpdate.Name = "progressBarUpdate";
-            progressBarUpdate.Size = new Size(100, 23);
-            progressBarUpdate.TabIndex = 2;
+            progressBar.Location = new Point(233, 214);
+            progressBar.Name = "progressBar";
+            progressBar.Size = new Size(284, 23);
+            progressBar.TabIndex = 8;
             // 
             // LQUpdator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(lblProgress);
-            Controls.Add(progressBarUpdate);
+            Controls.Add(percentageLabel);
+            Controls.Add(progressBar);
             Name = "LQUpdator";
             Text = "LQUpdator";
             Load += LQUpdator_Load;
@@ -64,7 +64,7 @@
 
         #endregion
 
-        private Label lblProgress;
-        private ProgressBar progressBarUpdate;
+        private Label percentageLabel;
+        private ProgressBar progressBar;
     }
 }

@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Account;
-using Volo.Abp.Identity;
-using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
-using Serilog;
 using ProductManagement.ClientApplication;
+using Serilog;
 using System.Diagnostics;
-using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
-using System.Security.Policy;
 using System.IO.Compression;
 using System.Text;
+using Volo.Abp.Account;
+using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+using Volo.Abp.Identity;
+using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -34,7 +33,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitializeCustomComponents()
         {
             WindowState = FormWindowState.Maximized;
-            percentageLabel.Text = string.Empty;    
+            percentageLabel.Text = string.Empty;
         }
         private async void BtnGetProfile_Click(object sender, EventArgs e)
         {
@@ -155,13 +154,37 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 if (DialogResult.Cancel == LQHelper.ConfirmMessage(LQMessage(LQCode.C0002), LQMessage(LQCode.C0003)))
                     return CanEnterSystemResult.No;
 
-                while (ClientDownloadResult.Error == await DownloadClientApp())
+                var downloadResult = await DownloadClientApp();
+                while (!downloadResult.IsSuccessful)
                 {
                     if (DialogResult.Cancel == LQHelper.ConfirmMessage(LQMessage(LQCode.C0004), LQMessage(LQCode.C0003)))
                         return CanEnterSystemResult.No;
+                    downloadResult = await DownloadClientApp();
                 }
+
+                var unzipResult = await UnzipDownloadFile(downloadResult.DownloaFilePath!);
+                while (!unzipResult.IsSuccessful)
+                {
+                    if (DialogResult.Cancel == LQHelper.ConfirmMessage(LQMessage(LQCode.C0017), LQMessage(LQCode.C0016)))
+                        return CanEnterSystemResult.No;
+                    unzipResult = await UnzipDownloadFile(downloadResult.DownloaFilePath!);
+                }
+
+                BeginToUpdate(unzipResult.ExtractPath);
             }
             return CanEnterSystemResult.Yes;
+        }
+
+        class ClientDownload
+        {
+            public string DownloaFilePath { get; set; } = string.Empty;
+            public bool IsSuccessful { get; set; }
+        }
+
+        class UnzipResult
+        {
+            public string ExtractPath { get; set; } = string.Empty;
+            public bool IsSuccessful { get; set; }
         }
 
         private async Task<ClientCheckResult> CheckUpdate()
@@ -181,17 +204,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private async Task<ClientDownloadResult> DownloadClientApp()
+        private async Task<ClientDownload> DownloadClientApp()
         {
             try
             {
                 var url = await GetClientAppDownloadUrl();
-                return await DownloadAndUpdateAsync(url);
+                return await DownloadFile(url);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, LQMessage(LQCode.C0007));
-                return ClientDownloadResult.Error;
+                return new ClientDownload { IsSuccessful = false };
             }
         }
 
@@ -203,46 +226,55 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private async Task<ClientDownloadResult> DownloadAndUpdateAsync(string url)
+        private async Task<ClientDownload> DownloadFile(string url)
         {
             var downloadFilePath = LQHelper.GetDownloadFilePath(url);
             await DownloadFileAsync(url, downloadFilePath);
-            var extractPath = UnzipDownloadFile(downloadFilePath);
-            UpdateFiles(extractPath);
-            return ClientDownloadResult.Successful;
+            return new ClientDownload
+            {
+                IsSuccessful = true,
+                DownloaFilePath = downloadFilePath
+            };
         }
 
-        private static void UpdateFiles(string extractPath)
+        private static void BeginToUpdate(string extractPath)
         {
             try
             {
-                var files = Directory.GetFiles(extractPath, UpdateExeFileName, SearchOption.AllDirectories);
-
-                if (files.Length > 0)
+                var updatorExePath = FindUpdatorFile(extractPath);
+                if (updatorExePath != null)
                 {
-                    var updateExePath = files[0];
-                    // 命令行參數是當前進程所在的目錄
-                    var path = Environment.ProcessPath!;
-
-                    // 執行 updateExePath，命令行參數是 path
-                    Process.Start(updateExePath, path);
-
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = updatorExePath,
+                        WorkingDirectory = Path.GetDirectoryName(updatorExePath)!,
+                        ArgumentList = {
+                            Path.GetDirectoryName(Environment.ProcessPath)!
+                        },
+                    };
+                    Process.Start(startInfo);
                     Application.Exit();
                 }
                 else
                 {
-                    Log.Error("Update executable not found in the extracted files.");
-                    MessageBox.Show("Update executable not found.");
+                    var msg = string.Format(LQMessage(LQCode.C0014), UpdatorExeFileName);
+                    Log.Error(msg);
+                    LQHelper.ErrorMessage(msg);
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error while updating files.");
-                MessageBox.Show("Error while updating files: " + ex.Message);
+                LQHelper.LogAndShowError(ex, LQMessage(LQCode.C0015));
             }
         }
 
-        private string UnzipDownloadFile(string downloadFilePath)
+        private static string? FindUpdatorFile(string extractPath)
+        {
+            var files = Directory.GetFiles(extractPath, UpdatorExeFileName, SearchOption.AllDirectories);
+            return files.Length > 0 ? files[0] : null;
+        }
+
+        private async Task<UnzipResult> UnzipDownloadFile(string downloadFilePath)
         {
             try
             {
@@ -251,37 +283,44 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 // 處理檔名中含中文字會出現亂碼的問題
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 using FileStream fs = File.OpenRead(downloadFilePath);
-                using ZipArchive archive = new (fs, ZipArchiveMode.Read, false, Encoding.GetEncoding(950));
+                using ZipArchive archive = new(fs, ZipArchiveMode.Read, false, Encoding.GetEncoding(950));
 
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
                     string destinationPath = Path.Combine(extractPath, entry.FullName);
                     if (string.IsNullOrEmpty(entry.Name))
                     {
-                        Directory.CreateDirectory(destinationPath);
+                        await Task.Run(() => Directory.CreateDirectory(destinationPath));
                     }
                     else
                     {
-                        entry.ExtractToFile(destinationPath);
+                        await Task.Run(() => entry.ExtractToFile(destinationPath));
                     }
                     var progress = (int)((++count * 100) / (float)archive.Entries.Count);
 
-                    progressBarDownload.Value = progress;
+                    progressBar.Value = progress;
                     UpdateProgressLabel(LQMessage(LQCode.C0008));
                 }
 
-                return extractPath;
+                return new UnzipResult
+                {
+                    IsSuccessful = true,
+                    ExtractPath = extractPath,
+                };
             }
             catch (Exception ex)
             {
                 Log.Error(ex, LQMessage(LQCode.C0006));
-                throw;
+                return new UnzipResult
+                {
+                    IsSuccessful = false,
+                };
             }
         }
 
         private void UpdateProgressLabel(string info)
         {
-            percentageLabel.Text = $"{info}{progressBarDownload.Value * 100 / progressBarDownload.Maximum}%";
+            percentageLabel.Text = $"{info}{progressBar.Value * 100 / progressBar.Maximum}%";
         }
 
         private async Task DownloadFileAsync(string url, string downloadFilePath)
@@ -307,7 +346,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 if (canReportProgress)
                 {
                     var progress = (int)((totalRead * 100) / totalBytes);
-                    progressBarDownload.Value = progress;
+                    progressBar.Value = progress;
                     UpdateProgressLabel(LQMessage(LQCode.C0009));
                 }
             }

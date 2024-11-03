@@ -14,6 +14,14 @@
             C0007,
             C0008,
             C0009,
+            C0010,
+            C0011,
+            C0012,
+            C0013,
+            C0014,
+            C0015,
+            C0016,
+            C0017,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -28,6 +36,14 @@
                     {LQCode.C0007, "下載檔案失敗" },
                     {LQCode.C0008, "正在解壓：" },
                     {LQCode.C0009, "正在下載：" },
+                    {LQCode.C0010, "移除舊檔：" },
+                    {LQCode.C0011, "複製新檔：" },
+                    {LQCode.C0012, "更新檔案失敗" },
+                    {LQCode.C0013, $"更新檔案失敗\n請確認離開「{MainExeFileProcessName}」後，點「確定」！" },
+                    {LQCode.C0014, "更新包中，缺少檔案「{0}」，請與管理員聯繫" },
+                    {LQCode.C0015, "準備更新檔案失敗，請與管理員聯繫" },
+                    {LQCode.C0016, "有錯誤" },
+                    {LQCode.C0017, "解壓縮檔案失敗，請重試。如仍有異常，請連繫管理員。" },
                 };
 
         public static string LQMessage(LQCode code)
@@ -48,7 +64,7 @@
             CheckUpdateError,
         }
 
-        public enum ClientDownloadResult
+        public enum UpdateClientResult
         {
             Error,
             Successful
@@ -58,8 +74,12 @@
 
         public const string ExtractPath = "Extracted";
 
-        public const string UpdateExeFileName = "龍騰數位題庫應用程式更新程式.exe";   
+        public const string MainExeFileName = "龍騰數位題庫應用程式.exe";
+        public static string MainExeFileProcessName => Path.GetFileNameWithoutExtension(MainExeFileName);
 
-        public static string UpdateFileName => Path.GetFileNameWithoutExtension(UpdateExeFileName);
+        public const string UpdatorExeFileName = "龍騰數位題庫應用程式更新程式.exe";   
+
+        public static string UpdatorExeFileProcessName => Path.GetFileNameWithoutExtension(UpdatorExeFileName);
+
     }
 }
