@@ -1,6 +1,6 @@
 ﻿namespace LQClientAppUpdator
 {
-    partial class MainForm
+    partial class LQUpdator
     {
         /// <summary>
         ///  Required designer variable.

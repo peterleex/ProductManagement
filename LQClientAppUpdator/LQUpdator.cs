@@ -5,9 +5,9 @@ using Serilog;
 
 namespace LQClientAppUpdator
 {
-    public partial class MainForm : Form
+    public partial class LQUpdator : Form
     {
-        public MainForm()
+        public LQUpdator()
         {
             InitializeComponent();
             WaitForClientAppToExit();

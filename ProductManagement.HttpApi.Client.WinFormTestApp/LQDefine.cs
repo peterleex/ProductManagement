@@ -54,6 +54,8 @@
 
         public const string ExtractPath = "Extracted";
 
-        public const string UpdateExeName = "龍騰數位題庫應用程式更新程式.exe";   
+        public const string UpdateExeFileName = "龍騰數位題庫應用程式更新程式.exe";   
+
+        public static string UpdateFileName => Path.GetFileNameWithoutExtension(UpdateExeFileName);
     }
 }

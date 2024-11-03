@@ -31,7 +31,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 var serviceProvider = application.ServiceProvider;
 
                 ApplicationConfiguration.Initialize();
-                Application.Run(new MainForm(serviceProvider));
+
+                // 有 CommandLine 參數時，執行更新程式，否則執行 MainForm
+                // 判斷執行程式的名稱是不是： LQClientAppUpdator.exe
+                if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdateFileName)
+                    Application.Run(new LQUpdator(serviceProvider));
+                else
+                    Application.Run(new MainForm(serviceProvider));
 
                 await application.ShutdownAsync();
             }

@@ -215,7 +215,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                var files = Directory.GetFiles(extractPath, UpdateExeName, SearchOption.AllDirectories);
+                var files = Directory.GetFiles(extractPath, UpdateExeFileName, SearchOption.AllDirectories);
 
                 if (files.Length > 0)
                 {
