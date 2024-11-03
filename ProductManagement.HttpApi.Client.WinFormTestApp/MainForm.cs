@@ -8,6 +8,7 @@ using System.Diagnostics;
 using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 using System.Security.Policy;
 using System.IO.Compression;
+using System.Text;
 
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -235,13 +236,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private string UnzipDownloadFile(string downloadFilePath)
+        private static string UnzipDownloadFile(string downloadFilePath)
         {
             try
             {
                 string extractPath = LQHelper.GetExtractPath(downloadFilePath);
 
-                using ZipArchive archive = ZipFile.OpenRead(downloadFilePath);
+                // 處理檔名中含中文字會出現亂碼的問題
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                using FileStream fs = File.OpenRead(downloadFilePath);
+                using ZipArchive archive = new (fs, ZipArchiveMode.Read, false, Encoding.GetEncoding(950));
+                //using ZipArchive archive = ZipFile.OpenRead(downloadFilePath);
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
                     string destinationPath = Path.Combine(extractPath, entry.FullName);
