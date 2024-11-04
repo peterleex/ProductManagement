@@ -83,6 +83,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ImageProcessIcon {
+            get {
+                object obj = ResourceManager.GetObject("ImageProcessIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ImageProcessProgram {
             get {
                 object obj = ResourceManager.GetObject("ImageProcessProgram", resourceCulture);
@@ -93,9 +103,39 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LoginedHeader {
+            get {
+                object obj = ResourceManager.GetObject("LoginedHeader", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap QuestionCheckIcon {
+            get {
+                object obj = ResourceManager.GetObject("QuestionCheckIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap QuestionCheckProgram {
             get {
                 object obj = ResourceManager.GetObject("QuestionCheckProgram", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap QuestionImportIcon {
+            get {
+                object obj = ResourceManager.GetObject("QuestionImportIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,4 +1,5 @@
-﻿using NUglify;
+﻿using Autofac;
+using NUglify;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Windows.Forms;
 
@@ -15,32 +16,48 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             InitForm();
             InitMenu();
         }
-
+        private const string moduleName = "Q001 小程式首頁";
         private MenuStrip menuStrip = null!;
 
         private void InitForm()
         {
-            Text = LQDefine.LQMessage(LQDefine.LQCode.C0021);
+            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
             Hide();
             ShowIcon = false;
+        }
+
+        private void CheckScreenResolution()
+        {
+            var currentScreenWidth = Screen.PrimaryScreen!.Bounds.Width;
+            var currentScreenHeight = Screen.PrimaryScreen.Bounds.Height;
+
+            if (LQDefine.PreferScreenWidth != currentScreenWidth | LQDefine.PreferScreenHeight != currentScreenHeight)
+            {
+                string info = "請調整螢幕解析度為 1920 * 1080，以確保最佳畫面呈現。";
+                LQHelper.InfoMessage(info);
+            }
         }
 
         private void InitMenu()
         {
             menuStrip = new MenuStrip();
-            ToolStripMenuItem homeMenuItem = new("首頁");
-            ToolStripMenuItem imageAppMenuItem = new("圖片小程式");
-            ToolStripMenuItem questionCheckMenuItem = new("題目檢查");
-            ToolStripMenuItem questionImportMenuItem = new("題目匯入");
-            ToolStripMenuItem greetingMenuItem = new("Mei，您好！");
+            ToolStripMenuItem HomeMenuItem = new("首頁");
+            ToolStripMenuItem ImageProcessMenuItem = new("圖片小程式");
+            ToolStripMenuItem QuestionCheckMenuItem = new("題目檢查");
+            ToolStripMenuItem QuestionImportMenuItem = new("題目匯入");
+            ToolStripMenuItem LoginedHeaderMenuItem = new("Mei，您好！");
 
-            homeMenuItem.Image = Resources.Home;
+            HomeMenuItem.Image = Resources.Home;
+            ImageProcessMenuItem.Image = Resources.ImageProcessIcon;
+            QuestionCheckMenuItem.Image = Resources.QuestionCheckIcon;
+            QuestionImportMenuItem.Image = Resources.QuestionImportIcon;
+            LoginedHeaderMenuItem.Image = Resources.LoginedHeader;
 
-            menuStrip.Items.Add(homeMenuItem);
-            menuStrip.Items.Add(imageAppMenuItem);
-            menuStrip.Items.Add(questionCheckMenuItem);
-            menuStrip.Items.Add(questionImportMenuItem);
-            menuStrip.Items.Add(greetingMenuItem);
+            menuStrip.Items.Add(HomeMenuItem);
+            menuStrip.Items.Add(ImageProcessMenuItem);
+            menuStrip.Items.Add(QuestionCheckMenuItem);
+            menuStrip.Items.Add(QuestionImportMenuItem);
+            menuStrip.Items.Add(LoginedHeaderMenuItem);
 
             // 将菜单添加到窗体
             MainMenuStrip = menuStrip;
@@ -76,6 +93,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             if (result == DialogResult.OK)
             {
                 WindowState = FormWindowState.Maximized;
+                CheckScreenResolution();
                 Show();
             }
             else

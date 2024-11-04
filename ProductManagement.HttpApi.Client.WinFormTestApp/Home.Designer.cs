@@ -39,9 +39,9 @@
             // PbImageProcessProgram
             // 
             PbImageProcessProgram.Image = Properties.Resources.ImageProcessProgram;
-            PbImageProcessProgram.Location = new Point(25, 142);
+            PbImageProcessProgram.Location = new Point(15, 142);
             PbImageProcessProgram.Name = "PbImageProcessProgram";
-            PbImageProcessProgram.Size = new Size(261, 242);
+            PbImageProcessProgram.Size = new Size(285, 262);
             PbImageProcessProgram.SizeMode = PictureBoxSizeMode.StretchImage;
             PbImageProcessProgram.TabIndex = 1;
             PbImageProcessProgram.TabStop = false;
@@ -49,19 +49,19 @@
             // PbQuestionCheckProgram
             // 
             PbQuestionCheckProgram.Image = Properties.Resources.QuestionCheckProgram;
-            PbQuestionCheckProgram.Location = new Point(316, 142);
+            PbQuestionCheckProgram.Location = new Point(306, 142);
             PbQuestionCheckProgram.Name = "PbQuestionCheckProgram";
-            PbQuestionCheckProgram.Size = new Size(261, 242);
+            PbQuestionCheckProgram.Size = new Size(285, 262);
             PbQuestionCheckProgram.SizeMode = PictureBoxSizeMode.StretchImage;
             PbQuestionCheckProgram.TabIndex = 2;
             PbQuestionCheckProgram.TabStop = false;
             // 
             // PbQuestionImportProgram
             // 
-            PbQuestionImportProgram.Image = Properties.Resources.QuestionCheckProgram;
-            PbQuestionImportProgram.Location = new Point(607, 142);
+            PbQuestionImportProgram.Image = Properties.Resources.QuestionImportProgram;
+            PbQuestionImportProgram.Location = new Point(597, 142);
             PbQuestionImportProgram.Name = "PbQuestionImportProgram";
-            PbQuestionImportProgram.Size = new Size(261, 242);
+            PbQuestionImportProgram.Size = new Size(285, 262);
             PbQuestionImportProgram.SizeMode = PictureBoxSizeMode.StretchImage;
             PbQuestionImportProgram.TabIndex = 3;
             PbQuestionImportProgram.TabStop = false;

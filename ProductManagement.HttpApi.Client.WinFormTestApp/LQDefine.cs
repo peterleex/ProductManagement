@@ -26,6 +26,7 @@
             C0019,
             C0020,
             C0021,
+            C0022,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -52,6 +53,7 @@
                     {LQCode.C0019, "檢查更新中" },
                     {LQCode.C0020, "版本更新中" },
                     {LQCode.C0021, "龍騰數位題庫應用程式" },
+                    {LQCode.C0022, $"龍騰數位題庫應用程式 V{CurrentAppInfo.FileVer} - " },
 
                     
                 };
@@ -93,5 +95,7 @@
         public static Color ProgressColor => Color.Green;
 
         public static Size UpdateWindowSize { get; internal set; } = new Size(418, 162);
+        public static int PreferScreenWidth { get; internal set; } = 1920;
+        public static int PreferScreenHeight { get; internal set; } = 1080;
     }
 }
