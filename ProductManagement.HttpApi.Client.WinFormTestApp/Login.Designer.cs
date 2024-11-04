@@ -106,7 +106,7 @@
             BtnLogin.Location = new Point(195, 339);
             BtnLogin.Name = "BtnLogin";
             BtnLogin.Size = new Size(275, 43);
-            BtnLogin.TabIndex = 6;
+            BtnLogin.TabIndex = 2;
             BtnLogin.Text = "登入";
             BtnLogin.UseVisualStyleBackColor = true;
             // 
@@ -115,14 +115,14 @@
             textBox1.Location = new Point(252, 252);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(218, 23);
-            textBox1.TabIndex = 7;
+            textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
             textBox2.Location = new Point(252, 292);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(218, 23);
-            textBox2.TabIndex = 8;
+            textBox2.TabIndex = 1;
             // 
             // PbShowPassword
             // 
