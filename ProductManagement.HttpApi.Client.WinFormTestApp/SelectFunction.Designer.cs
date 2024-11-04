@@ -70,6 +70,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = Properties.Resources.backgroup;
             ClientSize = new Size(1016, 578);
             Controls.Add(PbQuestionImportProgram);
             Controls.Add(PbQuestionCheckProgram);

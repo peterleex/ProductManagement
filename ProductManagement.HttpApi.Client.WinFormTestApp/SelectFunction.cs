@@ -12,6 +12,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
     public partial class SelectFunction : Form
     {
+        private const string moduleName = "Q001 小程式首頁";
         public SelectFunction()
         {
             InitializeComponent();
@@ -21,7 +22,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitForm()
         {
             WindowState = FormWindowState.Maximized;
-
+            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
         }
 
         private void CenterPictureBoxes()

@@ -81,7 +81,6 @@
             Name = "Home";
             Text = "Home";
             Load += Home_Load;
-            Resize += Home_Resize;
             ((System.ComponentModel.ISupportInitialize)PbImageProcessProgram).EndInit();
             ((System.ComponentModel.ISupportInitialize)PbQuestionCheckProgram).EndInit();
             ((System.ComponentModel.ISupportInitialize)PbQuestionImportProgram).EndInit();

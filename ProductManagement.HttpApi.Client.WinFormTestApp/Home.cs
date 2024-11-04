@@ -27,12 +27,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             selectFuntion.Show();
         }
 
-        private const string moduleName = "Q001 小程式首頁";
         private MenuStrip menuStrip = null!;
 
         private void InitForm()
         {
-            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
             IsMdiContainer = true;
             Hide();
             ShowIcon = false;
@@ -88,27 +86,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             Controls.Add(menuStrip);
         }
 
-        private void CenterPictureBoxes()
-        {
-            //int totalWidth = PbImageProcessProgram.Width + PbQuestionCheckProgram.Width + PbQuestionImportProgram.Width;
-            //int startX = (ClientSize.Width - totalWidth) / 2;
-            //int startY = (ClientSize.Height - PbImageProcessProgram.Height) / 2;
-
-            //PbImageProcessProgram.Location = new Point(startX, startY);
-            //PbQuestionCheckProgram.Location = new Point(startX + PbImageProcessProgram.Width, startY);
-            //PbQuestionImportProgram.Location = new Point(startX + PbImageProcessProgram.Width + PbQuestionCheckProgram.Width, startY);
-
-            int spacing = 20; // 三個 PictureBox 的间距
-            int totalWidth = PbImageProcessProgram.Width + PbQuestionCheckProgram.Width + PbQuestionImportProgram.Width + 2 * spacing;
-            int startX = (ClientSize.Width - totalWidth) / 2;
-            int startY = (ClientSize.Height - PbImageProcessProgram.Height) / 2;
-
-            PbImageProcessProgram.Location = new Point(startX, startY);
-            PbQuestionCheckProgram.Location = new Point(startX + PbImageProcessProgram.Width + spacing, startY);
-            PbQuestionImportProgram.Location = new Point(startX + PbImageProcessProgram.Width + PbQuestionCheckProgram.Width + 2 * spacing, startY);
-
-        }
-
         private void Home_Load(object sender, EventArgs e)
         {
             var lqUpdateForm = new LQUpdate(_serviceProvider);
@@ -124,11 +101,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Application.Exit();
             }
-        }
-
-        private void Home_Resize(object sender, EventArgs e)
-        {
-            CenterPictureBoxes();
         }
     }
 }
