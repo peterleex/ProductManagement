@@ -27,66 +27,23 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             _clientApplicationAppService = serviceProvider.GetRequiredService<IClientApplicationAppService>();
 
             InitializeComponent();
+            InitForm();
             InitializeCustomComponents();
+        }
+
+        private void InitForm()
+        {
+            StartPosition = FormStartPosition.CenterScreen;
+            FormBorderStyle = FormBorderStyle.None;
+            Text = LQMessage(LQCode.C0019);
         }
 
         private void InitializeCustomComponents()
         {
-            StartPosition = FormStartPosition.CenterScreen;
-
             progressBar.ForeColor = ProgressColor;
             percentageLabel.Text = string.Empty;
             percentageLabel.ForeColor = ProgressColor;
         }
-        private async void BtnGetProfile_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var profile = await _profileAppService.GetAsync();
-                MessageBox.Show($"UserName: {profile.UserName}\nEmail: {profile.Email}");
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "讀取使用者資料失敗");
-
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private async void BtnGetUsers_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var users = await _identityUserAppService.GetListAsync(new GetIdentityUsersInput());
-                MessageBox.Show($"Total users: {users.TotalCount}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private async void BtnLogin_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var userLoginInfo = new UserLoginInfo()
-                {
-                    UserNameOrEmailAddress = "admin",
-                    Password = "1q2w3E*",
-                    RememberMe = true
-                };
-
-                var loginResult = await _demo.LoginAsync(userLoginInfo);
-
-                MessageBox.Show(loginResult == null ? "loginResult is null" : loginResult.Description);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private async Task<bool> IsUpdateAvailable()
         {
             try
@@ -114,8 +71,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             Application.Exit();
         }
 
-
-
         private async Task<CanEnterSystemResult> ClientUpdateCheck()
         {
             var result = await CheckUpdate();
@@ -127,6 +82,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 if (DialogResult.Cancel == LQHelper.ConfirmMessage(LQMessage(LQCode.C0002), LQMessage(LQCode.C0003)))
                     return CanEnterSystemResult.No;
+
+                Text = LQMessage(LQCode.C0018);
+                LQWaiting.Instance.Release();
+                SetControlsVisible(true);
 
                 var downloadResult = await DownloadClientApp();
                 while (!downloadResult.IsSuccessful)
@@ -326,16 +285,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private void LQUpdate_Load(object sender, EventArgs e)
+        private async void LQUpdate_Load(object sender, EventArgs e)
         {
-            StartUpdate();
+            await StartUpdate();
         }
 
-        private async void StartUpdate()
+        private async Task StartUpdate()
         {
             try
             {
-                SetControlsEnabled(false);
+                SetControlsVisible(false);
 
                 LQWaiting.Instance.CenterTo(this);
 
@@ -345,19 +304,30 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 if (result == CanEnterSystemResult.No)
                 {
-                    LQHelper.ErrorMessage("you can't enter system.");
-                    Application.Exit();
+                    DialogResult = DialogResult.Cancel;
+                    Close();
                 }
-
-                LQHelper.InfoMessage("you can enter the system.");
+                else
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
             }
             catch (Exception)
             {
             }
             finally
             {
-                LQWaiting.Instance.Release();
-                SetControlsEnabled(true);
+                //LQWaiting.Instance.Release();
+                //SetControlsVisible(true);
+            }
+        }
+
+        private void SetControlsVisible(bool visible)
+        {
+            foreach (Control control in Controls)
+            {
+                control.Visible = visible;
             }
         }
     }

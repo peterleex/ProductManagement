@@ -39,7 +39,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 }
                 else
                 {
-                    Application.Run(new LQUpdate(serviceProvider));
+                    Application.Run(new Home(serviceProvider));
                 }
 
                 await application.ShutdownAsync();

@@ -30,12 +30,13 @@
         {
             percentageLabel = new Label();
             progressBar = new ProgressBar();
+            label1 = new Label();
             SuspendLayout();
             // 
             // percentageLabel
             // 
             percentageLabel.AutoSize = true;
-            percentageLabel.Location = new Point(526, 218);
+            percentageLabel.Location = new Point(338, 80);
             percentageLabel.Name = "percentageLabel";
             percentageLabel.Size = new Size(42, 15);
             percentageLabel.TabIndex = 9;
@@ -43,16 +44,27 @@
             // 
             // progressBar
             // 
-            progressBar.Location = new Point(233, 214);
+            progressBar.Location = new Point(45, 76);
             progressBar.Name = "progressBar";
             progressBar.Size = new Size(284, 23);
             progressBar.TabIndex = 8;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold);
+            label1.Location = new Point(45, 36);
+            label1.Name = "label1";
+            label1.Size = new Size(165, 20);
+            label1.TabIndex = 10;
+            label1.Text = "版本更新中，請稍候...";
             // 
             // LQUpdator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(444, 137);
+            Controls.Add(label1);
             Controls.Add(percentageLabel);
             Controls.Add(progressBar);
             Name = "LQUpdator";
@@ -66,5 +78,6 @@
 
         private Label percentageLabel;
         private ProgressBar progressBar;
+        private Label label1;
     }
 }

@@ -63,13 +63,12 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(402, 123);
+            ClientSize = new Size(459, 123);
             Controls.Add(label1);
             Controls.Add(percentageLabel);
             Controls.Add(progressBar);
             Name = "LQUpdate";
             StartPosition = FormStartPosition.WindowsDefaultBounds;
-            Text = "版本更新中";
             Load += LQUpdate_Load;
             ResumeLayout(false);
             PerformLayout();

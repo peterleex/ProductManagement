@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
 		<AssemblyVersion></AssemblyVersion>
-		<FileVersion>1.0.0.3</FileVersion>
+		<FileVersion>1.0.0.4</FileVersion>
 		<SatelliteResourceLanguages>zh-Hant</SatelliteResourceLanguages>
 		<AssemblyName>龍騰數位題庫應用程式</AssemblyName>
   </PropertyGroup>
@@ -53,12 +53,25 @@
     <Compile Update="LQUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="LQUpdate.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 	<Target Name="PostPublishActions" AfterTargets="Publish">

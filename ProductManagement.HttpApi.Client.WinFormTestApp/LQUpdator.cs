@@ -9,6 +9,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public LQUpdator(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            InitForm(); 
+        }
+
+        private void InitForm()
+        {
+            StartPosition = FormStartPosition.CenterScreen;
+            FormBorderStyle = FormBorderStyle.None;
+            Text = LQMessage(LQCode.C0020);
         }
 
         private string targetPath = null!;

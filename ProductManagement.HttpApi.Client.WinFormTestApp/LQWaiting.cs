@@ -35,7 +35,6 @@
             FormBorderStyle = FormBorderStyle.None;
             ControlBox = false;
             ShowInTaskbar = false;
-            Size = new Size(500, 150);
         }
 
         private void InitMessageLabel()
@@ -58,7 +57,7 @@
         {
             Location = new Point(
                 parent.Location.X + (parent.ClientSize.Width - Width) / 2,
-                parent.Location.Y + (parent.ClientSize.Height - Height) / 2
+                parent.Location.Y + (parent.ClientSize.Height - (Height - SystemInformation.CaptionHeight)) / 2
             );
         }
         public void ShowMessage(string message)
@@ -70,12 +69,14 @@
         private void ShowLabel(string message)
         {
             lblMessage.Text = message;
-            lblMessage.Location = new Point((ClientSize.Width - lblMessage.Width) / 2, (ClientSize.Height - lblMessage.Height) / 2); // Re-center the label
-
+            lblMessage.Location = new Point(
+                (ClientSize.Width - lblMessage.Width) / 2, (ClientSize.Height - lblMessage.Height) / 2);
         }
 
         public void Release()
         {
+            if (IsDisposed) return;
+
             Close();
             Dispose();
         }

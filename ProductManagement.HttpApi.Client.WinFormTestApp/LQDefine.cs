@@ -22,6 +22,10 @@
             C0015,
             C0016,
             C0017,
+            C0018,
+            C0019,
+            C0020,
+            C0021,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -44,6 +48,12 @@
                     {LQCode.C0015, "準備更新檔案失敗，請與管理員聯繫" },
                     {LQCode.C0016, "有錯誤" },
                     {LQCode.C0017, "解壓縮檔案失敗，請重試。如仍有異常，請連繫管理員。" },
+                    {LQCode.C0018, "版本下載中" },
+                    {LQCode.C0019, "檢查更新中" },
+                    {LQCode.C0020, "版本更新中" },
+                    {LQCode.C0021, "龍騰數位題庫應用程式" },
+
+                    
                 };
 
         public static string LQMessage(LQCode code)
@@ -82,5 +92,6 @@
 
         public static Color ProgressColor => Color.Green;
 
+        public static Size UpdateWindowSize { get; internal set; } = new Size(418, 162);
     }
 }
