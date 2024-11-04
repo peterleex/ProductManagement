@@ -45,6 +45,7 @@
             PbImageProcessProgram.SizeMode = PictureBoxSizeMode.StretchImage;
             PbImageProcessProgram.TabIndex = 1;
             PbImageProcessProgram.TabStop = false;
+            PbImageProcessProgram.Visible = false;
             // 
             // PbQuestionCheckProgram
             // 
@@ -55,6 +56,7 @@
             PbQuestionCheckProgram.SizeMode = PictureBoxSizeMode.StretchImage;
             PbQuestionCheckProgram.TabIndex = 2;
             PbQuestionCheckProgram.TabStop = false;
+            PbQuestionCheckProgram.Visible = false;
             // 
             // PbQuestionImportProgram
             // 
@@ -65,6 +67,7 @@
             PbQuestionImportProgram.SizeMode = PictureBoxSizeMode.StretchImage;
             PbQuestionImportProgram.TabIndex = 3;
             PbQuestionImportProgram.TabStop = false;
+            PbQuestionImportProgram.Visible = false;
             // 
             // Home
             // 

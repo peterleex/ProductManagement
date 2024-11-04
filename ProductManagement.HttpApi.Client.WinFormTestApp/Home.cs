@@ -15,13 +15,25 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             InitializeComponent();
             InitForm();
             InitMenu();
+            EnterSelectFunction();
         }
+
+        private void EnterSelectFunction()
+        {
+            var selectFuntion = new SelectFunction
+            {
+                MdiParent = this
+            };
+            selectFuntion.Show();
+        }
+
         private const string moduleName = "Q001 小程式首頁";
         private MenuStrip menuStrip = null!;
 
         private void InitForm()
         {
             Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
+            IsMdiContainer = true;
             Hide();
             ShowIcon = false;
         }
@@ -58,6 +70,18 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             menuStrip.Items.Add(QuestionCheckMenuItem);
             menuStrip.Items.Add(QuestionImportMenuItem);
             menuStrip.Items.Add(LoginedHeaderMenuItem);
+
+
+            LoginedHeaderMenuItem.Click += (sender, e) =>
+            {
+                new Login(_serviceProvider).ShowDialog(this);
+            };
+            ImageProcessMenuItem.Click += (sender, e) =>
+            {
+                var imageProcess = new ImageProcess(_serviceProvider);
+                imageProcess.MdiParent = this;
+                imageProcess.Show();
+            };
 
             // 将菜单添加到窗体
             MainMenuStrip = menuStrip;
