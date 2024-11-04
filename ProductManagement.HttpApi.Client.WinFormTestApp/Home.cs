@@ -26,7 +26,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             ShowIcon = false;
         }
 
-        private void CheckScreenResolution()
+        private static void CheckScreenResolution()
         {
             var currentScreenWidth = Screen.PrimaryScreen!.Bounds.Width;
             var currentScreenHeight = Screen.PrimaryScreen.Bounds.Height;

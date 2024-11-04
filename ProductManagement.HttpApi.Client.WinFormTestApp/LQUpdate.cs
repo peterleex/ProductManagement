@@ -4,9 +4,6 @@ using Serilog;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Text;
-using Volo.Abp.Account;
-using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
-using Volo.Abp.Identity;
 using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 
@@ -14,16 +11,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
     public partial class LQUpdate : Form
     {
-        private readonly IProfileAppService _profileAppService;
-        private readonly IIdentityUserAppService _identityUserAppService;
-        private readonly ClientDemoService _demo;
         private readonly IClientApplicationAppService _clientApplicationAppService;
 
         public LQUpdate(IServiceProvider serviceProvider)
         {
-            _profileAppService = serviceProvider.GetRequiredService<IProfileAppService>();
-            _identityUserAppService = serviceProvider.GetRequiredService<IIdentityUserAppService>();
-            _demo = serviceProvider.GetRequiredService<ClientDemoService>();
             _clientApplicationAppService = serviceProvider.GetRequiredService<IClientApplicationAppService>();
 
             InitializeComponent();
@@ -148,14 +139,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Log.Error(ex, LQMessage(LQCode.C0007));
                 return new ClientDownload { IsSuccessful = false };
-            }
-        }
-
-        private void SetControlsEnabled(bool enabled)
-        {
-            foreach (Control control in Controls)
-            {
-                control.Enabled = enabled;
             }
         }
 
