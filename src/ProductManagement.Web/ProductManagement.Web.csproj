@@ -75,8 +75,4 @@
     <PackageReference Include="Volo.Abp.Studio.Client.AspNetCore" Version="0.8.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\StaticFiles\ClientApp\win-x86.zip" />
-  </ItemGroup>
-
 </Project>

@@ -49,6 +49,18 @@
     <ProjectReference Include="..\src\ProductManagement.HttpApi.Client\ProductManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="LQUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="LQUpdate.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
 	<Target Name="PostPublishActions" AfterTargets="Publish">
 		<ItemGroup>
 			<PublishedFiles Include="$(PublishDir)龍騰數位題庫應用程式.exe" />

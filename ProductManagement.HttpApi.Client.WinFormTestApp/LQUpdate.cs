@@ -12,14 +12,14 @@ using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    public partial class MainForm : Form
+    public partial class LQUpdate : Form
     {
         private readonly IProfileAppService _profileAppService;
         private readonly IIdentityUserAppService _identityUserAppService;
         private readonly ClientDemoService _demo;
         private readonly IClientApplicationAppService _clientApplicationAppService;
 
-        public MainForm(IServiceProvider serviceProvider)
+        public LQUpdate(IServiceProvider serviceProvider)
         {
             _profileAppService = serviceProvider.GetRequiredService<IProfileAppService>();
             _identityUserAppService = serviceProvider.GetRequiredService<IIdentityUserAppService>();
@@ -32,8 +32,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitializeCustomComponents()
         {
-            WindowState = FormWindowState.Maximized;
+            StartPosition = FormStartPosition.CenterScreen;
+
+            progressBar.ForeColor = ProgressColor;
             percentageLabel.Text = string.Empty;
+            percentageLabel.ForeColor = ProgressColor;
         }
         private async void BtnGetProfile_Click(object sender, EventArgs e)
         {
@@ -111,36 +114,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             Application.Exit();
         }
 
-        private async void BtnDownloadClientApp_Click(object sender, EventArgs e)
-        {
 
-            try
-            {
-                SetControlsEnabled(false);
-
-                LQWaiting.Instance.CenterTo(this);
-
-                LQWaiting.Instance.ShowMessage(LQMessage(LQCode.C0005));
-
-                var result = await ClientUpdateCheck();
-
-                if (result == CanEnterSystemResult.No)
-                {
-                    LQHelper.ErrorMessage("you can't enter system.");
-                    Application.Exit();
-                }
-
-                LQHelper.InfoMessage("you can enter the system.");
-            }
-            catch (Exception)
-            {
-            }
-            finally
-            {
-                LQWaiting.Instance.Release();
-                SetControlsEnabled(true);
-            }
-        }
 
         private async Task<CanEnterSystemResult> ClientUpdateCheck()
         {
@@ -349,6 +323,41 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     progressBar.Value = progress;
                     UpdateProgressLabel(LQMessage(LQCode.C0009));
                 }
+            }
+        }
+
+        private void LQUpdate_Load(object sender, EventArgs e)
+        {
+            StartUpdate();
+        }
+
+        private async void StartUpdate()
+        {
+            try
+            {
+                SetControlsEnabled(false);
+
+                LQWaiting.Instance.CenterTo(this);
+
+                LQWaiting.Instance.ShowMessage(LQMessage(LQCode.C0005));
+
+                var result = await ClientUpdateCheck();
+
+                if (result == CanEnterSystemResult.No)
+                {
+                    LQHelper.ErrorMessage("you can't enter system.");
+                    Application.Exit();
+                }
+
+                LQHelper.InfoMessage("you can enter the system.");
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                LQWaiting.Instance.Release();
+                SetControlsEnabled(true);
             }
         }
     }

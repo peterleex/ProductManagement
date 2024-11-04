@@ -78,8 +78,9 @@
         public static string MainExeFileProcessName => Path.GetFileNameWithoutExtension(MainExeFileName);
 
         public const string UpdatorExeFileName = "龍騰數位題庫應用程式更新程式.exe";   
-
         public static string UpdatorExeFileProcessName => Path.GetFileNameWithoutExtension(UpdatorExeFileName);
+
+        public static Color ProgressColor => Color.Green;
 
     }
 }
