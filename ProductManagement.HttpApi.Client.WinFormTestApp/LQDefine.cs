@@ -28,6 +28,13 @@
             C0021,
             C0022,
             C0023,
+            C0024,
+            C0025,
+            C0026,
+            C0027,
+            C0028,
+            C0029,
+            C0030,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -56,8 +63,13 @@
                     {LQCode.C0021, "龍騰數位題庫應用程式" },
                     {LQCode.C0022, $"龍騰數位題庫應用程式 V{CurrentAppInfo.FileVer} - " },
                     {LQCode.C0023, "登入" },
-
-
+                    {LQCode.C0024, "登出" },
+                    {LQCode.C0025, "請輸入帳號" },
+                    {LQCode.C0026, "請輸入密碼" },
+                    {LQCode.C0027, "帳號或密碼錯誤" },
+                    {LQCode.C0028, "登入時，無法與伺服器連線，請與管理員聯繫" },
+                    {LQCode.C0029, "登入..." },
+                    {LQCode.C0030, "更新失敗" },
                 };
 
         public static string LQMessage(LQCode code)

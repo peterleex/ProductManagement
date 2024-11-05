@@ -116,6 +116,7 @@
             txtAccount.ImeMode = ImeMode.Off;
             txtAccount.Location = new Point(252, 211);
             txtAccount.Name = "txtAccount";
+            txtAccount.PlaceholderText = "帳號";
             txtAccount.Size = new Size(218, 23);
             txtAccount.TabIndex = 0;
             // 
@@ -124,6 +125,7 @@
             txtPassword.ImeMode = ImeMode.Off;
             txtPassword.Location = new Point(252, 251);
             txtPassword.Name = "txtPassword";
+            txtPassword.PlaceholderText = "密碼";
             txtPassword.Size = new Size(218, 23);
             txtPassword.TabIndex = 1;
             txtPassword.UseSystemPasswordChar = true;

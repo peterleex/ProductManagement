@@ -25,7 +25,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitForm()
         {
             StartPosition = FormStartPosition.CenterScreen;
-            FormBorderStyle = FormBorderStyle.None;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            ControlBox = false; 
+
             Text = LQMessage(LQCode.C0019);
         }
 
@@ -67,6 +69,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var result = await CheckUpdate();
             if (result == ClientCheckResult.CheckUpdateError)
             {
+                LQWaiting.Instance.Hide();
                 LQHelper.InfoMessage(LQMessage(LQCode.C0000));
             }
             else if (result == ClientCheckResult.UpdateAvailable)
@@ -75,7 +78,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     return CanEnterSystemResult.No;
 
                 Text = LQMessage(LQCode.C0018);
-                LQWaiting.Instance.Release();
+                LQWaiting.Instance.Hide();
                 SetControlsVisible(true);
 
                 var downloadResult = await DownloadClientApp();
@@ -280,7 +283,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 SetControlsVisible(false);
 
                 LQWaiting.Instance.CenterTo(this);
-
                 LQWaiting.Instance.ShowMessage(LQMessage(LQCode.C0005));
 
                 var result = await ClientUpdateCheck();
@@ -296,13 +298,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     Close();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex, LQMessage(LQCode.C0030));
             }
             finally
             {
-                //LQWaiting.Instance.Release();
-                //SetControlsVisible(true);
+                LQWaiting.Instance.Release();
             }
         }
 

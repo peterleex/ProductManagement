@@ -3,11 +3,16 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Volo.Abp.DependencyInjection;
+using Serilog;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp.Authentication
 {
     public class AccessTokenManager : ISingletonDependency
     {
+        public event EventHandler? AccessTokenObtained;
+
+        public event EventHandler? Logouted;
+
         public string? AccessToken { get; private set; }
 
         private readonly IHttpClientFactory _httpClientFactory;
@@ -23,6 +28,47 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Authentication
             var tokenResponse = await GetTokenResponse(discoveryResponse, userName, password);
 
             AccessToken = tokenResponse.AccessToken;
+
+            if (AccessToken != null)
+            {
+                OnAccessTokenObtained();
+            }
+        }
+
+        protected virtual void OnAccessTokenObtained()
+        {
+            AccessTokenObtained?.Invoke(this, EventArgs.Empty);
+        }
+        protected virtual void OnLogouted()
+        {
+            Logouted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public async Task Logout()
+        {
+            if (AccessToken != null)
+            {
+                var discoveryResponse = await GetDiscoveryResponse();
+                await RevokeToken(discoveryResponse, AccessToken);
+                AccessToken = null;
+                OnLogouted();
+            }
+        }
+
+        protected async Task RevokeToken(DiscoveryDocumentResponse discoveryResponse, string token)
+        {
+            using (var httpClient = _httpClientFactory.CreateClient())
+            {
+                var revokeTokenRequest = new TokenRevocationRequest
+                {
+                    Address = discoveryResponse.RevocationEndpoint,
+                    ClientId = "ProductManagement_App",
+                    Token = token,
+                    TokenTypeHint = "access_token"
+                };
+
+                await httpClient.RevokeTokenAsync(revokeTokenRequest);
+            }
         }
 
         protected async Task<DiscoveryDocumentResponse> GetDiscoveryResponse()
@@ -43,12 +89,22 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Authentication
             string password
         )
         {
-            using (var httpClient = _httpClientFactory.CreateClient())
+            using var httpClient = _httpClientFactory.CreateClient();
+            var tokenResponse = await httpClient.RequestPasswordTokenAsync(
+                await CreatePasswordTokenRequestAsync(discoveryResponse, userName, password)
+            );
+
+            if (tokenResponse.IsError)
             {
-                return await httpClient.RequestPasswordTokenAsync(
-                    await CreatePasswordTokenRequestAsync(discoveryResponse, userName, password)
-                );
+                var errorMessage = $"Error retrieving token: {tokenResponse.Error}\n" +
+                                   $"Error Description: {tokenResponse.ErrorDescription}\n" +
+                                   $"HTTP Status Code: {tokenResponse.HttpStatusCode}";
+
+
+                throw new HttpRequestException(errorMessage, null, tokenResponse.HttpStatusCode);
             }
+
+            return tokenResponse;
         }
 
         protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(

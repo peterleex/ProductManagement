@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System.Windows.Forms;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
@@ -68,6 +69,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             Log.Information($"解壓縮檔案路徑：{extractPath}");
 
             return extractPath;
+        }
+
+        internal static void LogAndShowErrorWithoutExceptionMessage(Exception ex, string message, string title = "錯誤")
+        {
+            Log.Error(ex, message);
+            ErrorMessage($"{message}", title);
         }
 
         public static string CurrentProcessDirectory => Path.GetDirectoryName(Environment.ProcessPath)!;

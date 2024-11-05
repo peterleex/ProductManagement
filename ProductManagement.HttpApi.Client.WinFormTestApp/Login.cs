@@ -16,6 +16,8 @@ using Volo.Abp.Account;
 using System.Net.Http.Headers;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Authentication;
 using System.IdentityModel.Tokens.Jwt;
+using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
+using Serilog;
 
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -24,12 +26,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IProfileAppService _profileAppService;
-        private readonly HttpClient _httpClient;
+        private readonly AccessTokenManager _accessTokenManager;
+
         public Login(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _profileAppService = serviceProvider.GetRequiredService<IProfileAppService>();
-            _httpClient = serviceProvider.GetRequiredService<HttpClient>();
+            _accessTokenManager = _serviceProvider.GetRequiredService<AccessTokenManager>();
 
             InitializeComponent();
             InitForm();
@@ -44,25 +47,60 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             StartPosition = FormStartPosition.CenterParent;
             BackColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            ShowInTaskbar = false;
         }
 
         private async void BtnLogin_Click(object sender, EventArgs e)
         {
-            await _serviceProvider.GetRequiredService<AccessTokenManager>().ObtainAccessToken("admin", "1q2w3E*");
+            //帳號或密碼錯誤
+            if (txtAccount.Text.IsNullOrWhiteSpace())
+            {
+                LQHelper.InfoMessage(LQDefine.LQMessage(LQDefine.LQCode.C0025));
+                txtAccount.Focus();
+                return;
+            }
+            if (txtPassword.Text.IsNullOrWhiteSpace())
+            {
+                LQHelper.InfoMessage(LQDefine.LQMessage(LQDefine.LQCode.C0026));
+                txtPassword.Focus();
+                return;
+            }
 
-            var token = _serviceProvider.GetRequiredService<AccessTokenManager>().AccessToken;
+            SetControlsEnabled(false);
+            LQWaiting.Instance.CenterTo(this);
+            LQWaiting.Instance.ShowMessage(LQMessage(LQCode.C0029));
 
-            var tokenWrapper = new AccessTokenWrapper(token!);
+            await LoginAsync();
 
-            System.Diagnostics.Debug.WriteLine($"Issuer: {tokenWrapper.Issuer}");
-            System.Diagnostics.Debug.WriteLine($"Subject: {tokenWrapper.Subject}");
-            System.Diagnostics.Debug.WriteLine($"Audience: {tokenWrapper.Audience}");
-            System.Diagnostics.Debug.WriteLine($"Expiration: {tokenWrapper.Expiration}");
-            System.Diagnostics.Debug.WriteLine($"Not Before: {tokenWrapper.NotBefore}");
-            System.Diagnostics.Debug.WriteLine($"Issued At: {tokenWrapper.IssuedAt}");
-            System.Diagnostics.Debug.WriteLine($"JWT ID: {tokenWrapper.JwtId}");
-            System.Diagnostics.Debug.WriteLine($"Preferred Username: {tokenWrapper.PreferredUsername}");
-            System.Diagnostics.Debug.WriteLine($"Given Name: {tokenWrapper.GivenName}");
+            LQWaiting.Instance.Release();
+            SetControlsEnabled(true);
+
+        }
+
+        private async Task LoginAsync()
+        {
+            try
+            {
+                await _accessTokenManager.ObtainAccessToken(txtAccount.Text, txtPassword.Text);
+                if (_accessTokenManager.AccessToken.IsNullOrEmpty())
+                {
+                    LQHelper.InfoMessage(LQMessage(LQCode.C0027));
+                }
+            }
+            catch (Exception ex)
+            {
+                var info = LQMessage(LQCode.C0028);
+                Log.Error(ex, info);
+                LQHelper.InfoMessage(info);
+            }
+        }
+
+        private void SetControlsEnabled(bool enabled)
+        {
+            foreach (Control control in Controls)
+            {
+                control.Enabled = enabled;
+            }
         }
 
         private void PbShowPassword_Click(object sender, EventArgs e)

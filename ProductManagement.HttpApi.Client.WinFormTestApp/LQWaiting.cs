@@ -33,7 +33,7 @@
             Controls.Add(lblMessage);
             StartPosition = FormStartPosition.Manual;
             FormBorderStyle = FormBorderStyle.None;
-            ControlBox = false;
+            //ControlBox = false;
             ShowInTaskbar = false;
         }
 
