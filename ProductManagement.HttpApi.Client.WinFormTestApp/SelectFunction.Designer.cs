@@ -1,6 +1,6 @@
 ﻿namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    partial class SelectFunction
+    partial class LQSelectFunction
     {
         /// <summary>
         /// Required designer variable.

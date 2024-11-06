@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    public partial class SelectFunction : Form
+    public partial class LQSelectFunction : Form
     {
-        private const string moduleName = "Q001 小程式首頁";
-        public SelectFunction()
+        private static string moduleName = LQDefine.LQMessage(LQDefine.LQCode.C0036) ;
+        public LQSelectFunction()
         {
             InitializeComponent();
             InitForm();
@@ -23,14 +23,22 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitControl()
         {
-           
+
         }
 
         private void HookEvent()
         {
             PbImageProcessProgram.MouseEnter += PbImageProcessProgram_MouseEnter;
             PbImageProcessProgram.MouseLeave += PbImageProcessProgram_MouseLeave;
+
+            PbImageProcessProgram.Click += PbImageProcessProgram_Click;
         }
+
+        private void PbImageProcessProgram_Click(object? sender, EventArgs e)
+        {
+            ((Home)MdiParent!).EnterImageProcess();
+        }
+
         private void PbImageProcessProgram_MouseEnter(object? sender, EventArgs e)
         {
             PbImageProcessProgram.BackColor = Color.LightBlue;

@@ -40,6 +40,10 @@
             C0033,
             C0034,
             C0035,
+            C0036,
+            C0037,
+            C0038,
+            C0039,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -80,6 +84,13 @@
                     {LQCode.C0033, "圖片小程式" },
                     {LQCode.C0034, "題目檢查" },
                     {LQCode.C0035, "題目匯入" },
+                    {LQCode.C0036, "Q001 小程式首頁" },
+                    {LQCode.C0037, "Q002 圖片小程式" },
+                    {LQCode.C0038, "離開龍騰數位題庫系統" },
+                    {LQCode.C0039, "您確定要離開本系統？" },
+
+                    
+
                 };
 
         public static Color PrimaryColor => Color.FromArgb(167, 108, 86);

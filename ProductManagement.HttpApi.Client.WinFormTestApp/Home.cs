@@ -6,6 +6,7 @@ using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
+
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
     public partial class Home : Form
@@ -20,7 +21,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             _serviceProvider = serviceProvider;
             _accessTokenManager = _serviceProvider.GetRequiredService<AccessTokenManager>();
             _accessTokenManager.AccessTokenObtained += _accessTokenManager_AccessTokenObtained;
-            _accessTokenManager.Logouted += _accessTokenManager_Logouted;
+            _accessTokenManager.Logouted += AccessTokenManager_Logouted;
 
             InitializeComponent();
             HookEvent();
@@ -36,7 +37,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void Home_FormClosing(object? sender, FormClosingEventArgs e)
         {
-            var result = LQHelper.ConfirmMessage("您確定要離開本系統？");
+            var result = LQHelper.ConfirmMessage(LQDefine.LQMessage(LQDefine.LQCode.C0039), LQDefine.LQMessage(LQDefine.LQCode.C0038));
             if (result == DialogResult.OK)
             {
                 e.Cancel = false;
@@ -47,7 +48,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private void _accessTokenManager_Logouted(object? sender, EventArgs e)
+        private void AccessTokenManager_Logouted(object? sender, EventArgs e)
         {
             CreateLoginOutMenuItem();
         }
@@ -59,7 +60,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void EnterSelectFunction()
         {
-            var selectFuntion = new SelectFunction
+            var selectFuntion = new LQSelectFunction
             {
                 MdiParent = this
             };
