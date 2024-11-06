@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    public partial class Home : Form
+    public partial class LQHome : Form
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly AccessTokenManager _accessTokenManager;
         private AccessTokenParser? _accessTokenParser = null;
         private ToolStripMenuItem? LoginOutMenuItem = null;
 
-        public Home(IServiceProvider serviceProvider)
+        public LQHome(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _accessTokenManager = _serviceProvider.GetRequiredService<AccessTokenManager>();

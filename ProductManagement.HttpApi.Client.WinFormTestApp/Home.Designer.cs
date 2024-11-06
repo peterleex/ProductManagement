@@ -1,6 +1,6 @@
 ﻿namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    partial class Home
+    partial class LQHome
     {
         /// <summary>
         /// Required designer variable.

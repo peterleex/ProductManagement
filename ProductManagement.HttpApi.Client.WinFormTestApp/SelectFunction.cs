@@ -36,7 +36,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void PbImageProcessProgram_Click(object? sender, EventArgs e)
         {
-            ((Home)MdiParent!).EnterImageProcess();
+            ((LQHome)MdiParent!).EnterImageProcess();
         }
 
         private void PbImageProcessProgram_MouseEnter(object? sender, EventArgs e)
