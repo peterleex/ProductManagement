@@ -15,6 +15,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         [STAThread]
         static async Task Main()
         {
+            //SynchronizationContext.SetSynchronizationContext(new WindowsFormsSynchronizationContext());
             try
             {
                 using var application = await AbpApplicationFactory.CreateAsync<ProductManagementWinFormApiClientModule>(options =>
@@ -32,15 +33,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 ApplicationConfiguration.Initialize();
 
-                if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
-                    Environment.GetCommandLineArgs().Length > 1)
-                {
-                    Application.Run(new LQUpdator(serviceProvider));
-                }
-                else
-                {
-                    Application.Run(new LQHome(serviceProvider));
-                }
+                //if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
+                //    Environment.GetCommandLineArgs().Length > 1)
+                //{
+                //    Application.Run(new LQUpdator(serviceProvider));
+                //}
+                //else
+                //{
+                //    Application.Run(new LQHome(serviceProvider));
+                //}
+
+                Application.Run(new LQImageProcess(serviceProvider));
 
                 await application.ShutdownAsync();
             }

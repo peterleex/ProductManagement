@@ -1,4 +1,6 @@
-﻿namespace ProductManagement.HttpApi.Client.WinFormTestApp
+﻿using System.Runtime.CompilerServices;
+
+namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
     public class LQDefine
     {
@@ -44,6 +46,7 @@
             C0037,
             C0038,
             C0039,
+            C0040,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -88,6 +91,8 @@
                     {LQCode.C0037, "Q002 圖片小程式" },
                     {LQCode.C0038, "離開龍騰數位題庫系統" },
                     {LQCode.C0039, "您確定要離開本系統？" },
+                    {LQCode.C0040, "docx 檔案沒有包含 MainDocumentPart\n{0}" },
+
 
                     
 
@@ -125,6 +130,8 @@
             Error,
             Successful
         }
+
+        public const string SupportedFileType = "Image Files|*.gif;*.jpg;*.jpeg;*.png;*.eps;*.ai;*.tif|Documents|*.docx;*.pdf|All Files|*.gif;*.jpg;*.jpeg;*.png;*.eps;*.ai;*.tif;*.docx;*.pdf";
 
         public const int DownloadBufferSize = 8192;
 
