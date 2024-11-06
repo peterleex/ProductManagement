@@ -26,7 +26,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            ControlBox = false; 
+            ControlBox = false;
 
             Text = LQMessage(LQCode.C0019);
         }
@@ -290,13 +290,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 if (result == CanEnterSystemResult.No)
                 {
                     DialogResult = DialogResult.Cancel;
-                    Close();
                 }
                 else
                 {
                     DialogResult = DialogResult.OK;
-                    Close();
                 }
+                Close();
             }
             catch (Exception ex)
             {

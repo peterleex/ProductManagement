@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Volo.Abp.DependencyInjection;
 using Serilog;
+using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp.Authentication
 {
@@ -22,17 +23,33 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Authentication
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task ObtainAccessToken(string userName, string password)
+        public async Task<LoginResult> ObtainAccessToken(string userName, string password)
         {
             var discoveryResponse = await GetDiscoveryResponse();
             var tokenResponse = await GetTokenResponse(discoveryResponse, userName, password);
+
+            if (tokenResponse.IsError)
+            {
+                if (tokenResponse.Error == "invalid_grant")
+                    return LoginResult.InvalidUsernameOrPassword;
+
+                var errorMessage = $"Error retrieving token: {tokenResponse.Error}\n" +
+                                   $"Error Description: {tokenResponse.ErrorDescription}\n" +
+                                   $"HTTP Status Code: {tokenResponse.HttpStatusCode}";
+
+
+                throw new HttpRequestException(errorMessage, null, tokenResponse.HttpStatusCode);
+            }
 
             AccessToken = tokenResponse.AccessToken;
 
             if (AccessToken != null)
             {
                 OnAccessTokenObtained();
+                return LoginResult.Successs;
             }
+            else
+                return LoginResult.Failed;  // 這裏不應該
         }
 
         protected virtual void OnAccessTokenObtained()
@@ -93,16 +110,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Authentication
             var tokenResponse = await httpClient.RequestPasswordTokenAsync(
                 await CreatePasswordTokenRequestAsync(discoveryResponse, userName, password)
             );
-
-            if (tokenResponse.IsError)
-            {
-                var errorMessage = $"Error retrieving token: {tokenResponse.Error}\n" +
-                                   $"Error Description: {tokenResponse.ErrorDescription}\n" +
-                                   $"HTTP Status Code: {tokenResponse.HttpStatusCode}";
-
-
-                throw new HttpRequestException(errorMessage, null, tokenResponse.HttpStatusCode);
-            }
 
             return tokenResponse;
         }

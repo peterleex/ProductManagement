@@ -118,34 +118,52 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ImageProcessProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ImageProcessProgram2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="QuestionCheckIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\QuestionCheckIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="LoginedHeader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LoginedHeader.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="QuestionImportProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\QuestionImportProgram2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Home" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Home2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ImageProcessIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ImageProcessIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ImageProcessProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImageProcessProgram2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="QuestionCheckProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\QuestionCheckProgram2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ImageProcessIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImageProcessIcon1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="QuestionImportIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\QuestionImportIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImageProcessIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImageProcessIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="backgroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\backgroup.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TransparentStar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TransparentStar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="OpenEye" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OpenEye.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuestionCheckIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\QuestionCheckIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Home" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Home2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PleaseSelectProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PleaseSelectProgram.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuestionImportProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\QuestionImportProgram2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LoginedHeader1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LoginedHeader1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuestionCheckIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\QuestionCheckIcon1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuestionImportIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\QuestionImportIcon1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

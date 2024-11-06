@@ -17,12 +17,34 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             InitializeComponent();
             InitForm();
+            InitControl();
+            HookEvent();
+        }
+
+        private void InitControl()
+        {
+           
+        }
+
+        private void HookEvent()
+        {
+            PbImageProcessProgram.MouseEnter += PbImageProcessProgram_MouseEnter;
+            PbImageProcessProgram.MouseLeave += PbImageProcessProgram_MouseLeave;
+        }
+        private void PbImageProcessProgram_MouseEnter(object? sender, EventArgs e)
+        {
+            PbImageProcessProgram.BackColor = Color.LightBlue;
+        }
+        private void PbImageProcessProgram_MouseLeave(object? sender, EventArgs e)
+        {
+            PbImageProcessProgram.BackColor = Color.Transparent;
         }
 
         private void InitForm()
         {
             WindowState = FormWindowState.Maximized;
             Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
+            ShowIcon = false;
         }
 
         private void CenterPictureBoxes()
@@ -36,6 +58,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             PbQuestionCheckProgram.Location = new Point(startX + PbImageProcessProgram.Width + spacing, startY);
             PbQuestionImportProgram.Location = new Point(startX + PbImageProcessProgram.Width + PbQuestionCheckProgram.Width + 2 * spacing, startY);
 
+            PbPleaseSelectProgram.Location = new Point(startX, PbImageProcessProgram.Top - PbPleaseSelectProgram.Height - spacing);
         }
 
         private void SelectFunction_Resize(object sender, EventArgs e)

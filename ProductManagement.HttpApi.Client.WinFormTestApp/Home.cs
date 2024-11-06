@@ -23,9 +23,28 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             _accessTokenManager.Logouted += _accessTokenManager_Logouted;
 
             InitializeComponent();
+            HookEvent();
             InitForm();
             InitMenu();
             EnterSelectFunction();
+        }
+
+        private void HookEvent()
+        {
+            FormClosing += Home_FormClosing;
+        }
+
+        private void Home_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            var result = LQHelper.ConfirmMessage("您確定要離開本系統？");
+            if (result == DialogResult.OK)
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
 
         private void _accessTokenManager_Logouted(object? sender, EventArgs e)
@@ -72,15 +91,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitMenu()
         {
             menuStrip = new MenuStrip();
-            ToolStripMenuItem HomeMenuItem = new("首頁");
-            ToolStripMenuItem ImageProcessMenuItem = new("圖片小程式");
-            ToolStripMenuItem QuestionCheckMenuItem = new("題目檢查");
-            ToolStripMenuItem QuestionImportMenuItem = new("題目匯入");
+            ToolStripMenuItem HomeMenuItem = new(LQDefine.LQMessage(LQDefine.LQCode.C0032));
+            ToolStripMenuItem ImageProcessMenuItem = new(LQDefine.LQMessage(LQDefine.LQCode.C0033));
+            ToolStripMenuItem QuestionCheckMenuItem = new(LQDefine.LQMessage(LQDefine.LQCode.C0034));
+            ToolStripMenuItem QuestionImportMenuItem = new(LQDefine.LQMessage(LQDefine.LQCode.C0035));
 
             HomeMenuItem.Image = Resources.Home;
-            ImageProcessMenuItem.Image = Resources.ImageProcessIcon;
-            QuestionCheckMenuItem.Image = Resources.QuestionCheckIcon;
-            QuestionImportMenuItem.Image = Resources.QuestionImportIcon;
+            ImageProcessMenuItem.Image = Resources.ImageProcessIcon1;
+            QuestionCheckMenuItem.Image = Resources.QuestionCheckIcon1;
+            QuestionImportMenuItem.Image = Resources.QuestionImportIcon1;
 
             menuStrip.Items.Add(HomeMenuItem);
             menuStrip.Items.Add(ImageProcessMenuItem);
@@ -133,7 +152,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 var loginInfo = $"您好，{_accessTokenParser.PreferredUsername}/{_accessTokenParser.GivenName}";
                 LoginOutMenuItem = new(loginInfo)
                 {
-                    Image = Resources.LoginedHeader
+                    Image = Resources.LoginedHeader1
                 };
                 string logout = LQDefine.LQMessage(LQDefine.LQCode.C0024);
 
@@ -189,7 +208,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
             else
             {
-                Application.Exit();
+                FormClosing -= Home_FormClosing;
+                Close();
             }
         }
     }

@@ -35,6 +35,11 @@
             C0028,
             C0029,
             C0030,
+            C0031,
+            C0032,
+            C0033,
+            C0034,
+            C0035,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -70,7 +75,14 @@
                     {LQCode.C0028, "登入時，無法與伺服器連線，請與管理員聯繫" },
                     {LQCode.C0029, "登入..." },
                     {LQCode.C0030, "更新失敗" },
+                    {LQCode.C0031, "登入失敗，請與管理員聯繫" },
+                    {LQCode.C0032, "首頁" },
+                    {LQCode.C0033, "圖片小程式" },
+                    {LQCode.C0034, "題目檢查" },
+                    {LQCode.C0035, "題目匯入" },
                 };
+
+        public static Color PrimaryColor => Color.FromArgb(167, 108, 86);
 
         public static string LQMessage(LQCode code)
         {
@@ -81,6 +93,13 @@
         {
             Yes,
             No,
+        }
+
+        public enum LoginResult
+        {
+            InvalidUsernameOrPassword,
+            Successs,
+            Failed,
         }
 
         public enum ClientCheckResult

@@ -31,9 +31,11 @@
             PbQuestionImportProgram = new PictureBox();
             PbQuestionCheckProgram = new PictureBox();
             PbImageProcessProgram = new PictureBox();
+            PbPleaseSelectProgram = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)PbQuestionImportProgram).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PbQuestionCheckProgram).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PbImageProcessProgram).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)PbPleaseSelectProgram).BeginInit();
             SuspendLayout();
             // 
             // PbQuestionImportProgram
@@ -66,12 +68,24 @@
             PbImageProcessProgram.TabIndex = 4;
             PbImageProcessProgram.TabStop = false;
             // 
+            // PbPleaseSelectProgram
+            // 
+            PbPleaseSelectProgram.BackColor = Color.Transparent;
+            PbPleaseSelectProgram.Image = Properties.Resources.PleaseSelectProgram;
+            PbPleaseSelectProgram.Location = new Point(67, 103);
+            PbPleaseSelectProgram.Name = "PbPleaseSelectProgram";
+            PbPleaseSelectProgram.Size = new Size(285, 51);
+            PbPleaseSelectProgram.SizeMode = PictureBoxSizeMode.StretchImage;
+            PbPleaseSelectProgram.TabIndex = 9;
+            PbPleaseSelectProgram.TabStop = false;
+            // 
             // SelectFunction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.backgroup;
             ClientSize = new Size(1016, 578);
+            Controls.Add(PbPleaseSelectProgram);
             Controls.Add(PbQuestionImportProgram);
             Controls.Add(PbQuestionCheckProgram);
             Controls.Add(PbImageProcessProgram);
@@ -81,6 +95,7 @@
             ((System.ComponentModel.ISupportInitialize)PbQuestionImportProgram).EndInit();
             ((System.ComponentModel.ISupportInitialize)PbQuestionCheckProgram).EndInit();
             ((System.ComponentModel.ISupportInitialize)PbImageProcessProgram).EndInit();
+            ((System.ComponentModel.ISupportInitialize)PbPleaseSelectProgram).EndInit();
             ResumeLayout(false);
         }
 
@@ -89,5 +104,6 @@
         private PictureBox PbQuestionImportProgram;
         private PictureBox PbQuestionCheckProgram;
         private PictureBox PbImageProcessProgram;
+        private PictureBox PbPleaseSelectProgram;
     }
 }

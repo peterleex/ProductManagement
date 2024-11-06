@@ -81,10 +81,19 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                await _accessTokenManager.ObtainAccessToken(txtAccount.Text, txtPassword.Text);
-                if (_accessTokenManager.AccessToken.IsNullOrEmpty())
+                var result = await _accessTokenManager.ObtainAccessToken(txtAccount.Text, txtPassword.Text);
+
+                if (result == LoginResult.Successs)
+                {
+                    Close();
+                }
+                else if (result == LoginResult.InvalidUsernameOrPassword)
                 {
                     LQHelper.InfoMessage(LQMessage(LQCode.C0027));
+                }
+                else
+                {
+                    LQHelper.InfoMessage(LQMessage(LQCode.C0031));
                 }
             }
             catch (Exception ex)

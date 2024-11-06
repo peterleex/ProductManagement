@@ -93,6 +93,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ImageProcessIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("ImageProcessIcon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ImageProcessProgram {
             get {
                 object obj = ResourceManager.GetObject("ImageProcessProgram", resourceCulture);
@@ -113,6 +123,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LoginedHeader1 {
+            get {
+                object obj = ResourceManager.GetObject("LoginedHeader1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap OpenEye {
             get {
                 object obj = ResourceManager.GetObject("OpenEye", resourceCulture);
@@ -123,9 +143,29 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PleaseSelectProgram {
+            get {
+                object obj = ResourceManager.GetObject("PleaseSelectProgram", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap QuestionCheckIcon {
             get {
                 object obj = ResourceManager.GetObject("QuestionCheckIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap QuestionCheckIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("QuestionCheckIcon1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +193,29 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap QuestionImportIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("QuestionImportIcon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap QuestionImportProgram {
             get {
                 object obj = ResourceManager.GetObject("QuestionImportProgram", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TransparentStar {
+            get {
+                object obj = ResourceManager.GetObject("TransparentStar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
