@@ -28,6 +28,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             WindowState = FormWindowState.Maximized;
             Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
+            ShowIcon = false;
 
         }
     }

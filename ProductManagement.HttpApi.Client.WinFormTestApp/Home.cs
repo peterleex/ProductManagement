@@ -123,6 +123,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         }
         private void ImageProcessMenuItem_Click(object? sender, EventArgs e)
         {
+            EnterImageProcess();
+        }
+
+        public void EnterImageProcess()
+        {
             var imageProcess = new ImageProcess(_serviceProvider)
             {
                 MdiParent = this
@@ -171,29 +176,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
             await _accessTokenManager.Logout();
         }
-
-        //private void LoginedHeaderMenuItem_Click(object? sender, EventArgs e)
-        //{
-        //    if (_accessTokenManager.AccessToken == null)
-        //    {
-        //        new Login(_serviceProvider).ShowDialog(this);
-        //    }
-        //    else
-        //    {
-        //        // 呈現 Logout 選單
-        //        string logout = LQDefine.LQMessage(LQDefine.LQCode.C0024);
-
-        //        var logoutMenuItem = new ToolStripMenuItem(logout);
-        //        logoutMenuItem.Click += async (s, args) =>
-        //        {
-        //            await _accessTokenManager.Logout();
-        //            LoginOutMenuItem!.DropDownItems.Clear();
-        //        };
-
-        //        if (!LoginOutMenuItem!.DropDownItems.OfType<ToolStripMenuItem>().Any(item => item.Text == logout))
-        //            LoginOutMenuItem.DropDownItems.Add(logoutMenuItem);
-        //    }
-        //}
 
         private void Home_Load(object sender, EventArgs e)
         {
