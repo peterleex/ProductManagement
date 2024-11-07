@@ -33,17 +33,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 ApplicationConfiguration.Initialize();
 
-                //if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
-                //    Environment.GetCommandLineArgs().Length > 1)
-                //{
-                //    Application.Run(new LQUpdator(serviceProvider));
-                //}
-                //else
-                //{
-                //    Application.Run(new LQHome(serviceProvider));
-                //}
+                if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
+                    Environment.GetCommandLineArgs().Length > 1)
+                {
+                    Application.Run(new LQUpdator(serviceProvider));
+                }
+                else
+                {
+                    Application.Run(new LQHome(serviceProvider));
+                }
 
-                Application.Run(new LQImageProcess(serviceProvider));
+                //Application.Run(new LQPreImageProcess(serviceProvider));
 
                 await application.ShutdownAsync();
             }

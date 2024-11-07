@@ -47,6 +47,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0038,
             C0039,
             C0040,
+            C0041,
+            C0042,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -92,9 +94,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0038, "離開龍騰數位題庫系統" },
                     {LQCode.C0039, "您確定要離開本系統？" },
                     {LQCode.C0040, "docx 檔案沒有包含 MainDocumentPart\n{0}" },
+                    {LQCode.C0041, "有 {0} 張圖正在載入中，請稍候…" },
+                    {LQCode.C0042, "載入中" },
 
 
-                    
+
 
                 };
 

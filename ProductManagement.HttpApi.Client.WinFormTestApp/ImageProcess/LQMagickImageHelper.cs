@@ -31,7 +31,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
             return new Bitmap(memoryStream);
         }
 
-        public static List<MagickImage> ExtractImagesFromDocx(string filePath)
+        public async static Task<List<MagickImage>> ExtractImagesFromDocx(string filePath)
         {
             var images = new List<MagickImage>();
 
@@ -48,7 +48,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
             foreach (var imagePart in imageParts)
             {
                 using var stream = imagePart.GetStream();
-                var image = new MagickImage(stream);
+                var image = new MagickImage();
+                await image.ReadAsync(stream);
                 images.Add(image);
             }
 
@@ -110,6 +111,32 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
         {
             return new HashSet<iText.Kernel.Pdf.Canvas.Parser.EventType> { iText.Kernel.Pdf.Canvas.Parser.EventType.RENDER_IMAGE };
         }
+    }
+
+
+    public class ImageInfo
+    {
+        public ImageInfo(string file) => FilePath = file;
+
+        public async Task LoadImage()
+        {
+            var fileType = LQHelper.GetFileType(FilePath);
+
+            if (fileType == LQHelper.FileType.Image)
+            {
+                var image = new MagickImage();
+                await image.ReadAsync(FilePath);
+                Images.Add(image);
+            }
+            else if (fileType == LQHelper.FileType.Docx)
+                Images.AddRange(await LQMagickImageExtensions.ExtractImagesFromDocx(FilePath));
+            else
+                Images.AddRange(LQMagickImageExtensions.ExtractImagesFromPdf(FilePath));
+        }
+        public List<MagickImage> Images { get; set; } = [];
+        public string FilePath { get; set; } = string.Empty;
+
+        public int ImageCount => Images.Count;
     }
 }
 

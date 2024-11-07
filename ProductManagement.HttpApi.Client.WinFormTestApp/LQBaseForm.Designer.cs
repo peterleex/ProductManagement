@@ -1,6 +1,6 @@
 ﻿namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    partial class LQImageProcess
+    partial class LQBaseForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "LQImageProcess";
+            this.Text = "LQBaseForm";
         }
 
         #endregion

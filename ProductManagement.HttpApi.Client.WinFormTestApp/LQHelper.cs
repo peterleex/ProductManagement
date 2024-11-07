@@ -78,5 +78,24 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         }
 
         public static string CurrentProcessDirectory => Path.GetDirectoryName(Environment.ProcessPath)!;
+    
+        public enum FileType
+        {
+            Image,
+            Docx,
+            Pdf,
+        }
+
+        public static FileType GetFileType(string filePath)
+        {
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+            return extension switch
+            {
+                ".jpg" or ".jpeg" or ".png" or ".gif" or ".ai" or ".eps" or ".tif" => FileType.Image,
+                ".docx" => FileType.Docx,
+                ".pdf" => FileType.Pdf,
+                _ => throw new NotSupportedException($"File type {extension} is not supported")
+            };
+        }
     }
 }

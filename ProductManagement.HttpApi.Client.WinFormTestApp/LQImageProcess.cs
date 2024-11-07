@@ -1,6 +1,6 @@
 ﻿using ImageMagick;
+using Microsoft.Extensions.DependencyInjection;
 using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
-using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,66 +13,27 @@ using System.Windows.Forms;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-
-    public partial class LQImageProcess : Form
+    public partial class LQImageProcess : LQBaseForm
     {
-        private readonly IServiceProvider _serviceProvider;
-        private static string moduleName = LQDefine.LQMessage(LQDefine.LQCode.C0037);
+        public List<ImageInfo> ImageInfos { get; set; } = [];
 
         public LQImageProcess(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
+
             InitializeComponent();
+            InitModule();
             InitForm();
         }
-
-        private void InitForm()
+        protected override void InitModule()
         {
-            WindowState = FormWindowState.Maximized;
-            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
-            ShowIcon = false;
-
+            ModuleName = LQDefine.LQMessage(LQDefine.LQCode.C0037); 
         }
 
-        private async void btnOpenFile_Click(object sender, EventArgs e)
+        protected override void InitForm()
         {
-            var files = await OpenFileDialogAsync();
-
-            //PbImage.Image = new MagickImage(files[0]).ToBitmap();
-
-            //var image = LQMagickImageExtensions.ExtractImagesFromDocx(files[0]);
-            //if (image.Count > 0)
-            //    PbImage.Image = image[0].ToBitmap();
-
-            var image = LQMagickImageExtensions.ExtractImagesFromPdf(files[0]);
-            if (image.Count > 0)
-                PbImage.Image = image[0].ToBitmap();
-            
-        }
-
-        private async Task<string[]> OpenFileDialogAsync()
-        {
-            var files = Array.Empty<string>();
-
-            await Task.Run(() =>
-            {
-                var tcs = new TaskCompletionSource<bool>();
-                var thread = new Thread(() =>
-                {
-                    using var dialog = new OpenFileDialog();
-                    dialog.Multiselect = true;
-                    dialog.Filter = LQDefine.SupportedFileType;
-                    dialog.ShowDialog();
-                    tcs.SetResult(true);
-
-                    files = dialog.FileNames;
-                });
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
-                tcs.Task.Wait();
-            });
-
-            return files;
+            base.InitForm();
+            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + ModuleName;
         }
     }
 }

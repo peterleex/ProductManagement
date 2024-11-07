@@ -129,7 +129,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public void EnterImageProcess()
         {
-            var imageProcess = new LQImageProcess(_serviceProvider)
+            var imageProcess = new LQPreImageProcess(_serviceProvider)
             {
                 MdiParent = this
             };

@@ -57,13 +57,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             return clientAppUrl;
         }
 
-        private const string _updatorFilePath = @"D:\SOURCE\LQSystem\Code\Training\ABP\ProductManagement\LQClientAppUpdator\bin\Debug\net8.0-windows\龍騰數位題庫應用程式更新程式.exe";
-        private void BtnRunUpdator_Click(object sender, EventArgs e)
-        {
-            Process.Start(_updatorFilePath);
-            Application.Exit();
-        }
-
         private async Task<CanEnterSystemResult> ClientUpdateCheck()
         {
             var result = await CheckUpdate();
