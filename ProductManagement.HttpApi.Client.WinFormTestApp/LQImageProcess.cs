@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
@@ -84,7 +85,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         protected override void InitForm()
         {
             base.InitForm();
-            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + ModuleName;
+            Text = LQMessage(LQCode.C0022) + ModuleName;
         }
 
         private void LoadImages()
@@ -101,6 +102,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 foreach (var image in imageInfo.Images)
                 {
+                    MagickInfo info = new(image);
+                    var isJpeg = info.GetIsJpeg();
+                    var widthInCm = info.GetWidthInCm();
+                    var isBelow300Dpi = info.GetIsBelow300Dpi();
+
                     var pictureBox = new PictureBox
                     {
                         Width = imageFrameWidth,
@@ -109,24 +115,97 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                         Image = image.ToBitmap()
                     };
 
-                    var label = new Label
+                    var lblRowOne_FileName = new Label
                     {
                         AutoSize = true,
-                        ForeColor = GetImageInfoColor(imageInfo),
                         Location = new Point(0, imageFrameHeight),
                     };
-                    label.Text = GetFileName(label, imageFrameWidth, imageInfo.FilePath);
-                    //Location = new Point((imageFrameWidth - label.PreferredWidth) / 2, imageFrameHeight);
+                    lblRowOne_FileName.Text = GetFileNameFitForUI(lblRowOne_FileName, imageFrameWidth, imageInfo.FilePath);
+
+                    var lblRowTwo_ExtensionName = new Label
+                    {
+                        AutoSize = true,
+                        ForeColor = isJpeg ? DefaultColor : WarningColor,
+                        Location = new Point(0, imageFrameHeight + lblRowOne_FileName.Height),
+                        Text = info.FileFormat
+                    };
+
+                    var lblRowTwo_Dpi = new Label
+                    {
+                        AutoSize = true,
+                        ForeColor = !isBelow300Dpi ? DefaultColor : WarningColor,
+                        Location = new Point(lblRowTwo_ExtensionName.Width, imageFrameHeight + lblRowOne_FileName.Height),
+                        Text = info.Dpi,
+                    };
+
+                    var lblRowTwo_ImageWidth = new Label
+                    {
+                        AutoSize = true,
+                        Text = widthInCm.ToString(),
+                        ForeColor = widthInCm <= AllowedMaxWidthInCm ? DefaultColor : WarningColor,
+                        Location = new Point(lblRowTwo_ExtensionName.Width + lblRowTwo_Dpi.Width, imageFrameHeight + lblRowOne_FileName.Height),
+                    };
+
+                    var fileSize = info.GetFileSizeInKB();
+                    var lblRowTwo_FileSize = new Label
+                    {
+                        AutoSize = true,
+                        Text = fileSize.ToString(),
+                        ForeColor = fileSize <= AllowedMaxFileSizeInKb ? DefaultColor : WarningColor,
+                        Location = new Point(lblRowTwo_ExtensionName.Width + lblRowTwo_Dpi.Width + lblRowTwo_ImageWidth.Width, imageFrameHeight + lblRowOne_FileName.Height),
+                    };
+
+                    var lblRowThree_FileExtentisonInfo = new Label
+                    {
+                        AutoSize = true,
+                        Text = isJpeg? string.Empty:LQMessage(LQCode.C0043),
+                        ForeColor = WarningColor,
+                        Location = new Point(0, imageFrameHeight + lblRowOne_FileName.Height + lblRowTwo_ExtensionName.Height),
+                    };
+
+                    var lblRowThree_DpiInfo = new Label
+                    {
+                        AutoSize = true,
+                        Text = !isBelow300Dpi ? string.Empty : LQMessage(LQCode.C0044),
+                        ForeColor = WarningColor,
+                        Location = new Point(lblRowThree_FileExtentisonInfo.Width, imageFrameHeight + lblRowOne_FileName.Height + lblRowTwo_ExtensionName.Height),
+                    };
+
+                    var lblRowThree_WidthInfo = new Label
+                    {
+                        AutoSize = true,
+                        Text = widthInCm <= AllowedMaxWidthInCm ? string.Empty : LQMessage(LQCode.C0045),
+                        ForeColor = WarningColor,
+                        Location = new Point(lblRowThree_FileExtentisonInfo.Width + lblRowThree_DpiInfo.Width, imageFrameHeight + lblRowOne_FileName.Height + lblRowTwo_ExtensionName.Height),
+                    };
+
+                    var lblRowThree_FileSizeInfo = new Label
+                    {
+                        AutoSize = true,
+                        Text = fileSize <= AllowedMaxFileSizeInKb ? string.Empty : LQMessage(LQCode.C0046),
+                        ForeColor = WarningColor,
+                        Location = new Point(lblRowThree_FileExtentisonInfo.Width + lblRowThree_DpiInfo.Width + lblRowThree_WidthInfo.Width, imageFrameHeight + lblRowOne_FileName.Height + lblRowTwo_ExtensionName.Height),
+                    };
 
                     var panel = new Panel
                     {
                         Width = imageFrameWidth,
-                        Height = imageFrameHeight + label.Height,
+                        Height = imageFrameHeight + lblRowOne_FileName.Height,
                         BorderStyle = BorderStyle.FixedSingle
                     };
 
                     panel.Controls.Add(pictureBox);
-                    panel.Controls.Add(label);
+                    panel.Controls.Add(lblRowOne_FileName);
+
+                    panel.Controls.Add(lblRowTwo_ExtensionName);
+                    panel.Controls.Add(lblRowTwo_Dpi);
+                    panel.Controls.Add(lblRowTwo_ImageWidth);
+                    panel.Controls.Add(lblRowTwo_FileSize);
+
+                    panel.Controls.Add(lblRowThree_FileExtentisonInfo);
+                    panel.Controls.Add(lblRowThree_DpiInfo);
+                    panel.Controls.Add(lblRowThree_WidthInfo);
+
                     imagePanel.Controls.Add(panel);
 
                     pictureBox.MouseEnter += (s, e) => ShowImagePreview(pictureBox, imageInfo);
@@ -136,12 +215,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private string GetImageInfoText(Label label, ImageInfo imageInfo, MagickImage image, int imageFrameWidth)
-        {
-            return GetFileName(label, imageFrameWidth, imageInfo.FilePath);
-        }
+        //private string GetImageInfoText(Label label, ImageInfo imageInfo, MagickImage image, int imageFrameWidth)
+        //{
+        //    return GetFileName(label, imageFrameWidth, imageInfo.FilePath);
+        //}
 
-        private static string GetFileName(Label label, int imageFrameWidth, string filePath)
+        private static string GetFileNameFitForUI(Label label, int imageFrameWidth, string filePath)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
             using (Graphics g = label.CreateGraphics())

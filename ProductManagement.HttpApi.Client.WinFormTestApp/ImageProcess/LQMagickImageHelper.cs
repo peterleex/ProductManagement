@@ -15,6 +15,7 @@ using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using DocumentFormat.OpenXml.Features;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using System.Diagnostics.Tracing;
+using System.Drawing.Imaging;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
 {
@@ -120,15 +121,30 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
 
         public async Task LoadImage()
         {
-            var fileType = LQHelper.GetFileType(FilePath);
+            LQImageFileHelper fileInfo = new(FilePath);
+            var fileType = fileInfo.GetFileType();
 
-            if (fileType == LQHelper.FileType.Image)
+            if (fileType == FileType.Image)
             {
                 var image = new MagickImage();
-                await image.ReadAsync(FilePath);
+                if (fileInfo.IsAiOrEps())
+                {
+                    var readSettings = new MagickReadSettings
+                    {
+                        Density = new Density(LQDefine.DefaultDpi, LQDefine.DefaultDpi, DensityUnit.PixelsPerInch),
+                    };
+                    await image.ReadAsync(FilePath, readSettings);
+
+                    image.Density = new Density(LQDefine.DefaultDpi, LQDefine.DefaultDpi, DensityUnit.PixelsPerInch);
+                }
+                else
+                {
+                    await image.ReadAsync(FilePath);
+                }
+
                 Images.Add(image);
             }
-            else if (fileType == LQHelper.FileType.Docx)
+            else if (fileType == FileType.Docx)
                 Images.AddRange(await LQMagickImageExtensions.ExtractImagesFromDocx(FilePath));
             else
                 Images.AddRange(LQMagickImageExtensions.ExtractImagesFromPdf(FilePath));

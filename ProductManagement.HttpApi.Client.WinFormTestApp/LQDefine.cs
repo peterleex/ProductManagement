@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using ImageMagick;
+using System.Runtime.CompilerServices;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
@@ -49,6 +50,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0040,
             C0041,
             C0042,
+            C0043,
+            C0044,
+            C0045,
+            C0046,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -96,6 +101,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0040, "docx 檔案沒有包含 MainDocumentPart\n{0}" },
                     {LQCode.C0041, "有 {0} 張圖正在載入中，請稍候…" },
                     {LQCode.C0042, "載入中" },
+                    {LQCode.C0043, "非jpg" },
+                    {LQCode.C0044, "未達300dpi" },
+                    {LQCode.C0045, "寬大於14" },
+                    {LQCode.C0046, "大於1000KB" },
 
 
 
@@ -103,6 +112,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 };
 
         public static Color PrimaryColor => Color.FromArgb(167, 108, 86);
+
+        public static Color WarningColor => Color.Red;
+        public static Color DefaultColor => Color.Black;
 
         public static string LQMessage(LQCode code)
         {
@@ -144,7 +156,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public const string MainExeFileName = "龍騰數位題庫應用程式.exe";
         public static string MainExeFileProcessName => Path.GetFileNameWithoutExtension(MainExeFileName);
 
-        public const string UpdatorExeFileName = "龍騰數位題庫應用程式更新程式.exe";   
+        public const string UpdatorExeFileName = "龍騰數位題庫應用程式更新程式.exe";
         public static string UpdatorExeFileProcessName => Path.GetFileNameWithoutExtension(UpdatorExeFileName);
 
         public static Color ProgressColor => Color.Green;
@@ -152,5 +164,81 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static Size UpdateWindowSize { get; internal set; } = new Size(418, 162);
         public static int PreferScreenWidth { get; internal set; } = 1920;
         public static int PreferScreenHeight { get; internal set; } = 1080;
+        public static double AllowedMaxWidthInCm => 14f;
+
+        public static double AllowedMaxFileSizeInKb => 1000f;
+
+        public static double DefaultDpi => 300;
+
+        public class MagickInfo
+        {
+            private readonly MagickImage _magickImage;
+            public MagickInfo(MagickImage magickImage) => _magickImage = magickImage;
+
+            public bool GetIsJpeg()
+            {
+                MagickFormat format = _magickImage.Format;
+
+                switch (format)
+                {
+                    case MagickFormat.J2c:
+                    case MagickFormat.J2k:
+                    case MagickFormat.Jng:
+                    case MagickFormat.Jp2:
+                    case MagickFormat.Jpc:
+                    case MagickFormat.Jpe:
+                    case MagickFormat.Jpeg:
+                    case MagickFormat.Jpg:
+                    case MagickFormat.Jpm:
+                    case MagickFormat.Jps:
+                    case MagickFormat.Jpt:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            public string FileFormat => Enum.GetName(typeof(MagickFormat), _magickImage.Format) ?? string.Empty;
+
+            public string Dpi => _magickImage.Density.ToString(DensityUnit.PixelsPerInch);
+
+
+            public bool GetIsBelow300Dpi()
+            {
+                return _magickImage.Density.X < DefaultDpi || _magickImage.Density.Y < DefaultDpi;
+            }
+
+            public double GetWidthInCm()
+            {
+                // 获取图像的宽度（像素）
+                uint widthInPixels = _magickImage.Width;
+
+                // 获取图像的分辨率（DPI）
+                double dpi = _magickImage.Density.X;
+
+                // 将像素转换为 CM
+                double widthInInches = widthInPixels / dpi;
+                double widthInCm = widthInInches * 2.54;
+
+                // 四舍五入保留一位小数
+                return Math.Round(widthInCm, 1);
+            }
+
+            public double GetFileSizeInKB()
+            {
+                // 将图像转换为字节数组
+                byte[] imageBytes = _magickImage.ToByteArray();
+
+                // 获取文件大小（字节）
+                long fileSizeInBytes = imageBytes.Length;
+
+                // 将字节转换为KB
+                double fileSizeInKB = fileSizeInBytes / 1024.0;
+
+                // 四舍五入保留两位小数
+                return Math.Round(fileSizeInKB, 2);
+            }
+
+        }
     }
 }
