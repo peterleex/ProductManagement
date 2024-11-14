@@ -27,8 +27,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
             InitializeComponent();
             InitForm();
+            InitControl();
             HookEvent();
             InitializeCustomComponents();
+        }
+
+        private void InitControl()
+        {
+            lblInfo.Text = string.Empty;
         }
 
         private void InitializeCustomComponents()

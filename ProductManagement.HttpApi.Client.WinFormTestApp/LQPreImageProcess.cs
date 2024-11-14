@@ -68,7 +68,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void ProcessDroppedFiles(string[] files)
         {
-            var filterFile = files.Where(f => LQDefine.AllSupportedFileType.Contains(Path.GetExtension(f).ToLower())).ToArray();
+            var filterFile = files
+                .Where(f => LQDefine.AllSupportedFileType.Contains(Path.GetExtension(f).ToLower()))
+                .ToArray();
             OpenImage(filterFile);
         }
 

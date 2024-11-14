@@ -21,10 +21,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
     {
         public List<ImageInfo> ImageInfos { get; set; } = [];
 
-        private Size imagePictureBoxSide;
+        private Size imageSideLength;
         private FlowLayoutPanel plImages = null!;
-        private Panel pnControlContainer = null!;
+        private Panel plControls = null!;
         private MagnifyImage _enlargeImageForm = null!;
+        private PictureBox PbMagnifyImage = null!;
 
         public LQImageProcess(IServiceProvider serviceProvider)
         {
@@ -33,14 +34,24 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             InitializeComponent();
             InitModule();
             InitForm();
+            InitControl();
             HookEvent();
+        }
+
+        private void InitControl()
+        {
+            PbMagnifyImage = new()
+            {
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Visible = false,
+                BackColor = System.Drawing.Color.Transparent
+            };
+            Controls.Add(PbMagnifyImage);
         }
 
         private void HookEvent()
         {
             Load += LQImageProcess_Load;
-            //Layout += LQImageProcess_Layout;
-            //Resize += LQImageProcess_Resize;
         }
 
 
@@ -48,20 +59,26 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             InitPanelLayout();
             InitImageSquare();
-            CreateMagnifyImage();
+            //CreateMagnifyImage();
+            InitMagnifyPictureBoxSize();
 
             LoadImages();
+        }
+
+        private void InitMagnifyPictureBoxSize()
+        {
+            PbMagnifyImage.Size = imageSideLength * MagnifyIndex;
         }
 
         private void InitImageSquare()
         {
             var len = (int)(plImages.ClientSize.Width / WidthDivider);
-            imagePictureBoxSide = new Size(len, len);
+            imageSideLength = new Size(len, len);
         }
 
         private void CreateMagnifyImage()
         {
-            _enlargeImageForm = new MagnifyImage(imagePictureBoxSide);
+            _enlargeImageForm = new MagnifyImage(imageSideLength);
         }
 
         private void InitPanelLayout()
@@ -77,18 +94,18 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             Controls.Add(plImages);
 
-            pnControlContainer = new Panel
+            plControls = new Panel
             {
                 Dock = DockStyle.Bottom,
                 Height = (int)(ClientSize.Height * 1 / 6.0)
             };
-            Controls.Add(pnControlContainer);
+            Controls.Add(plControls);
         }
 
 
         protected override void InitModule()
         {
-            ModuleName = LQDefine.LQMessage(LQDefine.LQCode.C0037);
+            ModuleName = LQMessage(LQCode.C0037);
         }
 
         protected override void InitForm()
@@ -131,7 +148,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 FormBorderStyle = FormBorderStyle.None;
                 StartPosition = FormStartPosition.CenterParent;
                 Size = _formSize;
-                //Location = new Point(Cursor.Position.X, Cursor.Position.Y);
                 ShowInTaskbar = false;
             }
 
@@ -147,12 +163,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-
-
         private void LoadImages()
         {
-            var pictureBoxHeigth = imagePictureBoxSide.Height;
-            var pictureBoxWidth = imagePictureBoxSide.Width;
+            var pictureBoxHeigth = imageSideLength.Height;
+            var pictureBoxWidth = imageSideLength.Width;
 
             for (int i = 0; i < ImageInfos.Count; i++)
             {
@@ -172,7 +186,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                     var pbImage = new PictureBox
                     {
-                        Size = imagePictureBoxSide,
+                        Size = imageSideLength,
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Image = image.ToBitmap()
                     };
@@ -272,7 +286,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {
                         Width = pictureBoxWidth,
                         Height = pictureBoxHeigth + row1Height + row2Height + row3Height,
-                        BorderStyle = BorderStyle.FixedSingle
+                        BorderStyle = BorderStyle.None,
                     };
 
                     plImage.Controls.Add(pbImage);
@@ -291,9 +305,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                     plImages.Controls.Add(plImage);
 
-                    pbImage.Click += (s, e) => ShowMagnify(pbImage.Image);
-                    //pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage.Image);
-                    //pbImage.MouseLeave += (s, e) => HideMagnify();
+                    //pbImage.Click += (s, e) => ShowMagnify(pbImage.Image);
+                    pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage.Image);
+                    pbImage.MouseLeave += (s, e) => HideMagnify();
                     pbCloseIcon.Click += (s, e) => plImages.Controls.Remove(plImage);
                 }
             }
@@ -326,20 +340,39 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             return fileName;
         }
 
-        private void ShowMagnify(Image image)
+        private void ShowMagnify1(Image image)
         {
             _enlargeImageForm.PictureBoxImage = image;
             _enlargeImageForm.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
-            _enlargeImageForm.Visible = true;
             _enlargeImageForm.BringToFront();
+            _enlargeImageForm.Visible = true;
         }
 
-        private void HideMagnify()
+        private void ShowMagnify(Image image)
+        {
+            PbMagnifyImage.Image = image;
+            PbMagnifyImage.Invalidate();
+            PbMagnifyImage.Location = CenterLocation();
+            PbMagnifyImage.BringToFront();
+            PbMagnifyImage.Visible = true;
+        }
+
+        private Point CenterLocation()
+        {
+            return new Point((ClientSize.Width - PbMagnifyImage.Width) / 2, (ClientSize.Height - PbMagnifyImage.Height) / 2);
+        }
+
+        private void HideMagnify1()
         {
             if (_enlargeImageForm.Visible)
             {
                 _enlargeImageForm.Visible = false;
             }
+        }
+
+        private void HideMagnify()
+        {
+            PbMagnifyImage.Visible = false;
         }
 
     }
