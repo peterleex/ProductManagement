@@ -45,9 +45,9 @@
             btnOpenFile.FlatStyle = FlatStyle.Flat;
             btnOpenFile.Font = new Font("Microsoft JhengHei UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 136);
             btnOpenFile.ForeColor = SystemColors.ButtonHighlight;
-            btnOpenFile.Location = new Point(341, 503);
+            btnOpenFile.Location = new Point(341, 423);
             btnOpenFile.Name = "btnOpenFile";
-            btnOpenFile.Size = new Size(363, 60);
+            btnOpenFile.Size = new Size(276, 60);
             btnOpenFile.TabIndex = 21;
             btnOpenFile.Text = "選擇檔案";
             btnOpenFile.UseVisualStyleBackColor = false;
@@ -59,7 +59,7 @@
             PbChooseImageFile.Image = Properties.Resources.ChooseImageFile2;
             PbChooseImageFile.Location = new Point(0, 0);
             PbChooseImageFile.Name = "PbChooseImageFile";
-            PbChooseImageFile.Size = new Size(1045, 620);
+            PbChooseImageFile.Size = new Size(958, 540);
             PbChooseImageFile.SizeMode = PictureBoxSizeMode.Zoom;
             PbChooseImageFile.TabIndex = 22;
             PbChooseImageFile.TabStop = false;
@@ -69,18 +69,18 @@
             plChooseImageFile.BackColor = Color.White;
             plChooseImageFile.Controls.Add(btnOpenFile);
             plChooseImageFile.Controls.Add(PbChooseImageFile);
-            plChooseImageFile.Location = new Point(413, 143);
+            plChooseImageFile.Location = new Point(380, 158);
             plChooseImageFile.Name = "plChooseImageFile";
-            plChooseImageFile.Size = new Size(1045, 620);
+            plChooseImageFile.Size = new Size(958, 540);
             plChooseImageFile.TabIndex = 23;
             // 
             // pbPleaseSelectImage
             // 
             pbPleaseSelectImage.BackColor = Color.Transparent;
             pbPleaseSelectImage.Image = Properties.Resources.lblPleaseSelectImage;
-            pbPleaseSelectImage.Location = new Point(413, 12);
+            pbPleaseSelectImage.Location = new Point(385, 93);
             pbPleaseSelectImage.Name = "pbPleaseSelectImage";
-            pbPleaseSelectImage.Size = new Size(515, 91);
+            pbPleaseSelectImage.Size = new Size(277, 44);
             pbPleaseSelectImage.SizeMode = PictureBoxSizeMode.Zoom;
             pbPleaseSelectImage.TabIndex = 24;
             pbPleaseSelectImage.TabStop = false;
@@ -90,7 +90,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.backgroup;
-            ClientSize = new Size(1904, 1041);
+            ClientSize = new Size(1602, 799);
             Controls.Add(pbPleaseSelectImage);
             Controls.Add(plChooseImageFile);
             Name = "LQPreImageProcess";

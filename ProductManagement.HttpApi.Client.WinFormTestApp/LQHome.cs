@@ -71,6 +71,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitForm()
         {
+            Size = LQDefine.DefaultWindowSize;
             IsMdiContainer = true;
             Hide();
             ShowIcon = false;

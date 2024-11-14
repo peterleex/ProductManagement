@@ -180,6 +180,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public static int MagnifyIndex => 2;
 
+        public static Size DefaultWindowSize => new (1920, 1080);
+
         public class MagickInfo
         {
             private readonly MagickImage _magickImage;
