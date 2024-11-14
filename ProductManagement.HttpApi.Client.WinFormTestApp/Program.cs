@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -13,12 +15,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static async Task Main()
+        static void Main()
         {
-            //SynchronizationContext.SetSynchronizationContext(new WindowsFormsSynchronizationContext());
-            try
+            var tcs = new TaskCompletionSource<bool>();
+
+            var thread = new Thread(async () =>
             {
-                using var application = await AbpApplicationFactory.CreateAsync<ProductManagementWinFormApiClientModule>(options =>
+                try
+                {
+                    using var application = await AbpApplicationFactory.CreateAsync<ProductManagementWinFormApiClientModule>(options =>
                     {
                         var builder = new ConfigurationBuilder();
                         builder.AddJsonFile("appsettings.json", false);
@@ -27,34 +32,42 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                         options.UseAutofac();
                     });
 
-                await application.InitializeAsync();
+                    await application.InitializeAsync();
 
-                var serviceProvider = application.ServiceProvider;
+                    var serviceProvider = application.ServiceProvider;
 
-                ApplicationConfiguration.Initialize();
+                    ApplicationConfiguration.Initialize();
 
-                if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
-                    Environment.GetCommandLineArgs().Length > 1)
-                {
-                    Application.Run(new LQUpdator(serviceProvider));
+                    if (Process.GetCurrentProcess().ProcessName == LQDefine.UpdatorExeFileProcessName ||
+                        Environment.GetCommandLineArgs().Length > 1)
+                    {
+                        Application.Run(new LQUpdator(serviceProvider));
+                    }
+                    else
+                    {
+                        Application.Run(new LQHome(serviceProvider));
+                    }
+
+                    await application.ShutdownAsync();
                 }
-                else
+                catch (Exception ex)
                 {
-                    Application.Run(new LQHome(serviceProvider));
+                    // Log the exception (you can use any logging framework)
+                    Debug.WriteLine($"An error occurred: {ex.Message}");
+                    Debug.WriteLine(ex.StackTrace);
+                    // Optionally, rethrow the exception if you want to crash the application
+                    throw;
                 }
+                finally
+                {
+                    tcs.SetResult(true);
+                }
+            });
 
-                //Application.Run(new LQPreImageProcess(serviceProvider));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
 
-                await application.ShutdownAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (you can use any logging framework)
-                Debug.WriteLine($"An error occurred: {ex.Message}");
-                Debug.WriteLine(ex.StackTrace);
-                // Optionally, rethrow the exception if you want to crash the application
-                throw;
-            }
+            tcs.Task.Wait();
         }
     }
 }

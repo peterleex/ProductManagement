@@ -73,6 +73,46 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ChooseImageFile {
+            get {
+                object obj = ResourceManager.GetObject("ChooseImageFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ChooseImageFile1 {
+            get {
+                object obj = ResourceManager.GetObject("ChooseImageFile1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ChooseImageFile2 {
+            get {
+                object obj = ResourceManager.GetObject("ChooseImageFile2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CloseIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloseIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Home {
             get {
                 object obj = ResourceManager.GetObject("Home", resourceCulture);
@@ -106,6 +146,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         internal static System.Drawing.Bitmap ImageProcessProgram {
             get {
                 object obj = ResourceManager.GetObject("ImageProcessProgram", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap lblPleaseSelectImage {
+            get {
+                object obj = ResourceManager.GetObject("lblPleaseSelectImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

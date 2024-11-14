@@ -55,7 +55,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             ShowIcon = false;
         }
 
-        private void CenterPictureBoxes()
+        private void CenterControls()
         {
             int spacing = 25; // 三個 PictureBox 的间距
             int totalWidth = PbImageProcessProgram.Width + PbQuestionCheckProgram.Width + PbQuestionImportProgram.Width + 2 * spacing;
@@ -71,7 +71,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void SelectFunction_Resize(object sender, EventArgs e)
         {
-            CenterPictureBoxes();
+            CenterControls();
         }
     }
 }

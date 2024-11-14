@@ -149,6 +149,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public const string SupportedFileType = "Image Files|*.gif;*.jpg;*.jpeg;*.png;*.eps;*.ai;*.tif|Documents|*.docx;*.pdf|All Files|*.gif;*.jpg;*.jpeg;*.png;*.eps;*.ai;*.tif;*.docx;*.pdf";
 
+        public static readonly string[] AllSupportedFileType = { ".gif", ".jpg", ".jpeg", ".png", ".eps", ".ai", ".tif", ".docx", ".pdf" };
+
         public const int DownloadBufferSize = 8192;
 
         public const string ExtractPath = "Extracted";
@@ -161,14 +163,22 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public static Color ProgressColor => Color.Green;
 
-        public static Size UpdateWindowSize { get; internal set; } = new Size(418, 162);
-        public static int PreferScreenWidth { get; internal set; } = 1920;
-        public static int PreferScreenHeight { get; internal set; } = 1080;
+        public static Size UpdateWindowSize => new Size(418, 162);
+        public static int PreferScreenWidth => 1920;
+        public static int PreferScreenHeight => 1080;
         public static double AllowedMaxWidthInCm => 14f;
 
         public static double AllowedMaxFileSizeInKb => 1000f;
 
         public static double DefaultDpi => 300;
+
+        public static double WidthDivider => 7.5;
+        public static double HeightDivider => 3.5;
+
+        public static int IconWidth => 32;
+        public static int IconHeight => 32;
+
+        public static int MagnifyIndex => 2;
 
         public class MagickInfo
         {
@@ -198,10 +208,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 }
             }
 
-            public string FileFormat => Enum.GetName(typeof(MagickFormat), _magickImage.Format) ?? string.Empty;
+            public string GetFileFormat()
+            {
+                return Enum.GetName(typeof(MagickFormat), _magickImage.Format) ?? string.Empty;
+            }
 
-            public string Dpi => _magickImage.Density.ToString(DensityUnit.PixelsPerInch);
-
+            public string GetDpi()
+            {
+                return _magickImage.Density.ToString(DensityUnit.PixelsPerInch);
+            }
 
             public bool GetIsBelow300Dpi()
             {
