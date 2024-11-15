@@ -63,6 +63,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Add {
+            get {
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap backgroup {
             get {
                 object obj = ResourceManager.GetObject("backgroup", resourceCulture);
@@ -96,6 +106,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         internal static System.Drawing.Bitmap ChooseImageFile2 {
             get {
                 object obj = ResourceManager.GetObject("ChooseImageFile2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ClearAll {
+            get {
+                object obj = ResourceManager.GetObject("ClearAll", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -256,6 +276,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         internal static System.Drawing.Bitmap QuestionImportProgram {
             get {
                 object obj = ResourceManager.GetObject("QuestionImportProgram", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Refresh", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
