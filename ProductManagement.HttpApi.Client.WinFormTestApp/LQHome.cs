@@ -1,10 +1,6 @@
-﻿using Autofac;
-using Microsoft.Extensions.DependencyInjection;
-using NUglify;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Authentication;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
-using System.Linq.Dynamic.Core;
-using System.Windows.Forms;
 
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
