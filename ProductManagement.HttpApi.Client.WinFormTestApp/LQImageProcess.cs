@@ -1,18 +1,6 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using ImageMagick;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
-using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
+﻿using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -25,7 +13,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private Panel plCommand = null!;
         private FlowLayoutPanel plImages = null!;
         private Panel plImageProcess = null!;
-        private MagnifyImage _enlargeImageForm = null!;
+        //private MagnifyImage _enlargeImageForm = null!;
         private PictureBox PbMagnifyImage = null!;
 
         public LQImageProcess(IServiceProvider serviceProvider)
@@ -45,8 +33,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Visible = false,
-                BackColor = System.Drawing.Color.Transparent
+                BackColor = System.Drawing.Color.Transparent,
+                BorderStyle = BorderStyle.Fixed3D,
             };
+            PbMagnifyImage.Parent = this;
             Controls.Add(PbMagnifyImage);
         }
 
@@ -55,15 +45,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             Load += LQImageProcess_Load;
         }
 
-
         private void LQImageProcess_Load(object? sender, EventArgs e)
         {
             SetPanelLayout();
             InitPanelContent();
             InitImageSquare();
-            //CreateMagnifyImage();
             InitMagnifyPictureBoxSize();
+        }
 
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
             ShowImages(ImageInfos);
         }
 
@@ -83,15 +75,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             imageSideLength = new Size(len, len);
         }
 
-        private void CreateMagnifyImage()
-        {
-            _enlargeImageForm = new MagnifyImage(imageSideLength);
-        }
+        //private void CreateMagnifyImage()
+        //{
+        //    _enlargeImageForm = new MagnifyImage(imageSideLength);
+        //}
 
         private void SetPanelLayout()
         {
             double commandWidthRadio = 1 / 12.0;
-            double imageProcessWidthRadio =  2 / 12.0;
+            double imageProcessWidthRadio = 2 / 12.0;
 
             plCommand = new Panel
             {
@@ -122,7 +114,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitCommandPanel()
         {
-            var spacing = 25;
+            var spacing = 20;
             var buttonHeight = 40;
             var buttonWidth = 150;
             Size buttonSize = new(buttonWidth, buttonHeight);
@@ -135,8 +127,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 ImageAlign = ContentAlignment.MiddleCenter,
                 TextAlign = ContentAlignment.MiddleCenter,
                 TextImageRelation = TextImageRelation.ImageBeforeText,
+                TabIndex = 0,
             };
-            btnRefresh.Click += BtnRefresh_Click; 
+            btnRefresh.Click += BtnRefresh_Click;
 
             var btnAdd = new Button
             {
@@ -146,6 +139,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 ImageAlign = ContentAlignment.MiddleCenter,
                 TextAlign = ContentAlignment.MiddleCenter,
                 TextImageRelation = TextImageRelation.ImageBeforeText,
+                TabIndex = 1,
             };
             btnAdd.Click += BtnAdd_Click;
 
@@ -157,6 +151,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 ImageAlign = ContentAlignment.MiddleCenter,
                 TextAlign = ContentAlignment.MiddleCenter,
                 TextImageRelation = TextImageRelation.ImageBeforeText,
+                TabIndex = 2,
             };
             btnClearAll.Click += (_, _) => Close();
 
@@ -191,6 +186,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void BtnAdd_Click(object? sender, EventArgs e)
         {
             var files = OpenImageFileDialog();
+            var alreadyAdded = ImageInfos.Select(i => i.FilePath);
+            files = files
+                .Where(f => !alreadyAdded.Contains(f))
+                .ToArray();
             var imageInfos = LoadImage(files);
             ImageInfos.AddRange(imageInfos);
             ShowImages(imageInfos);
@@ -205,61 +204,86 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             base.InitForm();
             Text = LQMessage(LQCode.C0022) + ModuleName;
+            BackColor = System.Drawing.Color.White;
         }
 
-        class MagnifyImage : LQBaseForm
-        {
-            //public Image PictureBoxImage = null!;
-            private PictureBox _pictureBox = null!;
-            public Image PictureBoxImage
-            {
-                get => _pictureBox.Image;
-                set
-                {
-                    _pictureBox.Image = value;
-                    _pictureBox.Invalidate(); // 觸發 PictureBox 的重新繪製
-                }
-            }
+        //class MagnifyImage : LQBaseForm
+        //{
+        //    //public Image PictureBoxImage = null!;
+        //    private PictureBox _pictureBox = null!;
+        //    public Image PictureBoxImage
+        //    {
+        //        get => _pictureBox.Image;
+        //        set
+        //        {
+        //            _pictureBox.Image = value;
+        //            _pictureBox.Invalidate(); // 觸發 PictureBox 的重新繪製
+        //        }
+        //    }
 
-            private Size _formSize;
+        //    private Size _formSize;
 
-            public MagnifyImage(Size formSize)
-            {
-                _formSize = formSize * MagnifyIndex;
+        //    public MagnifyImage(Size formSize)
+        //    {
+        //        _formSize = formSize * MagnifyIndex;
 
-                InitForm();
-                InitControl();
-            }
+        //        InitForm();
+        //        InitControl();
+        //    }
 
-            private void InitControl()
-            {
-                AddPictureBox();
-            }
+        //    private void InitControl()
+        //    {
+        //        AddPictureBox();
+        //    }
 
-            protected override void InitForm()
-            {
-                FormBorderStyle = FormBorderStyle.None;
-                StartPosition = FormStartPosition.CenterParent;
-                Size = _formSize;
-                ShowInTaskbar = false;
-            }
+        //    protected override void InitForm()
+        //    {
+        //        FormBorderStyle = FormBorderStyle.None;
+        //        StartPosition = FormStartPosition.CenterParent;
+        //        Size = _formSize;
+        //        ShowInTaskbar = false;
+        //    }
 
-            private void AddPictureBox()
-            {
-                _pictureBox = new PictureBox
-                {
-                    Dock = DockStyle.Fill,
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                };
+        //    private void AddPictureBox()
+        //    {
+        //        _pictureBox = new PictureBox
+        //        {
+        //            Dock = DockStyle.Fill,
+        //            SizeMode = PictureBoxSizeMode.Zoom,
+        //        };
 
-                Controls.Add(_pictureBox);
-            }
-        }
+        //        Controls.Add(_pictureBox);
+        //    }
+        //}
 
         private void ShowImages(List<ImageInfo> imageInfos)
         {
             var pictureBoxHeigth = imageSideLength.Height;
             var pictureBoxWidth = imageSideLength.Width;
+
+            // Create and configure the ProgressBar
+            ProgressBar progressBar = new ProgressBar
+            {
+                Dock = DockStyle.Top,
+                Maximum = imageInfos.Sum(info => info.Images.Count),
+                Step = 1,
+            };
+            Controls.Add(progressBar);
+            progressBar.BringToFront();
+
+            // Create and configure the Label
+            Label progressLabel = new Label
+            {
+                BackColor = System.Drawing.Color.Transparent, // Ensure the label background is transparent
+                AutoSize = true,
+                Parent = progressBar, // Set the parent of the label to the progress bar
+            };
+            progressLabel.Location = new Point((progressBar.Width - progressLabel.Width) / 2, (progressBar.Height - progressLabel.Height) / 2);
+            progressBar.Controls.Add(progressLabel);
+            progressLabel.BringToFront();
+
+            int totalImages = progressBar.Maximum;
+            int loadedImages = 0;
 
             for (int i = 0; i < imageInfos.Count; i++)
             {
@@ -404,8 +428,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage.Image);
                     pbImage.MouseLeave += (s, e) => HideMagnify();
                     pbCloseIcon.Click += (s, e) => plImages.Controls.Remove(plImage);
+
+                    // Update progress
+                    loadedImages++;
+                    progressBar.PerformStep();
+                    progressLabel.Text = $"載入畫面: {loadedImages}/{totalImages}";
                 }
             }
+
+            // Remove the progress bar and label after loading is complete
+            Controls.Remove(progressBar);
+            Controls.Remove(progressLabel);
         }
 
         private static string GetFileNameFitForUI(Label label, int imageFrameWidth, string filePath)
