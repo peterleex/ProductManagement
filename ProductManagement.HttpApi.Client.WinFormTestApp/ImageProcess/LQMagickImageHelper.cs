@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Packaging;
 using ImageMagick;
-using Serilog;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser.Data;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
-using DocumentFormat.OpenXml.Features;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using System.Diagnostics.Tracing;
-using System.Drawing.Imaging;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
 {
@@ -30,6 +18,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
                 magickImage.Write(memoryStream);
             memoryStream.Position = 0;
             return new Bitmap(memoryStream);
+        }
+
+        public static MagickImage GetThumbnail(this MagickImage magickImage, Size size)
+        {
+            var thumbnail = magickImage.Clone();
+            thumbnail.Thumbnail(new MagickGeometry((uint)size.Width, (uint)size.Height) { IgnoreAspectRatio = false });
+            return new MagickImage(thumbnail);
         }
 
         public async static Task<List<MagickImage>> ExtractImagesFromDocx(string filePath)

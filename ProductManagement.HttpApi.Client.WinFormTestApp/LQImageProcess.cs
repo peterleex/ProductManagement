@@ -22,8 +22,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public List<ImageInfo> ImageInfos { get; set; } = [];
 
         private Size imageSideLength;
+        private Panel plCommand = null!;
         private FlowLayoutPanel plImages = null!;
-        private Panel plControls = null!;
+        private Panel plImageProcess = null!;
         private MagnifyImage _enlargeImageForm = null!;
         private PictureBox PbMagnifyImage = null!;
 
@@ -57,12 +58,18 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void LQImageProcess_Load(object? sender, EventArgs e)
         {
-            InitPanelLayout();
+            SetPanelLayout();
+            InitPanelContent();
             InitImageSquare();
             //CreateMagnifyImage();
             InitMagnifyPictureBoxSize();
 
             LoadImages();
+        }
+
+        private void InitPanelContent()
+        {
+            InitCommandPanel();
         }
 
         private void InitMagnifyPictureBoxSize()
@@ -81,25 +88,80 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             _enlargeImageForm = new MagnifyImage(imageSideLength);
         }
 
-        private void InitPanelLayout()
+        private void SetPanelLayout()
         {
-            plImages = new FlowLayoutPanel
+            double commandWidthRadio = 1 / 12.0;
+            double imageProcessWidthRadio =  2 / 12.0;
+
+            plCommand = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = (int)(ClientSize.Height * 5 / 6.0),
+                Height = (int)(ClientSize.Height * commandWidthRadio),
+            };
+            Controls.Add(plCommand);
+
+            plImageProcess = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = (int)(ClientSize.Height * imageProcessWidthRadio),
+            };
+            Controls.Add(plImageProcess);
+
+            plImages = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                //Height = (int)(ClientSize.Height * 5 / 8.0),
                 Width = ClientSize.Width,
                 AutoScroll = true,
                 WrapContents = true,
                 FlowDirection = FlowDirection.LeftToRight
             };
             Controls.Add(plImages);
+            plImages.BringToFront();        // 會被頂部 Panel 擋住，所以加上這句
+        }
 
-            plControls = new Panel
+        private void InitCommandPanel()
+        {
+            var spacing = 30;
+            var buttonHeight = 40;
+            var buttonWidth = 130;
+            Size buttonSize = new(buttonWidth, buttonHeight);
+
+            var btnRefresh = new Button
             {
-                Dock = DockStyle.Bottom,
-                Height = (int)(ClientSize.Height * 1 / 6.0)
+                Text = LQMessage(LQCode.C0047),
+                Size = buttonSize,
+                Image = Resources.Refresh,
+                ImageAlign = ContentAlignment.MiddleLeft,
             };
-            Controls.Add(plControls);
+
+            var btnAdd = new Button
+            {
+                Text = LQMessage(LQCode.C0048),
+                Size = buttonSize,
+                Image = Resources.Add,
+                ImageAlign = ContentAlignment.MiddleLeft,
+            };
+
+            var btnClearAll = new Button
+            {
+                Text = LQMessage(LQCode.C0049),
+                Size = buttonSize,
+                Image = Resources.ClearAll,
+                ImageAlign = ContentAlignment.MiddleLeft,
+            };
+
+            plCommand.Controls.Add(btnRefresh);
+            plCommand.Controls.Add(btnAdd);
+            plCommand.Controls.Add(btnClearAll);
+
+            // Center the buttons vertically and arrange them horizontally
+            int totalHeight = btnRefresh.Height;
+            int startY = (plCommand.Height - totalHeight) / 2;
+
+            btnRefresh.Location = new Point(0, startY);
+            btnAdd.Location = new Point(btnRefresh.Width + spacing, startY);
+            btnClearAll.Location = new Point(btnRefresh.Width + spacing + btnAdd.Width + spacing, startY);
         }
 
 
@@ -188,7 +250,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {
                         Size = imageSideLength,
                         SizeMode = PictureBoxSizeMode.Zoom,
-                        Image = image.ToBitmap()
+                        //Image = image.GetThumbnail(imageSideLength).ToBitmap(),
+                        Image = image.ToBitmap(),
                     };
 
                     var pbCloseIcon = new PictureBox
@@ -340,13 +403,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             return fileName;
         }
 
-        private void ShowMagnify1(Image image)
-        {
-            _enlargeImageForm.PictureBoxImage = image;
-            _enlargeImageForm.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
-            _enlargeImageForm.BringToFront();
-            _enlargeImageForm.Visible = true;
-        }
+        //private void ShowMagnify1(Image image)
+        //{
+        //    _enlargeImageForm.PictureBoxImage = image;
+        //    _enlargeImageForm.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
+        //    _enlargeImageForm.BringToFront();
+        //    _enlargeImageForm.Visible = true;
+        //}
 
         private void ShowMagnify(Image image)
         {
@@ -356,24 +419,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             PbMagnifyImage.BringToFront();
             PbMagnifyImage.Visible = true;
         }
-
+        private void HideMagnify()
+        {
+            if (!PbMagnifyImage.ClientRectangle.Contains(PbMagnifyImage.PointToClient(Cursor.Position)))
+            {
+                PbMagnifyImage.Visible = false;
+            }
+        }
         private Point CenterLocation()
         {
             return new Point((ClientSize.Width - PbMagnifyImage.Width) / 2, (ClientSize.Height - PbMagnifyImage.Height) / 2);
         }
-
-        private void HideMagnify1()
-        {
-            if (_enlargeImageForm.Visible)
-            {
-                _enlargeImageForm.Visible = false;
-            }
-        }
-
-        private void HideMagnify()
-        {
-            PbMagnifyImage.Visible = false;
-        }
-
     }
 }

@@ -54,6 +54,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0044,
             C0045,
             C0046,
+            C0047,
+            C0048,
+            C0049,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -105,6 +108,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0044, "未達300dpi" },
                     {LQCode.C0045, "寬大於14" },
                     {LQCode.C0046, "大於1000KB" },
+                    {LQCode.C0047, "刷新頁面" },
+                    {LQCode.C0048, "新增" },
+                    {LQCode.C0049, "全部清空" },
 
 
 

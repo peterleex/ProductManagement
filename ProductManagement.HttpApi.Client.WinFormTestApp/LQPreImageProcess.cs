@@ -1,17 +1,5 @@
-﻿using ImageMagick;
-using Microsoft.Extensions.Http.Logging;
-using Microsoft.VisualBasic.FileIO;
-using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
-using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
