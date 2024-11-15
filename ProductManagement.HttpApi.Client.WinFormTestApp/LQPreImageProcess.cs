@@ -4,12 +4,11 @@ using System.Data;
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
 
-    public partial class LQPreImageProcess : Form
+    public partial class LQSelectImage : LQBaseForm
     {
-        private readonly IServiceProvider _serviceProvider;
         private static string moduleName = LQDefine.LQMessage(LQDefine.LQCode.C0037);
 
-        public LQPreImageProcess(IServiceProvider serviceProvider)
+        public LQSelectImage(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             InitializeComponent();
@@ -59,7 +58,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var filterFile = files
                 .Where(f => LQDefine.AllSupportedFileType.Contains(Path.GetExtension(f).ToLower()))
                 .ToArray();
-            OpenImage(filterFile);
+            var imageInfos = LoadImage(filterFile);
+            EnterImageProcess(imageInfos);
         }
 
         private void LQPreImageProcess_Resize(object? sender, EventArgs e)
@@ -79,62 +79,36 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             pbPleaseSelectImage.Location = new Point(plChooseImageFile.Left, plChooseImageFile.Top - pbPleaseSelectImage.Height - spacing);
         }
 
-        private void InitForm()
+        protected override void InitForm()
         {
-            Size = LQDefine.DefaultWindowSize;
-            WindowState = FormWindowState.Maximized;
+            base.InitForm();
+
             Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
             ShowIcon = false;
         }
 
         private void BtnOpenFile_Click(object sender, EventArgs e)
         {
-            //var files = await OpenFileDialogAsync();
-            var files = OpenFileDialog();
-
-            OpenImage(files);
+            OpenImageFile();
         }
 
-        private string[] OpenFileDialog()
+        protected void OpenImageFile()
         {
-            using var dialog = new OpenFileDialog();
-            dialog.Multiselect = true;
-            dialog.Filter = LQDefine.SupportedFileType;
-            dialog.FilterIndex = 3; // all types
-            if (dialog.ShowDialog(this) == DialogResult.OK)
-                return dialog.FileNames;
-            else
-                return [];
+            var files = OpenImageFileDialog();
+            var imageInfos = LoadImage(files);
+
+            EnterImageProcess(imageInfos);
         }
 
-        private void OpenImage(string[] files)
+        private void EnterImageProcess(List<ImageInfo> imageInfos)
         {
-            List<ImageInfo> imageInfos = LoadImage(files);
-
             new LQImageProcess(_serviceProvider)
             {
                 MdiParent = MdiParent,
                 ImageInfos = imageInfos,
             }.Show();
 
-            Close();
-        }
-
-        private List<ImageInfo> LoadImage(string[] files)
-        {
-            List<ImageInfo> images = [];
-
-            if (files == null || files.Length == 0)
-                return images;
-
-            var loadImageForm = new LQLoadImage(_serviceProvider)
-            {
-                Files = files,
-            };
-
-            loadImageForm.ShowDialog(this);
-
-            return loadImageForm.ImageInfos;
+            //Close();
         }
 
         //private async Task<string[]> OpenFileDialogAsync()

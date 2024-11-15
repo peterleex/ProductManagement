@@ -1,6 +1,6 @@
 ﻿namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    partial class LQPreImageProcess
+    partial class LQSelectImage
     {
         /// <summary>
         /// Required designer variable.

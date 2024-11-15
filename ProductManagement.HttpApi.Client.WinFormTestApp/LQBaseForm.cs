@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,8 +27,40 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         protected virtual void InitForm()
         {
+            Size = LQDefine.DefaultWindowSize;
             WindowState = FormWindowState.Maximized;
             ShowIcon = false;
         }
+
+        protected List<ImageInfo> LoadImage(string[] files)
+        {
+            List<ImageInfo> images = [];
+
+            if (files == null || files.Length == 0)
+                return images;
+
+            var loadImageForm = new LQLoadImage(_serviceProvider)
+            {
+                Files = files,
+            };
+
+            loadImageForm.ShowDialog(this);
+
+            return loadImageForm.ImageInfos;
+        }
+
+        protected string[] OpenImageFileDialog()
+        {
+            using var dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+            dialog.Filter = LQDefine.SupportedFileType;
+            dialog.FilterIndex = 3; // all types
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+                return dialog.FileNames;
+            else
+                return [];
+        }
+
+
     }
 }

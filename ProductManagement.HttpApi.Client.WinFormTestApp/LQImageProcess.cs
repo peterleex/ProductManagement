@@ -64,7 +64,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             //CreateMagnifyImage();
             InitMagnifyPictureBoxSize();
 
-            LoadImages();
+            ShowImages(ImageInfos);
         }
 
         private void InitPanelContent()
@@ -122,9 +122,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitCommandPanel()
         {
-            var spacing = 30;
+            var spacing = 25;
             var buttonHeight = 40;
-            var buttonWidth = 130;
+            var buttonWidth = 150;
             Size buttonSize = new(buttonWidth, buttonHeight);
 
             var btnRefresh = new Button
@@ -132,24 +132,33 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Text = LQMessage(LQCode.C0047),
                 Size = buttonSize,
                 Image = Resources.Refresh,
-                ImageAlign = ContentAlignment.MiddleLeft,
+                ImageAlign = ContentAlignment.MiddleCenter,
+                TextAlign = ContentAlignment.MiddleCenter,
+                TextImageRelation = TextImageRelation.ImageBeforeText,
             };
+            btnRefresh.Click += BtnRefresh_Click; 
 
             var btnAdd = new Button
             {
                 Text = LQMessage(LQCode.C0048),
                 Size = buttonSize,
                 Image = Resources.Add,
-                ImageAlign = ContentAlignment.MiddleLeft,
+                ImageAlign = ContentAlignment.MiddleCenter,
+                TextAlign = ContentAlignment.MiddleCenter,
+                TextImageRelation = TextImageRelation.ImageBeforeText,
             };
+            btnAdd.Click += BtnAdd_Click;
 
             var btnClearAll = new Button
             {
                 Text = LQMessage(LQCode.C0049),
                 Size = buttonSize,
                 Image = Resources.ClearAll,
-                ImageAlign = ContentAlignment.MiddleLeft,
+                ImageAlign = ContentAlignment.MiddleCenter,
+                TextAlign = ContentAlignment.MiddleCenter,
+                TextImageRelation = TextImageRelation.ImageBeforeText,
             };
+            btnClearAll.Click += (_, _) => Close();
 
             plCommand.Controls.Add(btnRefresh);
             plCommand.Controls.Add(btnAdd);
@@ -164,6 +173,28 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             btnClearAll.Location = new Point(btnRefresh.Width + spacing + btnAdd.Width + spacing, startY);
         }
 
+        private void BtnRefresh_Click(object? sender, EventArgs e)
+        {
+            ClearImages();
+
+            var files = ImageInfos.Select(i => i.FilePath).ToArray();
+            var imageInfos = LoadImage(files);
+
+            ShowImages(imageInfos);
+        }
+
+        private void ClearImages()
+        {
+            plImages.Controls.Clear();
+        }
+
+        private void BtnAdd_Click(object? sender, EventArgs e)
+        {
+            var files = OpenImageFileDialog();
+            var imageInfos = LoadImage(files);
+            ImageInfos.AddRange(imageInfos);
+            ShowImages(imageInfos);
+        }
 
         protected override void InitModule()
         {
@@ -225,14 +256,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
-        private void LoadImages()
+        private void ShowImages(List<ImageInfo> imageInfos)
         {
             var pictureBoxHeigth = imageSideLength.Height;
             var pictureBoxWidth = imageSideLength.Width;
 
-            for (int i = 0; i < ImageInfos.Count; i++)
+            for (int i = 0; i < imageInfos.Count; i++)
             {
-                var imageInfo = ImageInfos[i];
+                var imageInfo = imageInfos[i];
 
                 if (imageInfo.Images.Count == 0)
                     continue;
@@ -367,6 +398,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     plImage.Controls.Add(lblRowThree_WidthInfo);
 
                     plImages.Controls.Add(plImage);
+                    plImages.Controls.SetChildIndex(plImage, 0);
 
                     //pbImage.Click += (s, e) => ShowMagnify(pbImage.Image);
                     pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage.Image);
