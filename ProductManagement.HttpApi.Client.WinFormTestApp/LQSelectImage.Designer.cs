@@ -40,7 +40,7 @@
             // btnOpenFile
             // 
             btnOpenFile.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnOpenFile.BackColor = Color.FromArgb(167, 108, 86);
+            btnOpenFile.BackColor = LQDefine.PrimaryColor;
             btnOpenFile.FlatAppearance.BorderSize = 0;
             btnOpenFile.FlatStyle = FlatStyle.Flat;
             btnOpenFile.Font = new Font("Microsoft JhengHei UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 136);

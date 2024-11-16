@@ -12,7 +12,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private Size imageSideLength;
         private Panel plCommand = null!;
         private FlowLayoutPanel plImages = null!;
-        private Panel plImageProcess = null!;
+        private Panel plProcess = null!;
         //private MagnifyImage _enlargeImageForm = null!;
         private PictureBox PbMagnifyImage = null!;
 
@@ -62,6 +62,148 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitPanelContent()
         {
             InitCommandPanel();
+            InitProcessPanlel();
+        }
+
+        private void InitProcessPanlel()
+        {
+            var startX = 40;
+            var startY = 10;
+            var hSpacing = 200;
+            var vSpacing = 10;
+
+            var lblSetting = new Label
+            {
+                Text = "特殊設定",
+                Font = new Font(Font, FontStyle.Bold),
+                Location = new Point(startX, startY),
+            };
+            plProcess.Controls.Add(lblSetting);
+
+            var row1Y = lblSetting.Bottom + vSpacing;
+            var chkEqualWidth = new CheckBox
+            {
+                Text = "寬度統一",
+                Name = "chkEqualWidth",
+                Location = new Point(startX, row1Y),
+            };
+            plProcess.Controls.Add(chkEqualWidth);
+
+            var chkAdjustColor = new CheckBox
+            {
+                Text = "色彩調整",
+                Name = "chkAdjustColor",
+                Location = new Point(chkEqualWidth.Right + hSpacing, row1Y),
+            };
+            plProcess.Controls.Add(chkAdjustColor);
+
+            var chkKeepDpi = new CheckBox
+            {
+                Text = "保留原解析度",
+                Name = "chkKeepDpi",
+                Location = new Point(chkAdjustColor.Right + hSpacing, row1Y),
+            };
+            plProcess.Controls.Add(chkKeepDpi);
+
+            var chkConvertToPng = new CheckBox
+            {
+                Text = "轉爲 PNG",
+                Name = "chkConvertToPng",
+                Location = new Point(chkKeepDpi.Right + hSpacing, row1Y),
+            };
+            plProcess.Controls.Add(chkConvertToPng);
+
+            var txtImageWidth = new TextBox
+            {
+                Name = "txtImageWidth",
+                Location = new Point(startX, chkEqualWidth.Bottom + vSpacing),
+                Enabled = false,
+            };
+            plProcess.Controls.Add(txtImageWidth);
+            chkEqualWidth.CheckedChanged += (s, e) => txtImageWidth.Enabled = chkEqualWidth.Checked;
+
+            var lblCm = new Label
+            {
+                Text = "cm",
+                AutoSize = true,
+                Location = new Point(txtImageWidth.Right + 5, chkEqualWidth.Bottom + vSpacing),
+            };
+            plProcess.Controls.Add(lblCm);
+
+            var lblWidthInfo = new Label
+            {
+                Name = "lblWidthInfo",
+                Text = "寬度不超過14cm，以降低傳輸成本",
+                AutoSize = true,
+                ForeColor = PrimaryColor,
+                Location = new Point(startX, txtImageWidth.Bottom + vSpacing),
+            };
+            plProcess.Controls.Add(lblWidthInfo);
+
+            var rbKeepRgb = new RadioButton
+            {
+                Name = "rbKeepRgb",
+                Text = "保留 RGB",
+                Location = new Point(chkAdjustColor.Left, chkAdjustColor.Bottom + vSpacing),
+                Enabled = false,
+            };
+            plProcess.Controls.Add(rbKeepRgb);
+
+            var rbConvertToBlack = new RadioButton
+            {
+                Name = "rbConvertToBlack",
+                Text = "整圖轉爲K100(純黑)",
+                Location = new Point(chkAdjustColor.Left, rbKeepRgb.Bottom + vSpacing),
+                Enabled = false,
+            };
+            plProcess.Controls.Add(rbConvertToBlack);
+            chkAdjustColor.CheckedChanged += (s, e) =>
+            {
+                rbKeepRgb.Enabled = chkAdjustColor.Checked;
+                rbConvertToBlack.Enabled = chkAdjustColor.Checked;
+            };
+
+            var lblOutput = new Label
+            {
+                Name = "lblOutput",
+                Text = "輸出位置",
+                Font = new Font(Font, FontStyle.Bold),
+                Location = new Point(10, lblWidthInfo.Bottom + 10),
+            };
+            plProcess.Controls.Add(lblOutput);
+
+            var rbOutputFolder = new RadioButton
+            {
+                Name = "rbOutputFolder",
+                Text = "輸出到資料夾",
+                Location = new Point(10, lblOutput.Bottom + 10),
+            };
+            plProcess.Controls.Add(rbOutputFolder);
+
+            var rbCustomPath = new RadioButton
+            {
+                Name = "rbCustomPath",
+                Text = "自訂路徑",
+                Location = new Point(10, rbOutputFolder.Bottom + 5),
+            };
+            plProcess.Controls.Add(rbCustomPath);
+
+            var btnClose = new Button
+            {
+                Name = "btnClose",
+                Text = "離開",
+                Location = new Point(10, rbCustomPath.Bottom + 10),
+            };
+            btnClose.Click += (s, e) => Close();
+            plProcess.Controls.Add(btnClose);
+
+            var btnProcess = new Button
+            {
+                Name = "btnProcess",
+                Text = "重新批次處理",
+                Location = new Point(btnClose.Right + 10, rbCustomPath.Bottom + 10),
+            };
+            plProcess.Controls.Add(btnProcess);
         }
 
         private void InitMagnifyPictureBoxSize()
@@ -92,12 +234,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             Controls.Add(plCommand);
 
-            plImageProcess = new Panel
+            plProcess = new Panel
             {
                 Dock = DockStyle.Bottom,
                 Height = (int)(ClientSize.Height * imageProcessWidthRadio),
             };
-            Controls.Add(plImageProcess);
+            Controls.Add(plProcess);
 
             plImages = new FlowLayoutPanel
             {
