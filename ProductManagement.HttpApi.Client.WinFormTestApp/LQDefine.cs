@@ -58,6 +58,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0047,
             C0048,
             C0049,
+            C0050,
+            C0051,
+            C0052,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -112,6 +115,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0047, "刷新頁面" },
                     {LQCode.C0048, "新增" },
                     {LQCode.C0049, "全部清空" },
+                    {LQCode.C0050, "cm" },
+                    {LQCode.C0051, "kb" },
+                    {LQCode.C0052, "請輸入" },
 
 
 

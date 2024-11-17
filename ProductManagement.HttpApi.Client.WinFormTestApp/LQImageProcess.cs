@@ -1,6 +1,8 @@
-﻿using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
+﻿using ImageMagick;
+using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Data;
+using System.Linq;
 using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -100,6 +102,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var chkKeepDpi = new CheckBox
             {
                 Text = "保留原解析度",
+                AutoSize = true,
                 Name = "chkKeepDpi",
                 Location = new Point(chkAdjustColor.Right + HSpacing._200Pixel, row1Y),
                 TabIndex = 6,
@@ -109,6 +112,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var chkConvertToPng = new CheckBox
             {
                 Text = "轉爲 PNG",
+                AutoSize = true,
                 Name = "chkConvertToPng",
                 Location = new Point(chkKeepDpi.Right + HSpacing._200Pixel, row1Y),
                 TabIndex = 7,
@@ -121,6 +125,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Location = new Point(Margins.Left, chkEqualWidth.Bottom + VSpacing._10Pixel),
                 Enabled = false,
                 TabIndex = 4,
+                PlaceholderText = LQMessage(LQCode.C0052),
             };
             txtImageWidth.KeyPress += (s, e) =>
             {
@@ -456,6 +461,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         //    }
         //}
 
+        class MagicPictureBox : PictureBox
+        {
+            public MagickImage MagickImage { get; set; } = null!;
+        }
+
         private void ShowImages(List<ImageInfo> imageInfos)
         {
             var pictureBoxHeigth = imageSideLength.Height;
@@ -500,14 +510,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     var isBelow300Dpi = info.GetIsBelow300Dpi();
                     var fileFormat = info.GetFileFormat();
                     var imageDpi = info.GetDpi();
-                    int middle = 0;
 
-                    var pbImage = new PictureBox
+                    var pbImage = new MagicPictureBox
                     {
                         Size = imageSideLength,
                         SizeMode = PictureBoxSizeMode.Zoom,
                         //Image = image.GetThumbnail(imageSideLength).ToBitmap(),
                         Image = image.ToBitmap(),
+                        MagickImage = image,
                     };
 
                     var pbCloseIcon = new PictureBox
@@ -521,65 +531,63 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     };
 
 
-                    var lblRowOne_FileName = new Label
+                    var lblRow1 = new Label
                     {
                         AutoSize = true,
                     };
-                    lblRowOne_FileName.Text = GetFileNameFitForUI(lblRowOne_FileName, pictureBoxWidth, imageInfo.FilePath);
-                    middle = (pictureBoxWidth - lblRowOne_FileName.Width) / 2;
-                    lblRowOne_FileName.Location = new Point(middle, pictureBoxHeigth);
-                    
-                    var row1Height = lblRowOne_FileName.Height;
+                    lblRow1.Text = GetFileNameFitForUI(lblRow1, pictureBoxWidth, imageInfo.FilePath);
+                    lblRow1.Location = new Point(0, pictureBoxHeigth);
 
-                    var lblRowTwo_ExtensionName = new Label
+                    var row1Height = lblRow1.Height;
+
+                    var lblRow2_ExtensionName = new Label
                     {
                         AutoSize = true,
                         ForeColor = isJpeg ? DefaultColor : WarningColor,
-                        Location = new Point(0, pictureBoxHeigth + lblRowOne_FileName.Height),
+                        Location = new Point(0, pictureBoxHeigth + lblRow1.Height),
                         Text = fileFormat
                     };
-                    var row2Height = lblRowTwo_ExtensionName.Height;
+                    var row2Height = lblRow2_ExtensionName.Height;
 
                     var row2Y = pictureBoxHeigth + row1Height;
                     var lblRowTwo_Dpi = new Label
                     {
                         AutoSize = true,
                         ForeColor = !isBelow300Dpi ? DefaultColor : WarningColor,
-                        Location = new Point(lblRowTwo_ExtensionName.PreferredWidth, row2Y),
+                        Location = new Point(lblRow2_ExtensionName.PreferredWidth, row2Y),
                         Text = imageDpi,
                     };
 
                     var lblRowTwo_ImageWidth = new Label
                     {
                         AutoSize = true,
-                        Text = widthInCm.ToString(),
+                        Text = widthInCm.ToString() + LQMessage(LQCode.C0050),
                         ForeColor = widthInCm <= AllowedMaxWidthInCm ? DefaultColor : WarningColor,
-                        Location = new Point(lblRowTwo_ExtensionName.PreferredWidth + lblRowTwo_Dpi.PreferredWidth, row2Y),
+                        Location = new Point(lblRow2_ExtensionName.PreferredWidth + lblRowTwo_Dpi.PreferredWidth, row2Y),
                     };
 
                     var fileSize = info.GetFileSizeInKB();
                     var lblRowTwo_FileSize = new Label
                     {
                         AutoSize = true,
-                        Text = fileSize.ToString(),
+                        Text = fileSize.ToString() + LQMessage(LQCode.C0051),
                         ForeColor = fileSize <= AllowedMaxFileSizeInKb ? DefaultColor : WarningColor,
-                        Location = new Point(lblRowTwo_ExtensionName.PreferredWidth + lblRowTwo_Dpi.PreferredWidth + lblRowTwo_ImageWidth.PreferredWidth, row2Y),
+                        Location = new Point(lblRow2_ExtensionName.PreferredWidth + lblRowTwo_Dpi.PreferredWidth + lblRowTwo_ImageWidth.PreferredWidth, row2Y),
                     };
 
                     var row3Y = pictureBoxHeigth + row1Height + row2Height;
-                    var lblRowThree_ErrorInfo = new Label
+                    var lblRow3_ErrorInfo = new Label
                     {
                         AutoSize = true,
                         Text = isJpeg ? string.Empty : LQMessage(LQCode.C0043) + Space,
                         ForeColor = WarningColor,
                     };
-                    var row3Height = lblRowThree_ErrorInfo.Height;
+                    var row3Height = lblRow3_ErrorInfo.Height;
 
-                    lblRowThree_ErrorInfo.Text += !isBelow300Dpi ? string.Empty : LQMessage(LQCode.C0044) + Space;
-                    lblRowThree_ErrorInfo.Text += widthInCm <= AllowedMaxWidthInCm ? string.Empty : LQMessage(LQCode.C0045) + Space;
-                    lblRowThree_ErrorInfo.Text += fileSize <= AllowedMaxFileSizeInKb ? string.Empty : LQMessage(LQCode.C0046);
-                    middle = (pictureBoxWidth - lblRowThree_ErrorInfo.PreferredWidth) / 2;
-                    lblRowThree_ErrorInfo.Location = new Point(middle, row3Y);
+                    lblRow3_ErrorInfo.Text += !isBelow300Dpi ? string.Empty : LQMessage(LQCode.C0044) + Space;
+                    lblRow3_ErrorInfo.Text += widthInCm <= AllowedMaxWidthInCm ? string.Empty : LQMessage(LQCode.C0045) + Space;
+                    lblRow3_ErrorInfo.Text += fileSize <= AllowedMaxFileSizeInKb ? string.Empty : LQMessage(LQCode.C0046);
+                    lblRow3_ErrorInfo.Location = new Point(0, row3Y);
 
                     var plImage = new Panel
                     {
@@ -591,21 +599,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     plImage.Controls.Add(pbImage);
                     plImage.Controls.Add(pbCloseIcon);
                     pbCloseIcon.BringToFront();
-                    plImage.Controls.Add(lblRowOne_FileName);
+                    plImage.Controls.Add(lblRow1);
 
-                    plImage.Controls.Add(lblRowTwo_ExtensionName);
+                    plImage.Controls.Add(lblRow2_ExtensionName);
                     plImage.Controls.Add(lblRowTwo_Dpi);
                     plImage.Controls.Add(lblRowTwo_ImageWidth);
                     plImage.Controls.Add(lblRowTwo_FileSize);
 
-                    plImage.Controls.Add(lblRowThree_ErrorInfo);
+                    plImage.Controls.Add(lblRow3_ErrorInfo);
 
                     plImages.Controls.Add(plImage);
                     plImages.Controls.SetChildIndex(plImage, 0);
 
                     pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage);
                     pbImage.MouseLeave += (s, e) => HideMagnify(pbImage);
-                    pbCloseIcon.Click += (s, e) => plImages.Controls.Remove(plImage);
+                    pbCloseIcon.Click += (s, e) => RemoveImage(plImage, pbImage);
 
                     // Update progress
                     loadedImages++;
@@ -617,6 +625,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             // Remove the progress bar and label after loading is complete
             Controls.Remove(progressBar);
             Controls.Remove(progressLabel);
+        }
+
+        private void RemoveImage(Panel plImage, MagicPictureBox pb)
+        {
+            var imageInfo = ImageInfos.FirstOrDefault(i => i.Images.Contains(pb.MagickImage));
+
+            if (imageInfo != null)
+            {
+                imageInfo.Images.Remove(pb.MagickImage);
+                if (imageInfo.Images.Count == 0)
+                {
+                    ImageInfos.Remove(imageInfo);
+                }
+                plImages.Controls.Remove(plImage);
+            }
         }
 
         private static string GetFileNameFitForUI(Label label, int imageFrameWidth, string filePath)
@@ -658,7 +681,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             // PictureBox 無 Border Color 屬性
             pb.BorderStyle = BorderStyle.Fixed3D;
-            
+
             var image = pb.Image;
             PbMagnifyImage.Image = image;
             PbMagnifyImage.Invalidate();
