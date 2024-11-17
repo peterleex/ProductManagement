@@ -20,6 +20,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void InitControls()
         {
             PbChooseImageFile.AllowDrop = true;
+
+            btnOpenFile.BackColor = LQDefine.PrimaryColor;
+            btnOpenFile.ForeColor = SystemColors.ButtonHighlight;
+            btnOpenFile.FlatStyle = FlatStyle.Flat;
+            btnOpenFile.Font = LQDefine.BigBoldFont;
         }
 
         private void HookEvent()

@@ -67,25 +67,24 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitProcessPanlel()
         {
-            var startX = 40;
-            var startY = 10;
-            var hSpacing = 200;
-            var vSpacing = 10;
+            var yStart = 10;
+            //var vSpacing = 10;
 
             var lblSetting = new Label
             {
                 Text = "特殊設定",
                 Font = new Font(Font, FontStyle.Bold),
-                Location = new Point(startX, startY),
+                Location = new Point(Margins.Left, yStart),
             };
             plProcess.Controls.Add(lblSetting);
 
-            var row1Y = lblSetting.Bottom + vSpacing;
+            var row1Y = lblSetting.Bottom + VSpacing._10Pixel;
             var chkEqualWidth = new CheckBox
             {
                 Text = "寬度統一",
                 Name = "chkEqualWidth",
-                Location = new Point(startX, row1Y),
+                Location = new Point(Margins.Left, row1Y),
+                TabIndex = 3,
             };
             plProcess.Controls.Add(chkEqualWidth);
 
@@ -93,7 +92,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Text = "色彩調整",
                 Name = "chkAdjustColor",
-                Location = new Point(chkEqualWidth.Right + hSpacing, row1Y),
+                Location = new Point(chkEqualWidth.Right + HSpacing._200Pixel, row1Y),
+                TabIndex = 5,
             };
             plProcess.Controls.Add(chkAdjustColor);
 
@@ -101,7 +101,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Text = "保留原解析度",
                 Name = "chkKeepDpi",
-                Location = new Point(chkAdjustColor.Right + hSpacing, row1Y),
+                Location = new Point(chkAdjustColor.Right + HSpacing._200Pixel, row1Y),
+                TabIndex = 6,
             };
             plProcess.Controls.Add(chkKeepDpi);
 
@@ -109,15 +110,54 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Text = "轉爲 PNG",
                 Name = "chkConvertToPng",
-                Location = new Point(chkKeepDpi.Right + hSpacing, row1Y),
+                Location = new Point(chkKeepDpi.Right + HSpacing._200Pixel, row1Y),
+                TabIndex = 7,
             };
             plProcess.Controls.Add(chkConvertToPng);
 
             var txtImageWidth = new TextBox
             {
                 Name = "txtImageWidth",
-                Location = new Point(startX, chkEqualWidth.Bottom + vSpacing),
+                Location = new Point(Margins.Left, chkEqualWidth.Bottom + VSpacing._10Pixel),
                 Enabled = false,
+                TabIndex = 4,
+            };
+            txtImageWidth.KeyPress += (s, e) =>
+            {
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+                {
+                    e.Handled = true;
+                }
+
+                if (e.KeyChar == '.' && (s as TextBox)!.Text.IndexOf('.') > -1)
+                {
+                    e.Handled = true;
+                }
+            };
+            txtImageWidth.Validating += (s, e) =>
+            {
+                if (double.TryParse(txtImageWidth.Text, out double value))
+                {
+                    if (value <= 0.0)
+                    {
+                        e.Cancel = true;
+                        LQHelper.InfoMessage("請輸入大於0cm的數值");
+                    }
+                    else if (value > 14.0)
+                    {
+                        e.Cancel = true;
+                        LQHelper.InfoMessage("上限14cm");
+                    }
+                    else
+                    {
+                        txtImageWidth.Text = value.ToString("F1");
+                    }
+                }
+                else
+                {
+                    e.Cancel = true;
+                    LQHelper.InfoMessage("請輸入有效的數值。");
+                }
             };
             plProcess.Controls.Add(txtImageWidth);
             chkEqualWidth.CheckedChanged += (s, e) => txtImageWidth.Enabled = chkEqualWidth.Checked;
@@ -126,7 +166,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Text = "cm",
                 AutoSize = true,
-                Location = new Point(txtImageWidth.Right + 5, chkEqualWidth.Bottom + vSpacing),
+                Location = new Point(txtImageWidth.Right + HSpacing._5Pixel, chkEqualWidth.Bottom + VSpacing._10Pixel),
             };
             plProcess.Controls.Add(lblCm);
 
@@ -136,15 +176,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Text = "寬度不超過14cm，以降低傳輸成本",
                 AutoSize = true,
                 ForeColor = PrimaryColor,
-                Location = new Point(startX, txtImageWidth.Bottom + vSpacing),
+                Location = new Point(Margins.Left, txtImageWidth.Bottom + VSpacing._10Pixel),
             };
             plProcess.Controls.Add(lblWidthInfo);
 
             var rbKeepRgb = new RadioButton
             {
                 Name = "rbKeepRgb",
+                AutoSize = true,
                 Text = "保留 RGB",
-                Location = new Point(chkAdjustColor.Left, chkAdjustColor.Bottom + vSpacing),
+                Location = new Point(chkAdjustColor.Left, chkAdjustColor.Bottom + VSpacing._10Pixel),
                 Enabled = false,
             };
             plProcess.Controls.Add(rbKeepRgb);
@@ -152,8 +193,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var rbConvertToBlack = new RadioButton
             {
                 Name = "rbConvertToBlack",
+                AutoSize = true,
                 Text = "整圖轉爲K100(純黑)",
-                Location = new Point(chkAdjustColor.Left, rbKeepRgb.Bottom + vSpacing),
+                Location = new Point(chkAdjustColor.Left, rbKeepRgb.Bottom + VSpacing._10Pixel),
                 Enabled = false,
             };
             plProcess.Controls.Add(rbConvertToBlack);
@@ -166,17 +208,19 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var lblOutput = new Label
             {
                 Name = "lblOutput",
+                AutoSize = true,
                 Text = "輸出位置",
                 Font = new Font(Font, FontStyle.Bold),
-                Location = new Point(10, lblWidthInfo.Bottom + 10),
+                Location = new Point(chkConvertToPng.Right + HSpacing._200Pixel, yStart),
             };
             plProcess.Controls.Add(lblOutput);
 
             var rbOutputFolder = new RadioButton
             {
                 Name = "rbOutputFolder",
-                Text = "輸出到資料夾",
-                Location = new Point(10, lblOutput.Bottom + 10),
+                Text = "原檔「output」資料夾",
+                AutoSize = true,
+                Location = new Point(lblOutput.Left, lblOutput.Bottom + VSpacing._10Pixel),
             };
             plProcess.Controls.Add(rbOutputFolder);
 
@@ -184,7 +228,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Name = "rbCustomPath",
                 Text = "自訂路徑",
-                Location = new Point(10, rbOutputFolder.Bottom + 5),
+                AutoSize = true,
+                Location = new Point(lblOutput.Left, rbOutputFolder.Bottom + VSpacing._10Pixel),
             };
             plProcess.Controls.Add(rbCustomPath);
 
@@ -192,7 +237,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Name = "btnClose",
                 Text = "離開",
-                Location = new Point(10, rbCustomPath.Bottom + 10),
+                Size = MiddleButtonSize,
+                Location = new Point(lblOutput.Right + HSpacing._200Pixel, yStart),
+                BackColor = SecondaryColor,
+                ForeColor = PrimaryColor,
+                FlatStyle = FlatStyle.Flat,
+                Font = SmallBoldFont,
             };
             btnClose.Click += (s, e) => Close();
             plProcess.Controls.Add(btnClose);
@@ -201,7 +251,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 Name = "btnProcess",
                 Text = "重新批次處理",
-                Location = new Point(btnClose.Right + 10, rbCustomPath.Bottom + 10),
+                Size = MiddleButtonSize,
+                Location = new Point(btnClose.Right + ButtonSpace, yStart),
+                BackColor = PrimaryColor,
+                ForeColor = SystemColors.ButtonHighlight,
+                FlatStyle = FlatStyle.Flat,
+                Font = SmallBoldFont,
             };
             plProcess.Controls.Add(btnProcess);
         }
@@ -244,27 +299,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             plImages = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                //Height = (int)(ClientSize.Height * 5 / 8.0),
                 Width = ClientSize.Width,
                 AutoScroll = true,
                 WrapContents = true,
-                FlowDirection = FlowDirection.LeftToRight
+                FlowDirection = FlowDirection.LeftToRight,
             };
             Controls.Add(plImages);
-            plImages.BringToFront();        // 會被頂部 Panel 擋住，所以加上這句
+            plImages.BringToFront();        // 會被 plCommand 擋住頂部，故加上這句
         }
 
         private void InitCommandPanel()
         {
-            var spacing = 20;
-            var buttonHeight = 40;
-            var buttonWidth = 150;
-            Size buttonSize = new(buttonWidth, buttonHeight);
-
             var btnRefresh = new Button
             {
                 Text = LQMessage(LQCode.C0047),
-                Size = buttonSize,
+                Size = MiddleButtonSize,
                 Image = Resources.Refresh,
                 ImageAlign = ContentAlignment.MiddleCenter,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -276,7 +325,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var btnAdd = new Button
             {
                 Text = LQMessage(LQCode.C0048),
-                Size = buttonSize,
+                Size = MiddleButtonSize,
                 Image = Resources.Add,
                 ImageAlign = ContentAlignment.MiddleCenter,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -288,7 +337,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var btnClearAll = new Button
             {
                 Text = LQMessage(LQCode.C0049),
-                Size = buttonSize,
+                Size = MiddleButtonSize,
                 Image = Resources.ClearAll,
                 ImageAlign = ContentAlignment.MiddleCenter,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -297,17 +346,26 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             btnClearAll.Click += (_, _) => Close();
 
+            var lblInfo = new Label
+            {
+                Text = "圖檔原則：jpg、灰階、300dpi、寬小於14CM、檔案小於1000KB",
+                ForeColor = Color.Red,
+                AutoSize = true,
+            };
+
             plCommand.Controls.Add(btnRefresh);
             plCommand.Controls.Add(btnAdd);
             plCommand.Controls.Add(btnClearAll);
+            plCommand.Controls.Add(lblInfo);
 
             // Center the buttons vertically and arrange them horizontally
             int totalHeight = btnRefresh.Height;
             int startY = (plCommand.Height - totalHeight) / 2;
 
-            btnRefresh.Location = new Point(0, startY);
-            btnAdd.Location = new Point(btnRefresh.Width + spacing, startY);
-            btnClearAll.Location = new Point(btnRefresh.Width + spacing + btnAdd.Width + spacing, startY);
+            btnRefresh.Location = new Point(Margins.Left, startY);
+            btnAdd.Location = new Point(btnRefresh.Right + HSpacing._20Pixel, startY);
+            btnClearAll.Location = new Point(btnAdd.Right + HSpacing._20Pixel, startY);
+            lblInfo.Location = new Point(btnClearAll.Right + HSpacing._20Pixel, (btnClearAll.Height - lblInfo.Height) / 2 + startY);
         }
 
         private void BtnRefresh_Click(object? sender, EventArgs e)
@@ -442,6 +500,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     var isBelow300Dpi = info.GetIsBelow300Dpi();
                     var fileFormat = info.GetFileFormat();
                     var imageDpi = info.GetDpi();
+                    int middle = 0;
 
                     var pbImage = new PictureBox
                     {
@@ -465,9 +524,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     var lblRowOne_FileName = new Label
                     {
                         AutoSize = true,
-                        Location = new Point(0, pictureBoxHeigth),
                     };
                     lblRowOne_FileName.Text = GetFileNameFitForUI(lblRowOne_FileName, pictureBoxWidth, imageInfo.FilePath);
+                    middle = (pictureBoxWidth - lblRowOne_FileName.Width) / 2;
+                    lblRowOne_FileName.Location = new Point(middle, pictureBoxHeigth);
+                    
                     var row1Height = lblRowOne_FileName.Height;
 
                     var lblRowTwo_ExtensionName = new Label
@@ -484,7 +545,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {
                         AutoSize = true,
                         ForeColor = !isBelow300Dpi ? DefaultColor : WarningColor,
-                        Location = new Point(lblRowTwo_ExtensionName.Width, row2Y),
+                        Location = new Point(lblRowTwo_ExtensionName.PreferredWidth, row2Y),
                         Text = imageDpi,
                     };
 
@@ -493,7 +554,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                         AutoSize = true,
                         Text = widthInCm.ToString(),
                         ForeColor = widthInCm <= AllowedMaxWidthInCm ? DefaultColor : WarningColor,
-                        Location = new Point(lblRowTwo_ExtensionName.Width + lblRowTwo_Dpi.Width, row2Y),
+                        Location = new Point(lblRowTwo_ExtensionName.PreferredWidth + lblRowTwo_Dpi.PreferredWidth, row2Y),
                     };
 
                     var fileSize = info.GetFileSizeInKB();
@@ -502,45 +563,23 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                         AutoSize = true,
                         Text = fileSize.ToString(),
                         ForeColor = fileSize <= AllowedMaxFileSizeInKb ? DefaultColor : WarningColor,
-                        Location = new Point(lblRowTwo_ExtensionName.Width + lblRowTwo_Dpi.Width + lblRowTwo_ImageWidth.Width, row2Y),
+                        Location = new Point(lblRowTwo_ExtensionName.PreferredWidth + lblRowTwo_Dpi.PreferredWidth + lblRowTwo_ImageWidth.PreferredWidth, row2Y),
                     };
 
                     var row3Y = pictureBoxHeigth + row1Height + row2Height;
-                    var lblRowThree_FileExtentisonInfo = new Label
+                    var lblRowThree_ErrorInfo = new Label
                     {
                         AutoSize = true,
-                        Text = isJpeg ? string.Empty : LQMessage(LQCode.C0043),
+                        Text = isJpeg ? string.Empty : LQMessage(LQCode.C0043) + Space,
                         ForeColor = WarningColor,
-                        Location = new Point(0, row3Y),
                     };
-                    var row3Height = lblRowThree_FileExtentisonInfo.Height;
+                    var row3Height = lblRowThree_ErrorInfo.Height;
 
-                    var lblRowThree_DpiInfo = new Label
-                    {
-                        AutoSize = true,
-                        Text = !isBelow300Dpi ? string.Empty : LQMessage(LQCode.C0044),
-                        ForeColor = WarningColor,
-                        Location = new Point(lblRowThree_FileExtentisonInfo.Width, row3Y),
-                    };
-                    row3Height = Math.Max(row3Height, lblRowThree_DpiInfo.Height);
-
-                    var lblRowThree_WidthInfo = new Label
-                    {
-                        AutoSize = true,
-                        Text = widthInCm <= AllowedMaxWidthInCm ? string.Empty : LQMessage(LQCode.C0045),
-                        ForeColor = WarningColor,
-                        Location = new Point(lblRowThree_FileExtentisonInfo.Width + lblRowThree_DpiInfo.Width, row3Y),
-                    };
-                    row3Height = Math.Max(row3Height, lblRowThree_WidthInfo.Height);
-
-                    var lblRowThree_FileSizeInfo = new Label
-                    {
-                        AutoSize = true,
-                        Text = fileSize <= AllowedMaxFileSizeInKb ? string.Empty : LQMessage(LQCode.C0046),
-                        ForeColor = WarningColor,
-                        Location = new Point(lblRowThree_FileExtentisonInfo.Width + lblRowThree_DpiInfo.Width + lblRowThree_WidthInfo.Width, row3Y),
-                    };
-                    row3Height = Math.Max(row3Height, lblRowThree_FileSizeInfo.Height);
+                    lblRowThree_ErrorInfo.Text += !isBelow300Dpi ? string.Empty : LQMessage(LQCode.C0044) + Space;
+                    lblRowThree_ErrorInfo.Text += widthInCm <= AllowedMaxWidthInCm ? string.Empty : LQMessage(LQCode.C0045) + Space;
+                    lblRowThree_ErrorInfo.Text += fileSize <= AllowedMaxFileSizeInKb ? string.Empty : LQMessage(LQCode.C0046);
+                    middle = (pictureBoxWidth - lblRowThree_ErrorInfo.PreferredWidth) / 2;
+                    lblRowThree_ErrorInfo.Location = new Point(middle, row3Y);
 
                     var plImage = new Panel
                     {
@@ -559,16 +598,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     plImage.Controls.Add(lblRowTwo_ImageWidth);
                     plImage.Controls.Add(lblRowTwo_FileSize);
 
-                    plImage.Controls.Add(lblRowThree_FileExtentisonInfo);
-                    plImage.Controls.Add(lblRowThree_DpiInfo);
-                    plImage.Controls.Add(lblRowThree_WidthInfo);
+                    plImage.Controls.Add(lblRowThree_ErrorInfo);
 
                     plImages.Controls.Add(plImage);
                     plImages.Controls.SetChildIndex(plImage, 0);
 
-                    //pbImage.Click += (s, e) => ShowMagnify(pbImage.Image);
-                    pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage.Image);
-                    pbImage.MouseLeave += (s, e) => HideMagnify();
+                    pbImage.MouseEnter += (s, e) => ShowMagnify(pbImage);
+                    pbImage.MouseLeave += (s, e) => HideMagnify(pbImage);
                     pbCloseIcon.Click += (s, e) => plImages.Controls.Remove(plImage);
 
                     // Update progress
@@ -618,16 +654,22 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         //    _enlargeImageForm.Visible = true;
         //}
 
-        private void ShowMagnify(Image image)
+        private void ShowMagnify(PictureBox pb)
         {
+            // PictureBox 無 Border Color 屬性
+            pb.BorderStyle = BorderStyle.Fixed3D;
+            
+            var image = pb.Image;
             PbMagnifyImage.Image = image;
             PbMagnifyImage.Invalidate();
             PbMagnifyImage.Location = CenterLocation();
             PbMagnifyImage.BringToFront();
             PbMagnifyImage.Visible = true;
         }
-        private void HideMagnify()
+        private void HideMagnify(PictureBox pb)
         {
+            pb.BorderStyle = BorderStyle.None;
+
             if (!PbMagnifyImage.ClientRectangle.Contains(PbMagnifyImage.PointToClient(Cursor.Position)))
             {
                 PbMagnifyImage.Visible = false;

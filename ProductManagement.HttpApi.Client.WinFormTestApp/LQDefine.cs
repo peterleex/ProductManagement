@@ -1,4 +1,5 @@
-﻿using ImageMagick;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using ImageMagick;
 using System.Runtime.CompilerServices;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -117,10 +118,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 };
 
-        public static Color PrimaryColor => Color.FromArgb(167, 108, 86);
+        public static System.Drawing.Color PrimaryColor => System.Drawing.Color.FromArgb(167, 108, 86);
+        public static System.Drawing.Color SecondaryColor => System.Drawing.Color.FromArgb(237, 226, 221);
+        public static System.Drawing.Color WarningColor => System.Drawing.Color.Red;
+        public static System.Drawing.Color DefaultColor => System.Drawing.Color.Black;
 
-        public static Color WarningColor => Color.Red;
-        public static Color DefaultColor => Color.Black;
+        public static string Space => " ";
 
         public static string LQMessage(LQCode code)
         {
@@ -167,9 +170,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public const string UpdatorExeFileName = "龍騰數位題庫應用程式更新程式.exe";
         public static string UpdatorExeFileProcessName => Path.GetFileNameWithoutExtension(UpdatorExeFileName);
 
-        public static Color ProgressColor => Color.Green;
+        
 
-        public static Size UpdateWindowSize => new Size(418, 162);
         public static int PreferScreenWidth => 1920;
         public static int PreferScreenHeight => 1080;
         public static double AllowedMaxWidthInCm => 14f;
@@ -186,7 +188,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public static int MagnifyIndex => 2;
 
-        public static Size DefaultWindowSize => new (1920, 1080);
+        public static System.Drawing.Size DefaultWindowSize => new(1920, 1080);
+
+        public static System.Drawing.Font BigBoldFont => new("Microsoft JhengHei UI", 16, FontStyle.Bold);
+        public static System.Drawing.Font MiddleBoldFont => new("Microsoft JhengHei UI", 14, FontStyle.Bold);
+        public static System.Drawing.Font SmallBoldFont => new("Microsoft JhengHei UI", 12, FontStyle.Bold);
+
+        public static Size MiddleButtonSize => new(160, 48);
+
+        public static int ButtonSpace => 16;
 
         public class MagickInfo
         {
@@ -263,5 +273,30 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
 
         }
+        public static class HSpacing
+        {
+            public static int _5Pixel => 5;
+            public static int _20Pixel => 20;
+            public static int _200Pixel => 200;
+        }
+
+        public static class VSpacing
+        {
+            public static int _10Pixel => 10;
+            public static int _200Pixel => 200;
+        }
+
+        public static class Colors
+        {
+            public static System.Drawing.Color ProgressColor => System.Drawing.Color.Green;
+            public static System.Drawing.Color ImageBorderColor => System.Drawing.Color.Blue;
+        }
+
+        public static class Margins
+        {
+            public static int Left => 40;
+        }
     }
+
+
 }

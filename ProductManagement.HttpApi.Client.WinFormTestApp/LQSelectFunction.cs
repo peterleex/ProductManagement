@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +14,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
     public partial class LQSelectFunction : Form
     {
-        private static string moduleName = LQDefine.LQMessage(LQDefine.LQCode.C0036) ;
+        private static string moduleName = LQDefine.LQMessage(LQDefine.LQCode.C0036);
         public LQSelectFunction()
         {
             InitializeComponent();
@@ -23,7 +25,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitControl()
         {
-
         }
 
         private void HookEvent()

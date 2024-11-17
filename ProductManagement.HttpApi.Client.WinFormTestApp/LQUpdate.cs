@@ -33,9 +33,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void InitializeCustomComponents()
         {
-            progressBar.ForeColor = ProgressColor;
+            progressBar.ForeColor = Colors.ProgressColor;
             percentageLabel.Text = string.Empty;
-            percentageLabel.ForeColor = ProgressColor;
+            percentageLabel.ForeColor = Colors.ProgressColor;
         }
         private async Task<bool> IsUpdateAvailable()
         {

@@ -32,7 +32,6 @@
             PbQuestionCheckProgram = new PictureBox();
             PbImageProcessProgram = new PictureBox();
             PbPleaseSelectProgram = new PictureBox();
-            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)PbQuestionImportProgram).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PbQuestionCheckProgram).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PbImageProcessProgram).BeginInit();
@@ -80,22 +79,12 @@
             PbPleaseSelectProgram.TabIndex = 9;
             PbPleaseSelectProgram.TabStop = false;
             // 
-            // button1
-            // 
-            button1.Location = new Point(12, 12);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 10;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            // 
             // LQSelectFunction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.backgroup;
             ClientSize = new Size(1016, 578);
-            Controls.Add(button1);
             Controls.Add(PbPleaseSelectProgram);
             Controls.Add(PbQuestionImportProgram);
             Controls.Add(PbQuestionCheckProgram);
@@ -116,6 +105,6 @@
         private PictureBox PbQuestionCheckProgram;
         private PictureBox PbImageProcessProgram;
         private PictureBox PbPleaseSelectProgram;
-        private Button button1;
+        private Button BtnTest;
     }
 }
