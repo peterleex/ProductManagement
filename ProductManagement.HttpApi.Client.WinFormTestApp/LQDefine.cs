@@ -69,6 +69,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0058,
             C0059,
             C0060,
+            C0061,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -134,9 +135,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0058, "警告" },
                     {LQCode.C0059, "處理成功 {0} 筆，失敗 {1} 筆\n" },
                     {LQCode.C0060, "處理成功 {0} 筆" },
+                    {LQCode.C0061, "請選擇輸出位置" },
 
 
-            
+
                 };
 
         public static System.Drawing.Color PrimaryColor => System.Drawing.Color.FromArgb(167, 108, 86);
@@ -323,6 +325,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         }
 
         public static double InchToCmRadio => 2.54;
+
+        public static string SettingFolder => ".LQClientApp";
+
+        public static string SettingPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), SettingFolder);
+
+        public static string SettingFile => "setting.json";
+        public static string SettingFilePath => Path.Combine(SettingPath, SettingFile);
+
+        public static string CustomOutPathKey => "CustomOutputPath";
 
         public static class HSpacing
         {

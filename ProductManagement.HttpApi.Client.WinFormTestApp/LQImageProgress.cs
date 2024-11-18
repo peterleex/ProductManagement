@@ -69,7 +69,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
             Close();
         }
-        string SaveWarning = string.Empty;
+        //string SaveWarning = string.Empty;
 
         protected override void InitForm()
         {
@@ -105,7 +105,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             int sum = ImageInfosToDisk.Sum(info => info.ImageCount);
             progressBar.Maximum = sum;
             info = string.Format(LQMessage(LQCode.C0056), sum);
-            LQImageConvert.SaveWarning = string.Empty;
+            LQImageConvert.Warning = string.Empty;
             int failedCount = 0, successCount = 0;
             List<MagickImage> successConerted = [];
 
@@ -126,7 +126,6 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     progressBar.Value = ++count;
                     UpdateProgressLabel();
                 }
-
             }
 
             ImageInfosToDisk.ForEach(info => info.Images.RemoveAll(i => successConerted.Contains(i)));
@@ -138,9 +137,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private static void ShowResult(int successCount, int failedCount)
         {
             var result = string.Format(LQMessage(LQCode.C0059), successCount, failedCount);
-            if (!LQImageConvert.SaveWarning.IsNullOrEmpty())
+            if (!LQImageConvert.Warning.IsNullOrEmpty())
             {
-                result += LQImageConvert.SaveWarning;
+                result += LQImageConvert.Warning;
             }
 
             LQHelper.InfoMessage(result);

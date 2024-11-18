@@ -3,7 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -18,7 +20,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public bool ConvertToPng { get; set; }
         public bool ConvertToGrayScale { get; set; } = true;
         public static bool IsOutputFolder { get; set; } = true;
-        public static string CustomOutputPath { get; internal set; } = string.Empty;
+        public static string CustomOutputPath { get; internal set; } = LQHelper.ReadCustomSetting(CustomOutPathKey);
+
     }
 
     public partial class LQImageProcess : LQBaseForm
@@ -286,6 +289,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Checked = true,
             };
             plProcess.Controls.Add(rbOutputFolder);
+            rbOutputFolder.CheckedChanged += (s, e) => btnSelectOutPutPath.Enabled = !rbOutputFolder.Checked;
 
             rbCustomPath = new RadioButton
             {
@@ -295,21 +299,26 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Location = new Point(lblOutput.Left, rbOutputFolder.Bottom + VSpacing._10Pixel),
             };
             plProcess.Controls.Add(rbCustomPath);
+            rbCustomPath.CheckedChanged += (s, e) => btnSelectOutPutPath.Enabled = rbCustomPath.Checked;
 
             lblOutputPath = new Label
             {
                 Name = "lblOutputPath",
                 Location = new Point(rbCustomPath.Left, rbCustomPath.Bottom + VSpacing._10Pixel),
                 AutoSize = true,
+                Text = LQHelper.ReadCustomSetting(CustomOutPathKey),
             };
+            plProcess.Controls.Add(lblOutputPath);
 
             btnSelectOutPutPath = new Button
             {
                 Text = LQMessage(LQCode.C0055),
                 AutoSize = true,
-                Location = new Point(lblOutputPath.Left, lblOutputPath.Bottom + VSpacing._10Pixel),
+                Location = new Point(rbCustomPath.Right, rbCustomPath.Top),
+                Enabled = false,
             };
             btnSelectOutPutPath.Click += (s, e) => SelectOutPutPath();
+            plProcess.Controls.Add(btnSelectOutPutPath);
 
             var btnClose = new Button
             {
@@ -344,6 +353,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private void ProcessImages()
         {
             var setting = GetSetting();
+
+            if (!ProcessSetting.IsOutputFolder && ProcessSetting.CustomOutputPath.IsNullOrEmpty())
+            {
+                LQHelper.InfoMessage(LQMessage(LQCode.C0061));
+                return;
+            }
+
             SuccessCount = ImageInfos.Sum(info => info.ImageCount);
 
             var loadImageForm = new LQImageProgress(_serviceProvider)
@@ -377,62 +393,71 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             imageSelect.Show();
         }
 
-        private async Task ConvertImages()
-        {
-            foreach (var imageInfo in ImageInfos)
-            {
-                foreach (var image in imageInfo.Images)
-                {
-                    SetImageDensity(image);
-                    SetImageWidthAndMaintainAspectRatio(image);
-                    SetImageGrayScale(image);
-                    await SaveImage(imageInfo, image);
-                }
-            }
-        }
+        //private async Task ConvertImages()
+        //{
+        //    foreach (var imageInfo in ImageInfos)
+        //    {
+        //        foreach (var image in imageInfo.Images)
+        //        {
+        //            SetImageDensity(image);
+        //            SetImageWidthAndMaintainAspectRatio(image);
+        //            SetImageGrayScale(image);
+        //            await SaveImage(imageInfo, image);
+        //        }
+        //    }
+        //}
 
-        private async Task SaveImage(ImageInfo imageInfo, MagickImage image)
-        {
-            var path = GetOutputFilePath(imageInfo, image);
-            await image.WriteAsync(path);
-        }
+        //private async Task SaveImage(ImageInfo imageInfo, MagickImage image)
+        //{
+        //    var path = GetOutputFilePath(imageInfo, image);
+        //    if (path.IsNullOrEmpty())
+        //        return;
 
-        private string GetOutputFilePath(ImageInfo imageInfo, MagickImage image)
-        {
-            if (imageInfo.ImageCount == 0)
-            {
-                return string.Empty;
-            }
+        //    await image.WriteAsync(path);
+        //}
 
-            var file = new LQImageFileHelper(imageInfo.FilePath);
-            var fileIndex = imageInfo.Images.IndexOf(image);
-            var isDocxOrPdf = file.IsDocxOrPdf();
-            var originalFile = imageInfo.FilePath;
-            var orginalPath = Path.GetDirectoryName(originalFile);
-            var orignalFileName = Path.GetFileNameWithoutExtension(originalFile);
-            var newExtension = Setting.ConvertToPng ? Png : Jpeg;
-            var newFileName = isDocxOrPdf ? $"{orignalFileName}{++fileIndex}" : $"{orignalFileName}";
-            newFileName = $"{newFileName}{newExtension}";
-            var outputPath = string.Empty;
+        //private string GetOutputFilePath(ImageInfo imageInfo, MagickImage image)
+        //{
+        //    if (imageInfo.ImageCount == 0)
+        //    {
+        //        return string.Empty;
+        //    }
 
-            if (ProcessSetting.IsOutputFolder)
-            {
-                outputPath = Path.Combine(orginalPath!, DefaultOutputFolder, file.GetDocxPdfName());
-            }
-            else
-                outputPath = Path.Combine(orginalPath!, lblOutputPath.Text, file.GetDocxPdfName());
+        //    if (!ProcessSetting.IsOutputFolder && lblOutputPath.Text.IsNullOrEmpty())
+        //    {
+        //        LQHelper.InfoMessage(LQMessage(LQCode.C0061));
+        //        return string.Empty;
+        //    }
 
-            if (!Directory.Exists(outputPath))
-            {
-                Directory.CreateDirectory(outputPath);
-            }
+        //    var file = new LQImageFileHelper(imageInfo.FilePath);
+        //    var fileIndex = imageInfo.Images.IndexOf(image);
+        //    var isDocxOrPdf = file.IsDocxOrPdf();
+        //    var originalFile = imageInfo.FilePath;
+        //    var orginalPath = Path.GetDirectoryName(originalFile);
+        //    var orignalFileName = Path.GetFileNameWithoutExtension(originalFile);
+        //    var newExtension = Setting.ConvertToPng ? Png : Jpeg;
+        //    var newFileName = isDocxOrPdf ? $"{orignalFileName}{++fileIndex}" : $"{orignalFileName}";
+        //    newFileName = $"{newFileName}{newExtension}";
+        //    var outputPath = string.Empty;
 
-            outputPath = Path.Combine(outputPath, newFileName);
-            outputPath = GetUniqueFilePath(outputPath);
+        //    if (ProcessSetting.IsOutputFolder)
+        //    {
+        //        outputPath = Path.Combine(orginalPath!, DefaultOutputFolder, file.GetDocxPdfName());
+        //    }
+        //    else
+        //        outputPath = Path.Combine(orginalPath!, lblOutputPath.Text, file.GetDocxPdfName());
+
+        //    if (!Directory.Exists(outputPath))
+        //    {
+        //        Directory.CreateDirectory(outputPath);
+        //    }
+
+        //    outputPath = Path.Combine(outputPath, newFileName);
+        //    outputPath = GetUniqueFilePath(outputPath);
 
 
-            return outputPath;
-        }
+        //    return outputPath;
+        //}
 
         private string GetUniqueFilePath(string outputPath)
         {
@@ -478,8 +503,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 lblOutputPath.Text = folderBrowserDialog.SelectedPath;
+                SavePathToJson(folderBrowserDialog.SelectedPath);
             }
         }
+
+        private void SavePathToJson(string customPath)
+        {
+            if (!Directory.Exists(SettingPath))
+            {
+                Directory.CreateDirectory(SettingPath);
+            }
+
+            LQHelper.WriteCustomSetting(CustomOutPathKey, customPath);
+        }
+
+
 
         private void InitMagnifyPictureBoxSize()
         {
