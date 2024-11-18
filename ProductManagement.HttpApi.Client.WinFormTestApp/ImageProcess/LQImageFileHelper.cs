@@ -25,6 +25,24 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
             };
         }
 
+        public string GetDocxPdfName()
+        {
+            if(IsDocxOrPdf())
+                return Path.GetFileNameWithoutExtension( _filePath );
+            else
+                return string.Empty;
+        }
+
+        public bool IsDocxOrPdf()
+        {
+            var type = GetFileType();
+            if (type == FileType.Pdf || type == FileType.Docx)
+                return true;
+            else
+                return false;
+        }
+
+
         public bool IsAiOrEps()
         {
             if (Extension == ".ai" || Extension == ".eps")

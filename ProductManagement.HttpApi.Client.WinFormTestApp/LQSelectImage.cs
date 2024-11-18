@@ -1,4 +1,5 @@
 ﻿using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
+using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Data;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
@@ -25,6 +26,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             btnOpenFile.ForeColor = SystemColors.ButtonHighlight;
             btnOpenFile.FlatStyle = FlatStyle.Flat;
             btnOpenFile.Font = LQDefine.BigBoldFont;
+
+            lblSuccessInfo.ForeColor = LQDefine.PrimaryColor;
+            lblSuccessInfo.BackColor = System.Drawing.Color.Transparent;
+            lblSuccessInfo.Font = LQDefine.BigBoldFont;
+            lblSuccessInfo.AutoSize = true;
+            lblSuccessInfo.Visible = false;
         }
 
         private void HookEvent()
@@ -82,6 +89,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             );
 
             pbPleaseSelectImage.Location = new Point(plChooseImageFile.Left, plChooseImageFile.Top - pbPleaseSelectImage.Height - spacing);
+            lblSuccessInfo.Location = new Point(plChooseImageFile.Width / 2 - lblSuccessInfo.Width / 2, spacing);
         }
 
         protected override void InitForm()
@@ -107,39 +115,30 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void EnterImageProcess(List<ImageInfo> imageInfos)
         {
-            new LQImageProcess(_serviceProvider)
+            var imageProcess = new LQImageProcess(_serviceProvider)
             {
                 MdiParent = MdiParent,
                 ImageInfos = imageInfos,
-            }.Show();
-
-            //Close();
+            };
+            imageProcess.Show();
+            Close();
         }
 
-        //private async Task<string[]> OpenFileDialogAsync()
-        //{
-        //    var files = Array.Empty<string>();
+        public void RenewUI(int successCount)
+        {
+            PbChooseImageFile.Image = Resources.ConvertSuccess1;
+            PbChooseImageFile.Refresh();
 
-        //    await Task.Run(() =>
-        //    {
-        //        var tcs = new TaskCompletionSource<bool>();
-        //        var thread = new Thread(() =>
-        //        {
-        //            using var dialog = new OpenFileDialog();
-        //            dialog.Multiselect = true;
-        //            dialog.Filter = LQDefine.SupportedFileType;
-        //            dialog.FilterIndex = 3; // all types
-        //            dialog.ShowDialog();
-        //            tcs.SetResult(true);
+            var info = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0060), successCount);
+            lblSuccessInfo.Text = $"{info}";
+            lblSuccessInfo.Visible = true;
 
-        //            files = dialog.FileNames;
-        //        });
-        //        thread.SetApartmentState(ApartmentState.STA);
-        //        thread.Start();
-        //        tcs.Task.Wait();
-        //    });
+            CenterControls();
+        }
 
-        //    return files;
-        //}
+        private void PbChooseImageFile_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

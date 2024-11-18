@@ -61,6 +61,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0050,
             C0051,
             C0052,
+            C0053,
+            C0054,
+            C0055,
+            C0056,
+            C0057,
+            C0058,
+            C0059,
+            C0060,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -118,10 +126,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0050, "cm" },
                     {LQCode.C0051, "kb" },
                     {LQCode.C0052, "請輸入" },
+                    {LQCode.C0053, "批次處理" },
+                    {LQCode.C0054, "重新批次處理" },
+                    {LQCode.C0055, "..." },
+                    {LQCode.C0056, "有 {0} 張圖儲存中，請稍候…" },
+                    {LQCode.C0057, "{0}轉檔後大於1000KB\n" },
+                    {LQCode.C0058, "警告" },
+                    {LQCode.C0059, "處理成功 {0} 筆，失敗 {1} 筆\n" },
+                    {LQCode.C0060, "處理成功 {0} 筆" },
 
 
-
-
+            
                 };
 
         public static System.Drawing.Color PrimaryColor => System.Drawing.Color.FromArgb(167, 108, 86);
@@ -176,7 +191,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public const string UpdatorExeFileName = "龍騰數位題庫應用程式更新程式.exe";
         public static string UpdatorExeFileProcessName => Path.GetFileNameWithoutExtension(UpdatorExeFileName);
 
-        
+        public static string DefaultOutputFolder => "output";
 
         public static int PreferScreenWidth => 1920;
         public static int PreferScreenHeight => 1080;
@@ -204,12 +219,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public static int ButtonSpace => 16;
 
+        public static string Jpeg => ".jpeg";
+        public static string Png => ".png";
+
         public class MagickInfo
         {
             private readonly MagickImage _magickImage;
             public MagickInfo(MagickImage magickImage) => _magickImage = magickImage;
 
-            public bool GetIsJpeg()
+            public bool IsJpeg()
             {
                 MagickFormat format = _magickImage.Format;
 
@@ -232,14 +250,36 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 }
             }
 
+            public bool IsAiOrEps()
+            {
+                MagickFormat format = _magickImage.Format;
+                switch (format)
+                {
+                    case MagickFormat.Ai:
+                    case MagickFormat.Eps:
+                    case MagickFormat.Eps2:
+                    case MagickFormat.Eps3:
+                    case MagickFormat.Epsf:
+                    case MagickFormat.Epsi:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
             public string GetFileFormat()
             {
                 return Enum.GetName(typeof(MagickFormat), _magickImage.Format) ?? string.Empty;
             }
 
-            public string GetDpi()
+            public string GetDpiString()
             {
                 return _magickImage.Density.ToString(DensityUnit.PixelsPerInch);
+            }
+
+            public Density GetDpi()
+            {
+                return _magickImage.Density;
             }
 
             public bool GetIsBelow300Dpi()
@@ -257,11 +297,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
                 // 将像素转换为 CM
                 double widthInInches = widthInPixels / dpi;
-                double widthInCm = widthInInches * 2.54;
+                double widthInCm = widthInInches * InchToCmRadio;
 
                 // 四舍五入保留一位小数
                 return Math.Round(widthInCm, 1);
             }
+
+
 
             public double GetFileSizeInKB()
             {
@@ -279,6 +321,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
 
         }
+
+        public static double InchToCmRadio => 2.54;
+
         public static class HSpacing
         {
             public static int _5Pixel => 5;

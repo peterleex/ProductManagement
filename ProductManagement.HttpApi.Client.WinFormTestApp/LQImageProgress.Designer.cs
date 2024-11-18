@@ -1,6 +1,6 @@
 ﻿namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    partial class LQLoadImage
+    partial class LQImageProgress
     {
         /// <summary>
         /// Required designer variable.

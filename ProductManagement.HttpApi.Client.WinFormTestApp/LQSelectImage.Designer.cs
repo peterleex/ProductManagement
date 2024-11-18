@@ -32,6 +32,7 @@
             PbChooseImageFile = new PictureBox();
             plChooseImageFile = new Panel();
             pbPleaseSelectImage = new PictureBox();
+            lblSuccessInfo = new Label();
             ((System.ComponentModel.ISupportInitialize)PbChooseImageFile).BeginInit();
             plChooseImageFile.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbPleaseSelectImage).BeginInit();
@@ -40,7 +41,7 @@
             // btnOpenFile
             // 
             btnOpenFile.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnOpenFile.BackColor = LQDefine.PrimaryColor;
+            btnOpenFile.BackColor = Color.FromArgb(167, 108, 86);
             btnOpenFile.FlatAppearance.BorderSize = 0;
             btnOpenFile.FlatStyle = FlatStyle.Flat;
             btnOpenFile.Font = new Font("Microsoft JhengHei UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 136);
@@ -63,10 +64,12 @@
             PbChooseImageFile.SizeMode = PictureBoxSizeMode.Zoom;
             PbChooseImageFile.TabIndex = 22;
             PbChooseImageFile.TabStop = false;
+            PbChooseImageFile.Click += PbChooseImageFile_Click;
             // 
             // plChooseImageFile
             // 
             plChooseImageFile.BackColor = Color.White;
+            plChooseImageFile.Controls.Add(lblSuccessInfo);
             plChooseImageFile.Controls.Add(btnOpenFile);
             plChooseImageFile.Controls.Add(PbChooseImageFile);
             plChooseImageFile.Location = new Point(380, 158);
@@ -85,7 +88,19 @@
             pbPleaseSelectImage.TabIndex = 24;
             pbPleaseSelectImage.TabStop = false;
             // 
-            // LQPreImageProcess
+            // lblSuccessInfo
+            // 
+            lblSuccessInfo.AutoSize = true;
+            lblSuccessInfo.BackColor = Color.Transparent;
+            lblSuccessInfo.Font = new Font("Microsoft JhengHei UI", 16F);
+            lblSuccessInfo.ForeColor = Color.FromArgb(167, 108, 86);
+            lblSuccessInfo.Location = new Point(341, 20);
+            lblSuccessInfo.Name = "lblSuccessInfo";
+            lblSuccessInfo.Size = new Size(75, 28);
+            lblSuccessInfo.TabIndex = 23;
+            lblSuccessInfo.Text = "label1";
+            // 
+            // LQSelectImage
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -93,10 +108,11 @@
             ClientSize = new Size(1602, 799);
             Controls.Add(pbPleaseSelectImage);
             Controls.Add(plChooseImageFile);
-            Name = "LQPreImageProcess";
+            Name = "LQSelectImage";
             Text = "ImageProcess";
             ((System.ComponentModel.ISupportInitialize)PbChooseImageFile).EndInit();
             plChooseImageFile.ResumeLayout(false);
+            plChooseImageFile.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pbPleaseSelectImage).EndInit();
             ResumeLayout(false);
         }
@@ -107,5 +123,6 @@
         private PictureBox PbChooseImageFile;
         private Panel plChooseImageFile;
         private PictureBox pbPleaseSelectImage;
+        private Label lblSuccessInfo;
     }
 }

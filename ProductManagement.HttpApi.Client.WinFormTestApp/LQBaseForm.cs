@@ -39,14 +39,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             if (files == null || files.Length == 0)
                 return images;
 
-            var loadImageForm = new LQLoadImage(_serviceProvider)
+            var loadImageForm = new LQImageProgress(_serviceProvider)
             {
+                OperationType = OperationType.Load,
                 Files = files,
             };
 
             loadImageForm.ShowDialog(this);
 
-            return loadImageForm.ImageInfos;
+            return loadImageForm.ImageInfosFromDisk;
         }
 
         protected string[] OpenImageFileDialog()

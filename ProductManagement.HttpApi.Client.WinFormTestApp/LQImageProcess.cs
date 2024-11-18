@@ -1,4 +1,5 @@
 ﻿using ImageMagick;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Data;
@@ -7,16 +8,36 @@ using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
+    public class ProcessSetting
+    {
+        public double ImageWidthCm { get; set; } = AllowedMaxWidthInCm;
+        public Density? DensitySetting { get; set; } = new(300, 300, DensityUnit.PixelsPerInch);
+
+        public static Density DefaultDensitySetting = new(300, 300, DensityUnit.PixelsPerInch);
+
+        public bool ConvertToPng { get; set; }
+        public bool ConvertToGrayScale { get; set; } = true;
+        public static bool IsOutputFolder { get; set; } = true;
+        public static string CustomOutputPath { get; internal set; } = string.Empty;
+    }
+
     public partial class LQImageProcess : LQBaseForm
     {
         public List<ImageInfo> ImageInfos { get; set; } = [];
-
+        public int SuccessCount { get; private set; } = 0;
         private Size imageSideLength;
         private Panel plCommand = null!;
         private FlowLayoutPanel plImages = null!;
         private Panel plProcess = null!;
         //private MagnifyImage _enlargeImageForm = null!;
         private PictureBox PbMagnifyImage = null!;
+
+        class MagicPictureBox : PictureBox
+        {
+            public MagickImage MagickImage { get; set; } = null!;
+        }
+
+
 
         public LQImageProcess(IServiceProvider serviceProvider)
         {
@@ -67,10 +88,45 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             InitProcessPanlel();
         }
 
+        CheckBox chkEqualWidth = null!;
+        TextBox txtImageWidth = null!;
+        CheckBox chkAdjustColor = null!;
+        RadioButton rbKeepRgb = null!;
+        RadioButton rbConvertToBlack = null!;
+        CheckBox chkKeepDpi = null!;
+        CheckBox chkConvertToPng = null!;
+        RadioButton rbOutputFolder = null!;
+        RadioButton rbCustomPath = null!;
+        Label lblOutputPath = null!;
+        Button btnSelectOutPutPath = null!;
+
+        ProcessSetting Setting = null!;
+        private ProcessSetting GetSetting()
+        {
+            Setting = new();
+            if (chkEqualWidth.Checked && double.TryParse(txtImageWidth.Text, out double result))
+                Setting.ImageWidthCm = result;
+
+            if (chkAdjustColor.Checked && rbKeepRgb.Checked)
+            {
+                Setting.ConvertToGrayScale = false;
+            }
+
+            if (chkKeepDpi.Checked)
+                Setting.DensitySetting = null;
+
+            Setting.ConvertToPng = chkConvertToPng.Checked;
+
+            ProcessSetting.IsOutputFolder = rbOutputFolder.Checked;
+
+            ProcessSetting.CustomOutputPath = rbCustomPath.Checked ? lblOutputPath.Text : string.Empty;
+
+            return Setting;
+        }
+
         private void InitProcessPanlel()
         {
             var yStart = 10;
-            //var vSpacing = 10;
 
             var lblSetting = new Label
             {
@@ -81,7 +137,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             plProcess.Controls.Add(lblSetting);
 
             var row1Y = lblSetting.Bottom + VSpacing._10Pixel;
-            var chkEqualWidth = new CheckBox
+            chkEqualWidth = new CheckBox
             {
                 Text = "寬度統一",
                 Name = "chkEqualWidth",
@@ -90,7 +146,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             plProcess.Controls.Add(chkEqualWidth);
 
-            var chkAdjustColor = new CheckBox
+            chkAdjustColor = new CheckBox
             {
                 Text = "色彩調整",
                 Name = "chkAdjustColor",
@@ -99,7 +155,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             plProcess.Controls.Add(chkAdjustColor);
 
-            var chkKeepDpi = new CheckBox
+            chkKeepDpi = new CheckBox
             {
                 Text = "保留原解析度",
                 AutoSize = true,
@@ -109,7 +165,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             plProcess.Controls.Add(chkKeepDpi);
 
-            var chkConvertToPng = new CheckBox
+            chkConvertToPng = new CheckBox
             {
                 Text = "轉爲 PNG",
                 AutoSize = true,
@@ -119,7 +175,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             plProcess.Controls.Add(chkConvertToPng);
 
-            var txtImageWidth = new TextBox
+            txtImageWidth = new TextBox
             {
                 Name = "txtImageWidth",
                 Location = new Point(Margins.Left, chkEqualWidth.Bottom + VSpacing._10Pixel),
@@ -185,17 +241,18 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             plProcess.Controls.Add(lblWidthInfo);
 
-            var rbKeepRgb = new RadioButton
+            rbKeepRgb = new RadioButton
             {
                 Name = "rbKeepRgb",
                 AutoSize = true,
                 Text = "保留 RGB",
                 Location = new Point(chkAdjustColor.Left, chkAdjustColor.Bottom + VSpacing._10Pixel),
                 Enabled = false,
+                Checked = true,
             };
             plProcess.Controls.Add(rbKeepRgb);
 
-            var rbConvertToBlack = new RadioButton
+            rbConvertToBlack = new RadioButton
             {
                 Name = "rbConvertToBlack",
                 AutoSize = true,
@@ -220,16 +277,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             };
             plProcess.Controls.Add(lblOutput);
 
-            var rbOutputFolder = new RadioButton
+            rbOutputFolder = new RadioButton
             {
                 Name = "rbOutputFolder",
                 Text = "原檔「output」資料夾",
                 AutoSize = true,
                 Location = new Point(lblOutput.Left, lblOutput.Bottom + VSpacing._10Pixel),
+                Checked = true,
             };
             plProcess.Controls.Add(rbOutputFolder);
 
-            var rbCustomPath = new RadioButton
+            rbCustomPath = new RadioButton
             {
                 Name = "rbCustomPath",
                 Text = "自訂路徑",
@@ -237,6 +295,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Location = new Point(lblOutput.Left, rbOutputFolder.Bottom + VSpacing._10Pixel),
             };
             plProcess.Controls.Add(rbCustomPath);
+
+            lblOutputPath = new Label
+            {
+                Name = "lblOutputPath",
+                Location = new Point(rbCustomPath.Left, rbCustomPath.Bottom + VSpacing._10Pixel),
+                AutoSize = true,
+            };
+
+            btnSelectOutPutPath = new Button
+            {
+                Text = LQMessage(LQCode.C0055),
+                AutoSize = true,
+                Location = new Point(lblOutputPath.Left, lblOutputPath.Bottom + VSpacing._10Pixel),
+            };
+            btnSelectOutPutPath.Click += (s, e) => SelectOutPutPath();
 
             var btnClose = new Button
             {
@@ -255,7 +328,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             var btnProcess = new Button
             {
                 Name = "btnProcess",
-                Text = "重新批次處理",
+                Text = LQMessage(LQCode.C0053),
                 Size = MiddleButtonSize,
                 Location = new Point(btnClose.Right + ButtonSpace, yStart),
                 BackColor = PrimaryColor,
@@ -263,7 +336,149 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 FlatStyle = FlatStyle.Flat,
                 Font = SmallBoldFont,
             };
+            btnProcess.Click += (s, e) => ProcessImages();
             plProcess.Controls.Add(btnProcess);
+
+        }
+
+        private void ProcessImages()
+        {
+            var setting = GetSetting();
+            SuccessCount = ImageInfos.Sum(info => info.ImageCount);
+
+            var loadImageForm = new LQImageProgress(_serviceProvider)
+            {
+                OperationType = OperationType.Save,
+                LQImageConvert = new LQImageConvert(setting),
+                ImageInfosToDisk = ImageInfos,
+            };
+
+            loadImageForm.ShowDialog(this);
+
+            if (ImageInfos.Count == 0)
+            {
+                EnterImageSelect(true);
+                Close();
+            }
+            else
+                RefreshImage();
+        }
+
+        private void EnterImageSelect(bool success)
+        {
+            var imageSelect = new LQSelectImage(_serviceProvider)
+            {
+                MdiParent = MdiParent
+            };
+
+            if (success)
+                imageSelect.RenewUI(SuccessCount);
+
+            imageSelect.Show();
+        }
+
+        private async Task ConvertImages()
+        {
+            foreach (var imageInfo in ImageInfos)
+            {
+                foreach (var image in imageInfo.Images)
+                {
+                    SetImageDensity(image);
+                    SetImageWidthAndMaintainAspectRatio(image);
+                    SetImageGrayScale(image);
+                    await SaveImage(imageInfo, image);
+                }
+            }
+        }
+
+        private async Task SaveImage(ImageInfo imageInfo, MagickImage image)
+        {
+            var path = GetOutputFilePath(imageInfo, image);
+            await image.WriteAsync(path);
+        }
+
+        private string GetOutputFilePath(ImageInfo imageInfo, MagickImage image)
+        {
+            if (imageInfo.ImageCount == 0)
+            {
+                return string.Empty;
+            }
+
+            var file = new LQImageFileHelper(imageInfo.FilePath);
+            var fileIndex = imageInfo.Images.IndexOf(image);
+            var isDocxOrPdf = file.IsDocxOrPdf();
+            var originalFile = imageInfo.FilePath;
+            var orginalPath = Path.GetDirectoryName(originalFile);
+            var orignalFileName = Path.GetFileNameWithoutExtension(originalFile);
+            var newExtension = Setting.ConvertToPng ? Png : Jpeg;
+            var newFileName = isDocxOrPdf ? $"{orignalFileName}{++fileIndex}" : $"{orignalFileName}";
+            newFileName = $"{newFileName}{newExtension}";
+            var outputPath = string.Empty;
+
+            if (ProcessSetting.IsOutputFolder)
+            {
+                outputPath = Path.Combine(orginalPath!, DefaultOutputFolder, file.GetDocxPdfName());
+            }
+            else
+                outputPath = Path.Combine(orginalPath!, lblOutputPath.Text, file.GetDocxPdfName());
+
+            if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
+            outputPath = Path.Combine(outputPath, newFileName);
+            outputPath = GetUniqueFilePath(outputPath);
+
+
+            return outputPath;
+        }
+
+        private string GetUniqueFilePath(string outputPath)
+        {
+            int count = 1;
+            string directory = Path.GetDirectoryName(outputPath)!;
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputPath);
+            string extension = Path.GetExtension(outputPath);
+            string newFilePath = outputPath;
+
+            while (File.Exists(newFilePath))
+            {
+                newFilePath = Path.Combine(directory, $"{fileNameWithoutExtension}({count}){extension}");
+                count++;
+            }
+
+            return newFilePath;
+        }
+
+        private void SetImageDensity(MagickImage image)
+        {
+            MagickInfo info = new(image);
+
+            if (info.IsAiOrEps() || image.Density.X == 0)
+            {
+                image.Density = ProcessSetting.DefaultDensitySetting;
+                return;
+            }
+
+            if (Setting.DensitySetting != null)
+                image.Density = Setting.DensitySetting;
+
+        }
+
+        private void SetImageGrayScale(MagickImage image)
+        {
+            if (Setting.ConvertToGrayScale && image.ColorType != ColorType.Grayscale)
+                image.ColorType = ColorType.Grayscale;
+        }
+
+        private void SelectOutPutPath()
+        {
+            using var folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                lblOutputPath.Text = folderBrowserDialog.SelectedPath;
+            }
         }
 
         private void InitMagnifyPictureBoxSize()
@@ -375,6 +590,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void BtnRefresh_Click(object? sender, EventArgs e)
         {
+            RefreshImage();
+        }
+
+        private void RefreshImage()
+        {
             ClearImages();
 
             var files = ImageInfos.Select(i => i.FilePath).ToArray();
@@ -461,10 +681,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         //    }
         //}
 
-        class MagicPictureBox : PictureBox
-        {
-            public MagickImage MagickImage { get; set; } = null!;
-        }
+
 
         private void ShowImages(List<ImageInfo> imageInfos)
         {
@@ -505,11 +722,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 foreach (var image in imageInfo.Images)
                 {
                     MagickInfo info = new(image);
-                    var isJpeg = info.GetIsJpeg();
+                    var isJpeg = info.IsJpeg();
                     var widthInCm = info.GetWidthInCm();
                     var isBelow300Dpi = info.GetIsBelow300Dpi();
                     var fileFormat = info.GetFileFormat();
-                    var imageDpi = info.GetDpi();
+                    var imageDpi = info.GetDpiString();
 
                     var pbImage = new MagicPictureBox
                     {
@@ -642,6 +859,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
         }
 
+        private void RemoveImage(MagickImage magickImage)
+        {
+            var imageInfo = ImageInfos.FirstOrDefault(info => info.Images.Contains(magickImage));
+            if (imageInfo != null)
+            {
+                imageInfo.Images.Remove(magickImage);
+
+                if (!imageInfo.Images.Any())
+                {
+                    ImageInfos.Remove(imageInfo);
+                }
+            }
+        }
+
+
         private static string GetFileNameFitForUI(Label label, int imageFrameWidth, string filePath)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -701,6 +933,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private Point CenterLocation()
         {
             return new Point((ClientSize.Width - PbMagnifyImage.Width) / 2, (ClientSize.Height - PbMagnifyImage.Height) / 2);
+        }
+        private void SetImageWidthAndMaintainAspectRatio(MagickImage image)
+        {
+            double widthInCm = image.Width / image.Density.X * InchToCmRadio;
+            if (widthInCm > Setting.ImageWidthCm)
+            {
+                double aspectRatio = (double)image.Height / image.Width;
+                var newWidth = (uint)(Setting.ImageWidthCm / InchToCmRadio * image.Density.X);
+                var newHeight = (uint)(newWidth * aspectRatio);
+                image.Resize(newWidth, newHeight);
+            }
         }
     }
 }
