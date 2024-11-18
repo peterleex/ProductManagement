@@ -19,7 +19,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
             Setting = setting;
         }
 
-        public static string SaveWarning { get; set; } = string.Empty;
+        public static string Warning { get; set; } = string.Empty;
 
         public async Task ConvertImages(ImageInfo imageInfo, MagickImage image)
         {
@@ -32,6 +32,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
         private async Task SaveImage(ImageInfo imageInfo, MagickImage image)
         {
             var path = GetOutputFilePath(imageInfo, image);
+            if (path.IsNullOrEmpty())
+                return;
+
             await image.WriteAsync(path);
             CheckFileSize(path);
         }
@@ -45,16 +48,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
 
             if (fileSizeInKb > AllowedMaxFileSizeInKb)
             {
-                SaveWarning += string.Format(LQMessage(LQCode.C0057), fileInfo.Name);
+                Warning += string.Format(LQMessage(LQCode.C0057), fileInfo.Name);
             }
         }
 
-        public string GetOutputFileName(ImageInfo imageInfo, MagickImage image)
-        {
-            var path = GetOutputFilePath(imageInfo, image);
-            return Path.GetFileName(path);
-
-        }
+        //public string GetOutputFileName(ImageInfo imageInfo, MagickImage image)
+        //{
+        //    var path = GetOutputFilePath(imageInfo, image);
+        //    return Path.GetFileName(path);
+        //}
 
         private string GetOutputFilePath(ImageInfo imageInfo, MagickImage image)
         {
@@ -62,6 +64,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess
             {
                 return string.Empty;
             }
+
+
 
             var file = new LQImageFileHelper(imageInfo.FilePath);
             var fileIndex = imageInfo.Images.IndexOf(image);

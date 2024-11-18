@@ -1,10 +1,41 @@
 ﻿using Serilog;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
     public class LQHelper
     {
+        public static void WriteCustomSetting(string key, string customPath)
+        {
+            var settings = new Dictionary<string, string>();
+
+            if (File.Exists(LQDefine.SettingFilePath))
+            {
+                var json = File.ReadAllText(LQDefine.SettingFilePath);
+                settings = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+            }
+
+            settings![key] = customPath;
+
+            var updatedJson = JsonSerializer.Serialize(settings);
+            File.WriteAllText(LQDefine.SettingFilePath, updatedJson);
+        }
+
+        public static string ReadCustomSetting(string key)
+        {
+            if (!new FileInfo(LQDefine.SettingFilePath).Exists)
+                return string.Empty;
+
+            var json = File.ReadAllText(LQDefine.SettingFilePath);
+            var settings = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+            if (settings != null && settings.TryGetValue(key, out var value))
+            {
+                return value;
+            }
+            return string.Empty;
+        }
+
         public static void InfoMessage(string message, string title = "")
         {
             MessageBox.Show(
