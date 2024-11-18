@@ -360,6 +360,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 return;
             }
 
+            if(!Directory.Exists(ProcessSetting.CustomOutputPath))
+            {
+                LQHelper.InfoMessage(LQMessage(LQCode.C0062));
+                return;
+            }
+
             SuccessCount = ImageInfos.Sum(info => info.ImageCount);
 
             var loadImageForm = new LQImageProgress(_serviceProvider)

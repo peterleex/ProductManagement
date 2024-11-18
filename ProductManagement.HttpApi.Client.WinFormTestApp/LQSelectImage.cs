@@ -89,7 +89,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             );
 
             pbPleaseSelectImage.Location = new Point(plChooseImageFile.Left, plChooseImageFile.Top - pbPleaseSelectImage.Height - spacing);
-            lblSuccessInfo.Location = new Point(plChooseImageFile.Width / 2 - lblSuccessInfo.Width / 2, spacing);
+            lblSuccessInfo.Location = new Point(plChooseImageFile.Width / 2 - lblSuccessInfo.Width / 2, spacing * 2);
         }
 
         protected override void InitForm()

@@ -70,6 +70,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0059,
             C0060,
             C0061,
+            C0062,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -136,6 +137,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0059, "處理成功 {0} 筆，失敗 {1} 筆\n" },
                     {LQCode.C0060, "處理成功 {0} 筆" },
                     {LQCode.C0061, "請選擇輸出位置" },
+                    {LQCode.C0062, "輸出位置不存在，請重新選擇" },
 
 
 
