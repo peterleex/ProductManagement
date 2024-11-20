@@ -71,6 +71,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0060,
             C0061,
             C0062,
+            C0063,
+            C0064,
+            C0065,
+            C0066,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -138,8 +142,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0060, "處理成功 {0} 筆" },
                     {LQCode.C0061, "請選擇輸出位置" },
                     {LQCode.C0062, "輸出位置不存在，請重新選擇" },
+                    {LQCode.C0063, "Q003 圖片檢查程式" },
+                    {LQCode.C0064, "題目編碼/系統編碼/文件編號" },
+                    {LQCode.C0065, "新增範本" },
+                    {LQCode.C0066, "開啓七欄位" },
 
-
+                    
 
                 };
 

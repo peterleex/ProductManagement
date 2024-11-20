@@ -33,11 +33,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             PbImageProcessProgram.MouseLeave += PbImageProcessProgram_MouseLeave;
 
             PbImageProcessProgram.Click += PbImageProcessProgram_Click;
+            PbQuestionCheckProgram.Click += PbQuestionCheckProgram_Click;
         }
 
         private void PbImageProcessProgram_Click(object? sender, EventArgs e)
         {
-            ((LQHome)MdiParent!).EnterImageProcess();
+            ((LQHome)MdiParent!).EnterSelectImage();
+        }
+
+        private void PbQuestionCheckProgram_Click(object? sender, EventArgs e)
+        {
+            ((LQHome)MdiParent!).EnterQuestionCheck();
         }
 
         private void PbImageProcessProgram_MouseEnter(object? sender, EventArgs e)

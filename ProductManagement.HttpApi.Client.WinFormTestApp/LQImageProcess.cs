@@ -10,20 +10,6 @@ using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
-    public class ProcessSetting
-    {
-        public double ImageWidthCm { get; set; } = AllowedMaxWidthInCm;
-        public Density? DensitySetting { get; set; } = new(300, 300, DensityUnit.PixelsPerInch);
-
-        public static Density DefaultDensitySetting = new(300, 300, DensityUnit.PixelsPerInch);
-
-        public bool ConvertToPng { get; set; }
-        public bool ConvertToGrayScale { get; set; } = true;
-        public static bool IsOutputFolder { get; set; } = true;
-        public static string CustomOutputPath { get; internal set; } = LQHelper.ReadCustomSetting(CustomOutPathKey);
-
-    }
-
     public partial class LQImageProcess : LQBaseForm
     {
         public List<ImageInfo> ImageInfos { get; set; } = [];
@@ -32,15 +18,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private Panel plCommand = null!;
         private FlowLayoutPanel plImages = null!;
         private Panel plProcess = null!;
-        //private MagnifyImage _enlargeImageForm = null!;
         private PictureBox PbMagnifyImage = null!;
 
         class MagicPictureBox : PictureBox
         {
             public MagickImage MagickImage { get; set; } = null!;
         }
-
-
 
         public LQImageProcess(IServiceProvider serviceProvider)
         {
@@ -379,24 +362,24 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
             if (ImageInfos.Count == 0)
             {
-                EnterImageSelect(true);
+                EnterSelectImage(true);
                 Close();
             }
             else
                 RefreshImage();
         }
 
-        private void EnterImageSelect(bool success)
+        private void EnterSelectImage(bool success)
         {
-            var imageSelect = new LQSelectImage(_serviceProvider)
+            var selectImage = new LQSelectImage(_serviceProvider)
             {
                 MdiParent = MdiParent
             };
 
             if (success)
-                imageSelect.RenewUI(SuccessCount);
+                selectImage.RenewUI(SuccessCount);
 
-            imageSelect.Show();
+            selectImage.Show();
         }
 
         //private async Task ConvertImages()
@@ -989,5 +972,19 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 image.Resize(newWidth, newHeight);
             }
         }
+    }
+
+    public class ProcessSetting
+    {
+        public double ImageWidthCm { get; set; } = AllowedMaxWidthInCm;
+        public Density? DensitySetting { get; set; } = new(300, 300, DensityUnit.PixelsPerInch);
+
+        public static Density DefaultDensitySetting = new(300, 300, DensityUnit.PixelsPerInch);
+
+        public bool ConvertToPng { get; set; }
+        public bool ConvertToGrayScale { get; set; } = true;
+        public static bool IsOutputFolder { get; set; } = true;
+        public static string CustomOutputPath { get; internal set; } = LQHelper.ReadCustomSetting(CustomOutPathKey);
+
     }
 }

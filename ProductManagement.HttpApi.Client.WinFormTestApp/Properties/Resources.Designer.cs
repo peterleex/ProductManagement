@@ -153,6 +153,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DownArrow {
+            get {
+                object obj = ResourceManager.GetObject("DownArrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Home {
             get {
                 object obj = ResourceManager.GetObject("Home", resourceCulture);
@@ -216,6 +226,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.Properties {
         internal static System.Drawing.Bitmap LoginedHeader1 {
             get {
                 object obj = ResourceManager.GetObject("LoginedHeader1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Magify {
+            get {
+                object obj = ResourceManager.GetObject("Magify", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -107,7 +107,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             HomeMenuItem.Click += HomeMenuItem_Click;
 
             ImageProcessMenuItem.Click += ImageProcessMenuItem_Click;
-
+            QuestionCheckMenuItem.Click += QuestionCheckMenuItem_Click;
             // 建立登入/登出選單
             CreateLoginOutMenuItem();
 
@@ -116,21 +116,35 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             Controls.Add(menuStrip);
         }
 
+        private void QuestionCheckMenuItem_Click(object? sender, EventArgs e)
+        {
+            EnterQuestionCheck();
+        }
+
+        public void EnterQuestionCheck()
+        {
+            var questionCheck = new LQQuestionCheck(_serviceProvider)
+            {
+                MdiParent = this
+            };
+            questionCheck.Show();
+        }
+
         private void HomeMenuItem_Click(object? sender, EventArgs e)
         {
         }
         private void ImageProcessMenuItem_Click(object? sender, EventArgs e)
         {
-            EnterImageProcess();
+            EnterSelectImage();
         }
 
-        public void EnterImageProcess()
+        public void EnterSelectImage()
         {
-            var imageProcess = new LQSelectImage(_serviceProvider)
+            var selectImage = new LQSelectImage(_serviceProvider)
             {
                 MdiParent = this
             };
-            imageProcess.Show();
+            selectImage.Show();
         }
 
         private void CreateLoginOutMenuItem()

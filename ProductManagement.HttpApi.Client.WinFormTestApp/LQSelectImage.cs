@@ -1,23 +1,27 @@
 ﻿using ProductManagement.HttpApi.Client.WinFormTestApp.ImageProcess;
 using ProductManagement.HttpApi.Client.WinFormTestApp.Properties;
 using System.Data;
+using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp
 {
 
     public partial class LQSelectImage : LQBaseForm
     {
-        private static string moduleName = LQDefine.LQMessage(LQDefine.LQCode.C0037);
-
         public LQSelectImage(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             InitializeComponent();
+            InitModule();
             InitForm();
             InitControls();
             HookEvent();
         }
 
+        protected override void InitModule()
+        {
+            ModuleName = LQMessage(LQCode.C0037);
+        }
         private void InitControls()
         {
             PbChooseImageFile.AllowDrop = true;
@@ -96,7 +100,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             base.InitForm();
 
-            Text = LQDefine.LQMessage(LQDefine.LQCode.C0022) + moduleName;
+            Text = LQMessage(LQCode.C0022) + ModuleName;
             ShowIcon = false;
         }
 
