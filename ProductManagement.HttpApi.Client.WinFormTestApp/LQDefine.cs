@@ -75,6 +75,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0064,
             C0065,
             C0066,
+            C0067,
+            C0069,
+            C0068,
+            C0070,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -146,8 +150,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0064, "題目編碼/系統編碼/文件編號" },
                     {LQCode.C0065, "新增範本" },
                     {LQCode.C0066, "開啓七欄位" },
-
-                    
+                    {LQCode.C0067, "刪除" },
+                    {LQCode.C0068, "從電腦開啓" },
+                    {LQCode.C0069, "從雲端母庫載入" },
+                    {LQCode.C0070, "題目編碼/系統編碼" },
 
                 };
 
@@ -337,8 +343,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static double InchToCmRadio => 2.54;
 
         public static string SettingFolder => ".LQClientApp";
+        public static string WorkSpace => @".LQClientApp\WorkSpace\";
+
+        public static string WordNo => "文件編號";
 
         public static string SettingPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), SettingFolder);
+        public static string WorkSpacePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), WorkSpace);
 
         public static string SettingFile => "setting.json";
         public static string SettingFilePath => Path.Combine(SettingPath, SettingFile);

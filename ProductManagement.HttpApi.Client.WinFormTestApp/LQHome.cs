@@ -23,7 +23,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             HookEvent();
             InitForm();
             InitMenu();
+            InitWork();
+#if DEBUG
+            EnterQuestionCheck();
+#else
             EnterSelectFunction();
+#endif
+        }
+
+        private void InitWork()
+        {
+            LQHelper.CreateWorkSpace();
         }
 
         private void HookEvent()
@@ -75,6 +85,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private static void CheckScreenResolution()
         {
+#if !DEBUG
             var currentScreenWidth = Screen.PrimaryScreen!.Bounds.Width;
             var currentScreenHeight = Screen.PrimaryScreen.Bounds.Height;
 
@@ -83,6 +94,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 string info = "請調整螢幕解析度為 1920 * 1080，以確保最佳畫面呈現。";
                 LQHelper.InfoMessage(info);
             }
+#endif
         }
 
 

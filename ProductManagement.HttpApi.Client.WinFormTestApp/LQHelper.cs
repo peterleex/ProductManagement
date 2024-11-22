@@ -35,7 +35,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             }
             return string.Empty;
         }
-
+        public static void CreateWorkSpace()
+        {
+            if (!Directory.Exists(LQDefine.WorkSpacePath))
+            {
+                Directory.CreateDirectory(LQDefine.WorkSpacePath);
+            }
+        }
         public static void InfoMessage(string message, string title = "")
         {
             MessageBox.Show(
