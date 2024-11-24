@@ -52,6 +52,7 @@
             btnTestProgressCell = new Button();
             btnGetWordFooterRightText = new Button();
             panel2 = new Panel();
+            btnGetTable = new Button();
             plSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbMagnifyFile).BeginInit();
             plChoose7Field.SuspendLayout();
@@ -313,11 +314,22 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(btnGetTable);
             panel2.Controls.Add(btnGetWordFooterRightText);
-            panel2.Location = new Point(701, 553);
+            panel2.Location = new Point(655, 464);
             panel2.Name = "panel2";
             panel2.Size = new Size(438, 100);
             panel2.TabIndex = 40;
+            // 
+            // btnGetTable
+            // 
+            btnGetTable.Location = new Point(3, 32);
+            btnGetTable.Name = "btnGetTable";
+            btnGetTable.Size = new Size(159, 23);
+            btnGetTable.TabIndex = 40;
+            btnGetTable.Text = "Word 中的 Table 內容";
+            btnGetTable.UseVisualStyleBackColor = true;
+            btnGetTable.Click += btnGetTable_Click;
             // 
             // LQQuestionCheck
             // 
@@ -384,5 +396,6 @@
         private Button btnTestProgressCell;
         private Button btnGetWordFooterRightText;
         private Panel panel2;
+        private Button btnGetTable;
     }
 }

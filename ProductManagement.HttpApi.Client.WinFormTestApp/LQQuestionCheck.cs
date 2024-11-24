@@ -214,5 +214,19 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                 Log.Error(ex, "GetWordFooterRightText Failed");
             }
         }
+
+        private void btnGetTable_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using var word = new LQWord(wordFile);
+                word.GetTable();
+            }
+            catch (Exception ex)
+            {
+                LQHelper.ErrorMessage(ex.Message);
+                Log.Error(ex, "GetTable Failed");
+            }
+        }
     }
 }

@@ -79,6 +79,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0069,
             C0068,
             C0070,
+            C0071,
+            C0072,
+            C0073,
+            C0074,
+            C0075,
+            C0076,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -154,6 +160,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0068, "從電腦開啓" },
                     {LQCode.C0069, "從雲端母庫載入" },
                     {LQCode.C0070, "題目編碼/系統編碼" },
+                    {LQCode.C0071, "新七欄檔案格式錯誤，應該是10欄，目前是{0}欄" },
+                    {LQCode.C0072, "新七欄檔案格式錯誤，未找到表格" },
+                    {LQCode.C0073, "新七欄檔案格式錯誤，未找到 MainDocumentPart" },
+                    {LQCode.C0074, "新七欄檔案格式錯誤，未找到 Body" },
+                    {LQCode.C0075, "新七欄檔案格式錯誤，表格中無任何資料" },
+                    {LQCode.C0076, "新七欄檔案格式錯誤，檔案無頁尾" },
 
                 };
 
@@ -354,6 +366,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static string SettingFilePath => Path.Combine(SettingPath, SettingFile);
 
         public static string CustomOutPathKey => "CustomOutputPath";
+
+        public static int SevenFieldsCount { get; internal set; }
 
         public static class HSpacing
         {
