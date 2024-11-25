@@ -12,16 +12,21 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
     public class LQWord : LQWordBase, IDisposable
     {
-        private MainDocumentPart documentPart = null!;
-        private Body documentBody = null!;
-        private FooterPart footerPart = null!;
-
         public LQWord(string wordPath)
         {
-            LoadFile(wordPath);
-            Check7Field();
-            LoadParts();
-            FileNo = GetFooterRightText();
+            try
+            {
+                LoadFile(wordPath);
+                CheckFile();
+                LoadParts();
+
+                SetFileNo();
+            }
+            catch (Exception)
+            {
+                Dispose();
+                throw;
+            }
         }
 
         private void LoadFile(string wordPath)
@@ -34,18 +39,19 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
             documentPart = wordDocument.MainDocumentPart!;
             documentBody = wordDocument.MainDocumentPart!.Document.Body!;
             footerPart = wordDocument.MainDocumentPart!.FooterParts.First();
+            footer = footerPart.Footer;
         }
 
-        public string FileNo { get; private set; }
-        private string GetFooterRightText()
+        public string FileNo { get; private set; } = string.Empty;
+        private void SetFileNo()
         {
-            var footer = footerPart.Footer;
+            FileNo = string.Empty;
 
             var paragraph = footer
                 .Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>()
                 .FirstOrDefault();
             if (paragraph == null)
-                return string.Empty;
+                return;
 
             var justification = paragraph.ParagraphProperties?.Justification;
             if (justification != null && justification.Val != null && justification.Val == JustificationValues.Right)
@@ -60,42 +66,68 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
                         {
                             result.Append(texts[j].Text);
                         }
-                        return result.ToString();
+                        FileNo = result.ToString();
                     }
                 }
-                return string.Empty;
+                return;
             }
 
-            return string.Empty;
+            return;
         }
 
         public void GetTable()
         {
+            List<Field10Row> Field10Table = [];
+
             var tables = documentBody.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
             foreach (var table in tables)
             {
                 var rows = table.Elements<DocumentFormat.OpenXml.Wordprocessing.TableRow>();
+                var firstRow = rows.First();
                 foreach (var row in rows)
                 {
+                    if (row == firstRow)
+                    {
+                        continue;
+                    }
+
                     var cells = row.Elements<DocumentFormat.OpenXml.Wordprocessing.TableCell>();
 
-                    foreach (var cell in cells)
+                    Field10Row field10Row = new Field10Row()
                     {
-                        var paragraphs = cell.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
-                        foreach (var paragraph in paragraphs)
-                        {
-                            var texts = paragraph.Elements<DocumentFormat.OpenXml.Wordprocessing.Text>();
-                            foreach (var text in texts)
-                            {
-                                Log.Information(text.Text);
-                            }
-                        }
-                    }
+                        Field1 = new Field10Cell(FieldName.Field_1_Status_QuestionCode_QuestionSystemCode, cells.ElementAt(0)),
+                        Field2 = new Field10Cell(FieldName.Field_2_QuestionSeq, cells.ElementAt(1)),
+                        Field3 = new Field10Cell(FieldName.Field_3_QuestionTypeModule_QuestionType, cells.ElementAt(2)),
+                        Field4 = new Field10Cell(FieldName.Field_4_Difficulty, cells.ElementAt(3)),
+                        Field5 = new Field10Cell(FieldName.Field_5_PublishYearCode_BookNo_ChapterCode_SourceName_SourceExtensionName, cells.ElementAt(4)),
+                        Field6 = new Field10Cell(FieldName.Field_6_Question, cells.ElementAt(5)),
+                        Field7 = new Field10Cell(FieldName.Field_7_Answer, cells.ElementAt(6)),
+                        Field8 = new Field10Cell(FieldName.Field_8_Analysis, cells.ElementAt(7)),
+                        Field9 = new Field10Cell(FieldName.Field_9_LimitName_FlexName, cells.ElementAt(8)),
+                        Field10 = new Field10Cell(FieldName.Field_10_Comment_ExportCheckBookAccountInfo, cells.ElementAt(9)),
+                    };
+
+                    var field1Text = field10Row.Field1.GetPlainText();
+
+                    Field10Table.Add(field10Row);
+
+                    //foreach (var cell in cells)
+                    //{
+                    //    var paragraphs = cell.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+                    //    foreach (var paragraph in paragraphs)
+                    //    {
+                    //        var texts = paragraph.Elements<DocumentFormat.OpenXml.Wordprocessing.Text>();
+                    //        foreach (var text in texts)
+                    //        {
+                    //            Log.Information(text.Text);
+                    //        }
+                    //    }
+                    //}
                 }
             }
         }
 
-        private void Check7Field()
+        private void CheckFile()
         {
             string info;
 

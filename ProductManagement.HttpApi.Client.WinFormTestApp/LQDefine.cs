@@ -367,7 +367,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public static string CustomOutPathKey => "CustomOutputPath";
 
-        public static int SevenFieldsCount { get; internal set; }
+        public static int SevenFieldsCount => 10;
 
         public static class HSpacing
         {

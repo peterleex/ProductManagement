@@ -200,7 +200,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         }
 
-        private string wordFile = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\新七欄_MIZU_toto備註_0726.docx";
+        private string wordFile = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\新七欄_測試.docx";
         private void btnGetWordFooterRightText_Click(object sender, EventArgs e)
         {
             try
