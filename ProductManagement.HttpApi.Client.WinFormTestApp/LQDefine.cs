@@ -85,6 +85,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0074,
             C0075,
             C0076,
+            C0077,
+            C0078,
+            C0079,
+            C0080,
+            C0081,
+            C0082,
+            C0083,
+            C0084,
+            C0085,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -166,6 +175,15 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0074, "新七欄檔案格式錯誤，未找到 Body" },
                     {LQCode.C0075, "新七欄檔案格式錯誤，表格中無任何資料" },
                     {LQCode.C0076, "新七欄檔案格式錯誤，檔案無頁尾" },
+                    {LQCode.C0077, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 1 欄需包含 0 個或 2 個分號，分號前後不可空白" },
+                    {LQCode.C0078, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 2 欄不應包含分號" },
+                    {LQCode.C0079, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 3 欄需包含 1 個分號，分號前後不可空白" },
+                    {LQCode.C0080, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 4 欄不應包含分號" },
+                    {LQCode.C0081, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 5 欄不應包含分號" },
+                    {LQCode.C0082, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 9 欄需包含 0 個或 1 個分號，分號前後不可空白" },
+                    {LQCode.C0083, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 10 欄需包含 0 個或 1 個分號，分號前後不可空白" },
+                    {LQCode.C0084, "新七欄檔案格式錯誤\n檔案中不包含表格" },
+                    {LQCode.C0085, "新七欄檔案格式錯誤\n檔案只允許包含一個表格" },
 
                 };
 
@@ -368,6 +386,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static string CustomOutPathKey => "CustomOutputPath";
 
         public static int SevenFieldsCount => 10;
+
+        public static char Semicolon => ';';
 
         public static class HSpacing
         {
