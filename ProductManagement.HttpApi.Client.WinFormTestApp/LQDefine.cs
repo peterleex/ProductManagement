@@ -94,6 +94,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0083,
             C0084,
             C0085,
+            C0086,
+            C0087,
+            C0088,
+            C0089,
+            C0090,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -169,21 +174,26 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0068, "從電腦開啓" },
                     {LQCode.C0069, "從雲端母庫載入" },
                     {LQCode.C0070, "題目編碼/系統編碼" },
-                    {LQCode.C0071, "新七欄檔案格式錯誤，應該是10欄，目前是{0}欄" },
-                    {LQCode.C0072, "新七欄檔案格式錯誤，未找到表格" },
-                    {LQCode.C0073, "新七欄檔案格式錯誤，未找到 MainDocumentPart" },
-                    {LQCode.C0074, "新七欄檔案格式錯誤，未找到 Body" },
-                    {LQCode.C0075, "新七欄檔案格式錯誤，表格中無任何資料" },
-                    {LQCode.C0076, "新七欄檔案格式錯誤，檔案無頁尾" },
-                    {LQCode.C0077, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 1 欄需包含 0 個或 2 個分號，分號前後不可空白" },
-                    {LQCode.C0078, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 2 欄不應包含分號" },
-                    {LQCode.C0079, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 3 欄需包含 1 個分號，分號前後不可空白" },
-                    {LQCode.C0080, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 4 欄不應包含分號" },
-                    {LQCode.C0081, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 5 欄不應包含分號" },
-                    {LQCode.C0082, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 9 欄需包含 0 個或 1 個分號，分號前後不可空白" },
-                    {LQCode.C0083, "新七欄檔案格式錯誤\n檔案：\n{0}\n第 {1} 列，第 10 欄需包含 0 個或 1 個分號，分號前後不可空白" },
-                    {LQCode.C0084, "新七欄檔案格式錯誤\n檔案中不包含表格" },
-                    {LQCode.C0085, "新七欄檔案格式錯誤\n檔案只允許包含一個表格" },
+                    {LQCode.C0071, "應該是10欄，目前是{0}欄" },
+                    {LQCode.C0072, "未找到表格" },
+                    {LQCode.C0073, "未找到 MainDocumentPart" },
+                    {LQCode.C0074, "未找到 Body" },
+                    {LQCode.C0075, "表格中無任何資料" },
+                    {LQCode.C0076, "檔案無頁尾" },
+                    {LQCode.C0077, "檔案：\n{0}\n第 {1} 列，第 1 欄「狀態;編」內容錯誤：「{2}」" },
+                    {LQCode.C0086, "檔案：\n{0}\n第 {1} 列，第 1 欄，狀態只允許「新增」和「修改」，目前是「{2}」" },
+                    {LQCode.C0087, "檔案：\n{0}\n第 {1} 列，第 1 欄，狀態「新增」，不應有編碼，目前是「{2}」" },
+                    {LQCode.C0088, "檔案：\n{0}\n第 {1} 列，第 1 欄，狀態「修改」，但缺少題目編碼和系統編碼" },
+                    {LQCode.C0078, "檔案：\n{0}\n第 {1} 列，第 2 欄應該是整數，目前是：「{2}」" },
+                    {LQCode.C0090, "檔案：\n{0}\n第 {1} 列，第 2 欄應該是整數，目前是：「{2}」" },
+                    {LQCode.C0079, "檔案：\n{0}\n第 {1} 列，第 3 欄需爲分號區隔的題型模組和題型，目前是「{2}」" },
+                    {LQCode.C0080, "檔案：\n{0}\n第 {1} 列，第 4 欄應該是難易度，目前是「{2}」" },
+                    {LQCode.C0081, "檔案：\n{0}\n第 {1} 列，第 5 欄應該是發印年度-書號-章節-出處_註記，目前是「{2}」" },
+                    {LQCode.C0082, "檔案：\n{0}\n第 {1} 列，第 9 欄「限;彈」內容錯誤：「{2}」" },
+                    {LQCode.C0083, "檔案：\n{0}\n第 {1} 列，第 10 欄「備;系」內容錯誤：「{2}」" },
+                    {LQCode.C0084, "檔案中不包含表格" },
+                    {LQCode.C0085, "檔案只允許包含一個表格" },
+                    {LQCode.C0089, "新七欄檔案格式錯誤" },
 
                 };
 
@@ -193,7 +203,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static System.Drawing.Color DefaultColor => System.Drawing.Color.Black;
 
         public static string Space => " ";
-
+        public const string New = "新增";
+        public const string Modify = "修改";
+        public static string[] Field1Keyword => [New, Modify];
         public static string LQMessage(LQCode code)
         {
             return LQMessages[code];
@@ -387,8 +399,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         public static int SevenFieldsCount => 10;
 
-        public static char Semicolon => ';';
+        public const char Semicolon = ';';
 
+        public static Field10ConstDef Field10Const => new() { HeaderRowCount = 1, };
+
+        public const char Comma = ',';
+
+        public class Field10ConstDef
+        {
+            public int HeaderRowCount { get; set; }
+        }
         public static class HSpacing
         {
             public static int _5Pixel => 5;

@@ -43,6 +43,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
 
         private void Home_FormClosing(object? sender, FormClosingEventArgs e)
         {
+#if DEBUG
+            e.Cancel = false;
+#else
             var result = LQHelper.ConfirmMessage(LQDefine.LQMessage(LQDefine.LQCode.C0039), LQDefine.LQMessage(LQDefine.LQCode.C0038));
             if (result == DialogResult.OK)
             {
@@ -52,6 +55,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             {
                 e.Cancel = true;
             }
+#endif
         }
 
         private void AccessTokenManager_Logouted(object? sender, EventArgs e)

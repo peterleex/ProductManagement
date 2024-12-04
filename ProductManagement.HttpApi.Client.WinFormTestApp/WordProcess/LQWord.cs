@@ -78,7 +78,10 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
         public void GetTable()
         {
+            StringBuilder exInfos = new();
+
             List<Field10Row> Field10Table = [];
+
 
             var tables = documentBody.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
             if (!tables.Any())
@@ -90,57 +93,40 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
             var table = tables.First();
             var rows = table.Elements<DocumentFormat.OpenXml.Wordprocessing.TableRow>();
             var rowNumber = 0;
-            
-            foreach (var row in rows)
+
+            foreach (var row in rows.Skip(Field10Const.HeaderRowCount))
             {
                 ++rowNumber;
 
-                if (rowNumber == 1)
+                try
                 {
-                    continue;
+                    var cells = row.Elements<DocumentFormat.OpenXml.Wordprocessing.TableCell>();
+
+                    var field10Row = new Field10Row()
+                    {
+                        Field1 = new Field_1(this, rowNumber, FieldName.Field_1_Status_QuestionCode_QuestionSystemCode, cells.ElementAt(0)),
+                        Field2 = new Field_2(this, rowNumber, FieldName.Field_2_QuestionSeq, cells.ElementAt(1)),
+                        Field3 = new Field_3(this, rowNumber, FieldName.Field_3_QuestionTypeModule_QuestionType, cells.ElementAt(2)),
+                        Field4 = new Field_4(this, rowNumber, FieldName.Field_4_Difficulty, cells.ElementAt(3)),
+                        Field5 = new Field_5(this, rowNumber, FieldName.Field_5_PublishYearCode_BookNo_ChapterCode_SourceName_SourceExtensionName, cells.ElementAt(4)),
+                        Field6 = new CellField(this, rowNumber, FieldName.Field_6_Question, cells.ElementAt(5)),
+                        Field7 = new CellField(this, rowNumber, FieldName.Field_7_Answer, cells.ElementAt(6)),
+                        Field8 = new CellField(this, rowNumber, FieldName.Field_8_Analysis, cells.ElementAt(7)),
+                        Field9 = new Field_9(this, rowNumber, FieldName.Field_9_LimitName_FlexName, cells.ElementAt(8)),
+                        Field10 = new Field_10(this, rowNumber, FieldName.Field_10_Comment_ExportCheckBookAccountInfo, cells.ElementAt(9)),
+                    };
+
+                    Field10Table.Add(field10Row);
                 }
-
-                var cells = row.Elements<DocumentFormat.OpenXml.Wordprocessing.TableCell>();
-
-                Field10Row field10Row = new Field10Row()
+                catch (Exception ex)
                 {
-                    Field1 = new Field_1(this, rowNumber, FieldName.Field_1_Status_QuestionCode_QuestionSystemCode, cells.ElementAt(0)),
-                    Field2 = new Field_2(this, rowNumber, FieldName.Field_2_QuestionSeq, cells.ElementAt(1)),
-                    Field3 = new Field_3(this, rowNumber, FieldName.Field_3_QuestionTypeModule_QuestionType, cells.ElementAt(2)),
-                    Field4 = new Field_4(this, rowNumber, FieldName.Field_4_Difficulty, cells.ElementAt(3)),
-                    Field5 = new Field_5(this, rowNumber, FieldName.Field_5_PublishYearCode_BookNo_ChapterCode_SourceName_SourceExtensionName, cells.ElementAt(4)),
-                    Field6 = new CellField(this, rowNumber, FieldName.Field_6_Question, cells.ElementAt(5)),
-                    Field7 = new CellField(this, rowNumber, FieldName.Field_7_Answer, cells.ElementAt(6)),
-                    Field8 = new CellField(this, rowNumber, FieldName.Field_8_Analysis, cells.ElementAt(7)),
-                    Field9 = new Field_9(this, rowNumber, FieldName.Field_9_LimitName_FlexName, cells.ElementAt(8)),
-                    Field10 = new Field_10(this, rowNumber, FieldName.Field_10_Comment_ExportCheckBookAccountInfo, cells.ElementAt(9)),
-                };
-
-                //var field1Text = field10Row.Field1.StringArray;
-                //var field2Text = field10Row.Field2.StringArray;
-                //var field3Text = field10Row.Field3.StringArray;
-                //var field4Text = field10Row.Field4.StringArray;
-                //var field5Text = field10Row.Field5.StringArray;
-
-                //var field9Text = field10Row.Field9.StringArray;
-                //var field10Text = field10Row.Field10.StringArray;
-
-
-                Field10Table.Add(field10Row);
-
-                //foreach (var cell in cells)
-                //{
-                //    var paragraphs = cell.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
-                //    foreach (var paragraph in paragraphs)
-                //    {
-                //        var texts = paragraph.Elements<DocumentFormat.OpenXml.Wordprocessing.Text>();
-                //        foreach (var text in texts)
-                //        {
-                //            Log.Information(text.Text);
-                //        }
-                //    }
-                //}
+                    Log.Error(ex, ex.Message);
+                    exInfos.AppendLine(ex.Message);
+                }
             }
+
+            if (exInfos.Length > 0)
+                LQHelper.ErrorMessage(exInfos.ToString(), LQMessage(LQCode.C0089));
         }
 
         private void CheckFile()

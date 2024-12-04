@@ -201,14 +201,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         }
 
         private string wordFile = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\新七欄_測試.docx";
-        private string wordFileGood = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_正常.docx";
-        private string wordFileBad1 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第1欄.docx";
-        private string wordFileBad2 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第2欄.docx";
-        private string wordFileBad3 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第3欄.docx";
-        private string wordFileBad4 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第4欄.docx";
-        private string wordFileBad5 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第5欄.docx";
-        private string wordFileBad9 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第9欄.docx";
-        private string wordFileBad10 = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第10欄.docx";
+        private string wordFieldOk = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_正常.docx";
+        private string wordField1Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第1欄.docx";
+        private string wordField2Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第2欄.docx";
+        private string wordField3Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第3欄.docx";
+        private string wordField4Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第4欄.docx";
+        private string wordField5Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第5欄.docx";
+        private string wordField9Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第9欄.docx";
+        private string wordField10Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第10欄.docx";
         private void btnGetWordFooterRightText_Click(object sender, EventArgs e)
         {
             try
@@ -227,11 +227,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                //using var word = new LQWord(wordFileGood);
-                //word.GetTable();
-
-                using var wordBad1 = new LQWord(wordFileBad1);
-                wordBad1.GetTable();
+                using var wordBad = new LQWord(wordField1Error);
+                wordBad.GetTable();
             }
             catch (Exception ex)
             {

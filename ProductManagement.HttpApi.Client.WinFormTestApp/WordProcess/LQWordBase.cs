@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using IdentityModel.Client;
 
 namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 {
@@ -56,7 +57,25 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             if (StringArray.Length != 1 && StringArray.Length != 3)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0077), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0077), Word.WordPath, RowNumber, PlainText);
+                throw new FieldException(exInfo);
+            }
+
+            if (!LQDefine.Field1Keyword.Contains(StringArray[0]))
+            {
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0086), Word.WordPath, RowNumber, StringArray[0]);
+                throw new FieldException(exInfo);
+            }
+
+            if (StringArray[0] == LQDefine.New && StringArray.Length == 3)
+            {
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0087), Word.WordPath, RowNumber, PlainText);
+                throw new FieldException(exInfo);
+            }
+
+            if (StringArray[0] == LQDefine.Modify && StringArray.Length == 1)
+            {
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0088), Word.WordPath, RowNumber, PlainText);
                 throw new FieldException(exInfo);
             }
         }
@@ -71,7 +90,13 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             if (StringArray.Length != 1)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0078), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0078), Word.WordPath, RowNumber, StringArray[0]);
+                throw new FieldException(exInfo);
+            }
+
+            if (!int.TryParse(StringArray[0], out int result))
+            {
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0090), Word.WordPath, RowNumber, StringArray[0]);
                 throw new FieldException(exInfo);
             }
         }
@@ -86,7 +111,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             if (StringArray.Length != 2)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0079), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0079), Word.WordPath, RowNumber, PlainText);
                 throw new FieldException(exInfo);
             }
         }
@@ -101,7 +126,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             if (StringArray.Length != 1)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0080), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0080), Word.WordPath, RowNumber, PlainText);
                 throw new FieldException(exInfo);
             }
         }
@@ -110,16 +135,24 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_5 : TextField
     {
         public Field_5(LQWord word, int rowNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
-            : base(word, rowNumber, fieldName, cell) { }
+            : base(word, rowNumber, fieldName, cell)
+        {
+        }
 
         protected override void CheckField()
         {
-            if (StringArray.Length != 1)
+            if (StringArray.Length < 1)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0081), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0081), Word.WordPath, RowNumber, PlainText);
                 throw new FieldException(exInfo);
             }
         }
+
+        //protected override void SplitString()
+        //{
+        //    StringArray = PlainText.Split(LQDefine.Comma, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        //}
+
     }
 
     public class Field_9 : TextField
@@ -131,7 +164,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             if (StringArray.Length != 0 && StringArray.Length != 1 && StringArray.Length != 2)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0082), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0082), Word.WordPath, RowNumber, PlainText);
                 throw new FieldException(exInfo);
             }
         }
@@ -146,7 +179,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             if (StringArray.Length != 0 && StringArray.Length != 1 && StringArray.Length != 2)
             {
-                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0083), Word.WordPath, RowNumber);
+                var exInfo = string.Format(LQDefine.LQMessage(LQDefine.LQCode.C0083), Word.WordPath, RowNumber, PlainText);
                 throw new FieldException(exInfo);
             }
         }
@@ -154,12 +187,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
     public class TextField : CellField
     {
-        public string PlainText { get; private set; } = null!;
-        public string[] StringArray { get; private set; } = null!;
+        public string[] StringArray { get; set; } = null!;
 
         public TextField(LQWord word, int rowNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, fieldName, cell)
         {
+
             GetData();
             CheckField();
         }
@@ -170,15 +203,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         }
         private void GetData()
         {
-            PlainText = GetPlainText();
-            StringArray = SplitBySemicolon();
+            GetPlainText();
+            SplitString();
         }
-        private string[] SplitBySemicolon()
+
+        protected virtual void SplitString()
         {
-            return PlainText.Split(LQDefine.Semicolon, StringSplitOptions.TrimEntries);
+            StringArray = PlainText.Split(LQDefine.Semicolon, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         }
-
-
     }
 
     public class CellField
@@ -188,6 +220,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         public int RowNumber { get; set; }
         public FieldName Name { get; set; }
         public DocumentFormat.OpenXml.Wordprocessing.TableCell? Value { get; set; } = null;
+        public string PlainText { get; private set; } = null!;
         public CellField(LQWord word, int rowNumber, FieldName field10, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
         {
             Word = word;
@@ -196,16 +229,17 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
             Value = cell;
         }
 
-        protected string GetPlainText()
+        protected void GetPlainText()
         {
             if (Value == null)
             {
-                return string.Empty;
+                PlainText = string.Empty;
+                return;
             }
 
             var textElements = Value.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>();
 
-            return string.Join(string.Empty, textElements.Select(te => te.Text));
+            PlainText = string.Join(string.Empty, textElements.Select(te => te.Text));
         }
 
     }
