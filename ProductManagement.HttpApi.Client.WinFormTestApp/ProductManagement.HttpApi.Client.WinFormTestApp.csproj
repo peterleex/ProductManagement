@@ -77,7 +77,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="_doc\新七欄\" />
   </ItemGroup>
 
 	<Target Name="PostPublishActions" AfterTargets="Publish">

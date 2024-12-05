@@ -104,16 +104,16 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
                     var field10Row = new Field10Row()
                     {
-                        Field1 = new Field_1(this, rowNumber, FieldName.Field_1_Status_QuestionCode_QuestionSystemCode, cells.ElementAt(0)),
-                        Field2 = new Field_2(this, rowNumber, FieldName.Field_2_QuestionSeq, cells.ElementAt(1)),
-                        Field3 = new Field_3(this, rowNumber, FieldName.Field_3_QuestionTypeModule_QuestionType, cells.ElementAt(2)),
-                        Field4 = new Field_4(this, rowNumber, FieldName.Field_4_Difficulty, cells.ElementAt(3)),
-                        Field5 = new Field_5(this, rowNumber, FieldName.Field_5_PublishYearCode_BookNo_ChapterCode_SourceName_SourceExtensionName, cells.ElementAt(4)),
-                        Field6 = new CellField(this, rowNumber, FieldName.Field_6_Question, cells.ElementAt(5)),
-                        Field7 = new CellField(this, rowNumber, FieldName.Field_7_Answer, cells.ElementAt(6)),
-                        Field8 = new CellField(this, rowNumber, FieldName.Field_8_Analysis, cells.ElementAt(7)),
-                        Field9 = new Field_9(this, rowNumber, FieldName.Field_9_LimitName_FlexName, cells.ElementAt(8)),
-                        Field10 = new Field_10(this, rowNumber, FieldName.Field_10_Comment_ExportCheckBookAccountInfo, cells.ElementAt(9)),
+                        Field1 = new Field_1(this, rowNumber, 1, FieldName.Field_1_Status_QuestionCode_QuestionSystemCode, cells.ElementAt(0)),
+                        Field2 = new Field_2(this, rowNumber, 2, FieldName.Field_2_QuestionSeq, cells.ElementAt(1)),
+                        Field3 = new Field_3(this, rowNumber, 3, FieldName.Field_3_QuestionTypeModule_QuestionType, cells.ElementAt(2)),
+                        Field4 = new Field_4(this, rowNumber, 4, FieldName.Field_4_Difficulty, cells.ElementAt(3)),
+                        Field5 = new Field_5(this, rowNumber, 5, FieldName.Field_5_PublishYearCode_BookNo_ChapterCode_SourceName_SourceExtensionName, cells.ElementAt(4)),
+                        Field6 = new Field_6(this, rowNumber, 6, FieldName.Field_6_Question, cells.ElementAt(5)),
+                        Field7 = new CellField(this, rowNumber, 7, FieldName.Field_7_Answer, cells.ElementAt(6)),
+                        Field8 = new CellField(this, rowNumber, 8, FieldName.Field_8_Analysis, cells.ElementAt(7)),
+                        Field9 = new Field_9(this, rowNumber, 9, FieldName.Field_9_LimitName_FlexName, cells.ElementAt(8)),
+                        Field10 = new Field_10(this, rowNumber, 10, FieldName.Field_10_Comment_ExportCheckBookAccountInfo, cells.ElementAt(9)),
                     };
 
                     Field10Table.Add(field10Row);
