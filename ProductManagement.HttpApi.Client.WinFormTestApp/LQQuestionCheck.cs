@@ -213,7 +213,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                using var word = new LQWord(wordFile);
+                using var word = new LQ10FieldWord(wordFile);
                 var footerText = word.FileNo;
             }
             catch (Exception ex)
@@ -227,8 +227,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                using var wordBad = new LQWord(wordFieldOk);
-                wordBad.GetTable();
+                using var word = new LQ10FieldWord(wordFieldOk);
+                word.GetTable();
             }
             catch (Exception ex)
             {

@@ -103,6 +103,9 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
             C0091,
             C0092,
             C0093,
+            C0094,
+            C0095,
+            C0096,
         }
 
         public static readonly Dictionary<LQCode, string> LQMessages = new()
@@ -188,8 +191,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0086, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，狀態只允許「新增」和「修改」，目前是「{3}」" },
                     {LQCode.C0087, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，狀態「新增」，不應有編碼，目前是「{3}」" },
                     {LQCode.C0088, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，狀態「修改」，但缺少題目編碼和系統編碼" },
-                    {LQCode.C0078, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，應該是整數，目前是：「{3}」" },
-                    {LQCode.C0090, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，應該是整數，目前是：「{3}」" },
+                    {LQCode.C0078, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，題號應該是整數，目前是：「{3}」" },
+                    {LQCode.C0090, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，題號應該是整數，目前是：「{3}」" },
                     {LQCode.C0079, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，需爲分號區隔的題型模組和題型，目前是「{3}」" },
                     {LQCode.C0080, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，應該是難易度，目前是「{3}」" },
                     {LQCode.C0081, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，應該是發印年度-書號-章節-出處_註記，目前是「{2}」" },
@@ -199,8 +202,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
                     {LQCode.C0085, "檔案只允許包含一個表格" },
                     {LQCode.C0089, "新七欄檔案格式錯誤" },
                     {LQCode.C0091, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，儲存格爲空" },
-                    {LQCode.C0092, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，發印年度-書號-章節-出處_註記中，沒有粗體" },
+                    {LQCode.C0092, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，發印年度-書號-章節-出處_註記中，沒有粗體字" },
                     {LQCode.C0093, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，發印年度-書號-章節-出處_註記中，章節資料不合規格：「{3}」" },
+                    {LQCode.C0094, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，發印年度-書號-章節-出處_註記中，最新年度（粗體）設定有誤" },
+                    {LQCode.C0095, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，題型模組錯誤：{3}"},
+                    {LQCode.C0096, "檔案：\n{0}\n第 {1} 列，第 {2} 欄，難易度錯誤：{3}"},
 
                 };
 
@@ -415,7 +421,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static Regex RegExChapter => new Regex(RegExChapterStr);
 
         public static char Hyphen => '-';
-        public static int Underscore => '_';
+        public static char Underscore => '_';
 
         public const char Comma = ',';
 

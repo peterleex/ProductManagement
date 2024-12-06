@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.DbMigrato
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.HttpApi.Client.WinFormTestApp", "ProductManagement.HttpApi.Client.WinFormTestApp\ProductManagement.HttpApi.Client.WinFormTestApp.csproj", "{A51594D6-DA21-4706-B068-40231239A8A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LQClientAppUpdator", "LQClientAppUpdator\LQClientAppUpdator.csproj", "{ADA9768B-65DC-42F9-B49F-08DE2FACAE98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LQClientAppUpdator", "LQClientAppUpdator\LQClientAppUpdator.csproj", "{ADA9768B-65DC-42F9-B49F-08DE2FACAE98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
