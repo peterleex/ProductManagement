@@ -37,6 +37,8 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.btnModify10Fields = this.Factory.CreateRibbonButton();
+            this.ebRowCount = this.Factory.CreateRibbonEditBox();
+            this.btnAdd10FieldRow = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.SuspendLayout();
@@ -51,14 +53,28 @@
             // group1
             // 
             this.group1.Items.Add(this.btnModify10Fields);
-            this.group1.Label = "修改";
+            this.group1.Items.Add(this.ebRowCount);
+            this.group1.Items.Add(this.btnAdd10FieldRow);
+            this.group1.Label = "新七欄";
             this.group1.Name = "group1";
             // 
             // btnModify10Fields
             // 
-            this.btnModify10Fields.Label = "修改新七欄";
+            this.btnModify10Fields.Label = "顯示新七欄窗格";
             this.btnModify10Fields.Name = "btnModify10Fields";
             this.btnModify10Fields.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnModify10Fields_Click);
+            // 
+            // ebRowCount
+            // 
+            this.ebRowCount.Label = "新增筆數";
+            this.ebRowCount.Name = "ebRowCount";
+            this.ebRowCount.Text = "1";
+            // 
+            // btnAdd10FieldRow
+            // 
+            this.btnAdd10FieldRow.Label = "新增";
+            this.btnAdd10FieldRow.Name = "btnAdd10FieldRow";
+            this.btnAdd10FieldRow.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnAdd10FieldRow_Click);
             // 
             // LQRibbon
             // 
@@ -79,6 +95,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnModify10Fields;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox ebRowCount;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAdd10FieldRow;
     }
 
     partial class ThisRibbonCollection

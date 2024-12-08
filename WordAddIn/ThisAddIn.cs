@@ -7,6 +7,8 @@ using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Word;
 using System.Windows.Forms;
+using Microsoft.Office.Interop.Word;
+using System.Runtime.InteropServices;
 
 namespace WordAddIn
 {
@@ -17,23 +19,53 @@ namespace WordAddIn
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             //CloseNavigationPane();
-
+            InitDocumentPageSize();
             InitPane();
-            CheckDocument();
+            InitGrid();
+            //CheckFor10FieldsTable();
+            HookEvent();
         }
 
-        private void CheckDocument()
+        private void InitGrid()
         {
-            navigationPaneControl.Info = "文檔中缺少新七欄表格。";
+            navigationPaneControl.QuestionList.AddRange(new List<LQQuestionOperation>
+            {
+                new LQQuestionOperation { QuestionCode = "Q001", QuestionSystemCode = "Q001", Operation = LQOperation.Add },
+                new LQQuestionOperation { QuestionCode = "Q002", QuestionSystemCode = "Q002", Operation = LQOperation.Update },
+                new LQQuestionOperation { QuestionCode = "Q003", QuestionSystemCode = "Q003", Operation = LQOperation.Ignor },
+            });
+
+            navigationPaneControl.RefreshQuestionListGrid();
+        }
+
+        private void HookEvent()
+        {
+            Application.DocumentChange += new Word.ApplicationEvents4_DocumentChangeEventHandler(DocumentChanged);
+            Application.WindowSelectionChange += new Word.ApplicationEvents4_WindowSelectionChangeEventHandler(SelectionChanged);
+            Application.WindowBeforeRightClick += new Word.ApplicationEvents4_WindowBeforeRightClickEventHandler(BeforeRightClick);
+            Application.WindowBeforeDoubleClick += new Word.ApplicationEvents4_WindowBeforeDoubleClickEventHandler(BeforeDoubleClick);
+        }
+
+        private void InitDocumentPageSize()
+        {
+            Word.Document doc = Application.ActiveDocument;
+            doc.PageSetup.PaperSize = Word.WdPaperSize.wdPaperA3;
+            doc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;
+            doc.PageSetup.TopMargin = Application.CentimetersToPoints(LQDefine.DocumentMargin);
+            doc.PageSetup.BottomMargin = Application.CentimetersToPoints(LQDefine.DocumentMargin);
+            doc.PageSetup.LeftMargin = Application.CentimetersToPoints(LQDefine.DocumentMargin);
+            doc.PageSetup.RightMargin = Application.CentimetersToPoints(LQDefine.DocumentMargin);
         }
 
         private void InitPane()
         {
             navigationPaneControl = new NavigationPaneControl();
-            customTaskPane = CustomTaskPanes.Add(navigationPaneControl, "修改新七欄");
+            customTaskPane = CustomTaskPanes.Add(navigationPaneControl, LQDefine.LQMessage(LQDefine.LQCode.C0002));
             customTaskPane.DockPosition = Office.MsoCTPDockPosition.msoCTPDockPositionLeft;
-            customTaskPane.Width = Application.Width / 3; // Set the width to 1/3 of the Word window
+            customTaskPane.Width = (int)(Application.Width * LQDefine.TaskPaneWidthRadio);
             customTaskPane.Visible = true;
+
+            navigationPaneControl.Info = string.Empty;
         }
 
         private bool CheckFor10FieldsTable()
@@ -67,6 +99,130 @@ namespace WordAddIn
         {
             this.Startup += new System.EventHandler(ThisAddIn_Startup);
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
+        }
+
+        internal void Add10FieldsRow(int rowCount)
+        {
+            Word.Document doc = Application.ActiveDocument;
+            Word.Range range = Application.Selection.Range;
+            Word.Table table = null;
+
+            // Check if a table with 10 columns already exists
+            var tables = doc.Tables.Cast<Word.Table>().Where(t => t.Columns.Count == 10).ToList();
+            if (tables.Count == 1)
+            {
+                table = tables.First();
+                range = table.Range;
+                range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+            }
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                if (table == null)
+                {
+                    table = doc.Tables.Add(range, 1, 10);
+                    table.Borders.Enable = 1;
+
+                    SetColumnWidth(table);
+                    SetTableHeader(table);
+
+                }
+                else
+                {
+                    table.Rows.Add();
+                }
+
+                range = table.Range;
+                range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+            }
+        }
+
+        private void DocumentChanged()
+        {
+            //ReadField01();
+        }
+
+        private void SelectionChanged(Word.Selection Sel)
+        {
+            ReadField01();
+        }
+
+        private void BeforeRightClick(Word.Selection Sel, ref bool Cancel)
+        {
+            //ReadField01();
+        }
+
+        private void BeforeDoubleClick(Word.Selection Sel, ref bool Cancel)
+        {
+            //ReadField01();
+        }
+
+        private void ReadField01()
+        {
+            List<string> fieldValues = new List<string>();
+            Word.Document doc = Application.ActiveDocument;
+            var tables = doc.Tables.Cast<Word.Table>().Where(t => t.Columns.Count == 10).ToList();
+
+            if (tables.Count == 1)
+            {
+                Word.Table table = tables.First();
+                for (int i = 2; i <= table.Rows.Count; i++) // Start from 2 to skip the first row
+                {
+                    Word.Cell cell = table.Cell(i, 1);
+                    if (cell != null && !string.IsNullOrEmpty(cell.Range.Text.Trim()))
+                    {
+                        fieldValues.Add(cell.Range.Text.Trim());
+                    }
+                }
+            }
+        }
+
+        private void SetColumnWidth(Table table)
+        {
+            table.Columns[1].Width = Application.CentimetersToPoints(1.2f);
+            table.Columns[2].Width = Application.CentimetersToPoints(0.9f);
+            table.Columns[3].Width = Application.CentimetersToPoints(1.5f);
+            table.Columns[4].Width = Application.CentimetersToPoints(0.7f);
+            table.Columns[5].Width = Application.CentimetersToPoints(4.0f);
+            table.Columns[6].Width = Application.CentimetersToPoints(14.2f);
+            table.Columns[7].Width = Application.CentimetersToPoints(3.0f);
+            table.Columns[8].Width = Application.CentimetersToPoints(14.2f);
+            table.Columns[9].Width = Application.CentimetersToPoints(0.7f);
+            table.Columns[10].Width = Application.CentimetersToPoints(0.7f);
+        }
+
+        private static void SetTableHeader(Table table)
+        {
+            table.Cell(1, 1).Range.Text = LQDefine.Field01Name;
+            table.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+
+            table.Cell(1, 2).Range.Text = LQDefine.Field02Name;
+            table.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 3).Range.Text = LQDefine.Field03Name;
+            table.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 4).Range.Text = LQDefine.Field04Name;
+            table.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 5).Range.Text = LQDefine.Field05Name;
+            table.Cell(1, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 6).Range.Text = LQDefine.Field06Name;
+            table.Cell(1, 6).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 7).Range.Text = LQDefine.Field07Name;
+            table.Cell(1, 7).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 8).Range.Text = LQDefine.Field08Name;
+            table.Cell(1, 8).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 9).Range.Text = LQDefine.Field09Name;
+            table.Cell(1, 9).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            table.Cell(1, 10).Range.Text = LQDefine.Field10Name;
+            table.Cell(1, 10).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
         }
 
         #endregion

@@ -117,6 +117,7 @@
             this.dgvQuestion.Location = new System.Drawing.Point(3, 54);
             this.dgvQuestion.Name = "dgvQuestion";
             this.dgvQuestion.ReadOnly = true;
+            this.dgvQuestion.RowHeadersVisible = false;
             this.dgvQuestion.RowHeadersWidth = 51;
             this.dgvQuestion.RowTemplate.Height = 27;
             this.dgvQuestion.Size = new System.Drawing.Size(540, 691);

@@ -209,15 +209,15 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="LQDefine.cs" />
+    <Compile Include="LQHelper.cs" />
     <Compile Include="LQRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="LQRibbon.Designer.cs">
       <DependentUpon>LQRibbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="NavigationPaneControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="NavigationPaneControl.cs" />
     <Compile Include="NavigationPaneControl.Designer.cs">
       <DependentUpon>NavigationPaneControl.cs</DependentUpon>
     </Compile>

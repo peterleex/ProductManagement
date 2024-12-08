@@ -10,6 +10,19 @@ using System.Windows.Forms;
 
 namespace WordAddIn
 {
+    public class LQQuestionOperation
+    {
+        public string QuestionCode { get; set; }
+        public string QuestionSystemCode { get; set; }
+        public LQOperation Operation { get; set; }
+    }
+
+    public enum LQOperation
+    {
+        Add = 0,
+        Update,
+        Ignor,
+    }
     public partial class NavigationPaneControl : UserControl
     {
         public string Info
@@ -19,10 +32,37 @@ namespace WordAddIn
                 lblInfo.Text = value;
             }
         }
+
+        public List<LQQuestionOperation> QuestionList { get; set; } = new List<LQQuestionOperation>();
+
+        public void RefreshQuestionListGrid()
+        {
+            dgvQuestion.DataSource = null;
+            dgvQuestion.DataSource = QuestionList;
+            dgvQuestion.Refresh();
+        }
+
         public NavigationPaneControl()
         {
             InitializeComponent();
             HookEvent();
+            InitQuestionGrid();
+        }
+
+        private void InitQuestionGrid()
+        {
+            dgvQuestion.AutoGenerateColumns = false;
+            dgvQuestion.ReadOnly = false;
+            dgvQuestion.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2; // Enable editing on keystroke or F2
+            dgvQuestion.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Set selection mode to full row
+
+            ColumnQuestionCode.DataPropertyName = nameof(LQQuestionOperation.QuestionCode);
+            ColumnQuestionSystemCode.DataPropertyName = nameof(LQQuestionOperation.QuestionSystemCode);
+            ColumnOperation.DataPropertyName = nameof(LQQuestionOperation.Operation);
+            ColumnOperation.ReadOnly = false;
+            ColumnOperation.DataSource = Enum.GetValues(typeof(LQOperation));
+            ColumnOperation.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            ColumnOperation.FlatStyle = FlatStyle.Flat;
         }
 
         private void HookEvent()
