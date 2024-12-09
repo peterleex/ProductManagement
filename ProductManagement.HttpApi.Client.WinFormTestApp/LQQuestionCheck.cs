@@ -227,7 +227,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                using var word = new LQ10FieldWord(wordFieldOk);
+                using var word = new LQ10FieldWord(wordField1Error);
                 word.GetTable();
             }
             catch (Exception ex)

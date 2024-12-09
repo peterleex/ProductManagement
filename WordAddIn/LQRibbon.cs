@@ -28,8 +28,13 @@ namespace WordAddIn
             }
             else
             {
-                LQHelper.InfoMessage(LQDefine.LQMessage(LQDefine.LQCode.C0000), LQDefine.LQMessage(LQDefine.LQCode.C0000));
+                LQHelper.InfoMessage(LQDefine.LQMessage(LQDefine.LQCode.C0001), LQDefine.LQMessage(LQDefine.LQCode.C0000));
             }
+        }
+
+        private void btnRead_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.ReadField01();
         }
     }
 }

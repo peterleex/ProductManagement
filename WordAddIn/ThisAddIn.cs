@@ -26,18 +26,6 @@ namespace WordAddIn
             HookEvent();
         }
 
-        private void InitGrid()
-        {
-            navigationPaneControl.QuestionList.AddRange(new List<LQQuestionOperation>
-            {
-                new LQQuestionOperation { QuestionCode = "Q001", QuestionSystemCode = "Q001", Operation = LQOperation.Add },
-                new LQQuestionOperation { QuestionCode = "Q002", QuestionSystemCode = "Q002", Operation = LQOperation.Update },
-                new LQQuestionOperation { QuestionCode = "Q003", QuestionSystemCode = "Q003", Operation = LQOperation.Ignor },
-            });
-
-            navigationPaneControl.RefreshQuestionListGrid();
-        }
-
         private void HookEvent()
         {
             Application.DocumentChange += new Word.ApplicationEvents4_DocumentChangeEventHandler(DocumentChanged);
@@ -116,6 +104,9 @@ namespace WordAddIn
                 range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
             }
 
+            if (table == null)
+                ++rowCount;
+
             for (int i = 0; i < rowCount; i++)
             {
                 if (table == null)
@@ -125,7 +116,6 @@ namespace WordAddIn
 
                     SetColumnWidth(table);
                     SetTableHeader(table);
-
                 }
                 else
                 {
@@ -144,7 +134,7 @@ namespace WordAddIn
 
         private void SelectionChanged(Word.Selection Sel)
         {
-            ReadField01();
+            //ReadField01();
         }
 
         private void BeforeRightClick(Word.Selection Sel, ref bool Cancel)
@@ -157,24 +147,52 @@ namespace WordAddIn
             //ReadField01();
         }
 
-        private void ReadField01()
+        public void ReadField01()
         {
-            List<string> fieldValues = new List<string>();
+            navigationPaneControl.QuestionList.Clear();
+
             Word.Document doc = Application.ActiveDocument;
+            
             var tables = doc.Tables.Cast<Word.Table>().Where(t => t.Columns.Count == 10).ToList();
 
-            if (tables.Count == 1)
+            if (tables.Count != 1)
             {
-                Word.Table table = tables.First();
-                for (int i = 2; i <= table.Rows.Count; i++) // Start from 2 to skip the first row
+                navigationPaneControl.Info = LQDefine.LQMessage(LQDefine.LQCode.C0002);
+                return;
+            }
+
+            Word.Table table = tables.First();
+            for (int i = 2; i <= table.Rows.Count; i++) // Start from 2 to skip the first row
+            {
+                Word.Cell cell = table.Cell(i, 1);
+                if (cell != null && !string.IsNullOrEmpty(cell.Range.Text.Trim()))
                 {
-                    Word.Cell cell = table.Cell(i, 1);
-                    if (cell != null && !string.IsNullOrEmpty(cell.Range.Text.Trim()))
-                    {
-                        fieldValues.Add(cell.Range.Text.Trim());
-                    }
+                    var fieldValue = GetPlainTextFromCell(cell);
+
+                    navigationPaneControl.QuestionList.Add(new LQQuestionOperation(fieldValue, i));
                 }
             }
+
+            navigationPaneControl.RefreshQuestionListGrid();
+        }
+
+        private string GetPlainTextFromCell(Word.Cell cell)
+        {
+            string text = cell.Range.Text;
+            text = text.Replace("\r", "").Replace("\a", "").Trim();
+            return text;
+        }
+
+        private void InitGrid()
+        {
+            //navigationPaneControl.QuestionList.AddRange(new List<LQQuestionOperation>
+            //{
+            //    new LQQuestionOperation { QuestionCode = "Q001", QuestionSystemCode = "Q001", Operation = LQOperation.Add },
+            //    new LQQuestionOperation { QuestionCode = "Q002", QuestionSystemCode = "Q002", Operation = LQOperation.Update },
+            //    new LQQuestionOperation { QuestionCode = "Q003", QuestionSystemCode = "Q003", Operation = LQOperation.Ignor },
+            //});
+
+            //navigationPaneControl.RefreshQuestionListGrid();
         }
 
         private void SetColumnWidth(Table table)

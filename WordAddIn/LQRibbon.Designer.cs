@@ -39,14 +39,18 @@
             this.btnModify10Fields = this.Factory.CreateRibbonButton();
             this.ebRowCount = this.Factory.CreateRibbonEditBox();
             this.btnAdd10FieldRow = this.Factory.CreateRibbonButton();
+            this.btnRead = this.Factory.CreateRibbonButton();
+            this.group2 = this.Factory.CreateRibbonGroup();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
+            this.group2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.group1);
+            this.tab1.Groups.Add(this.group2);
             this.tab1.Label = "題庫插件";
             this.tab1.Name = "tab1";
             // 
@@ -76,6 +80,18 @@
             this.btnAdd10FieldRow.Name = "btnAdd10FieldRow";
             this.btnAdd10FieldRow.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnAdd10FieldRow_Click);
             // 
+            // btnRead
+            // 
+            this.btnRead.Label = "讀取";
+            this.btnRead.Name = "btnRead";
+            this.btnRead.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnRead_Click);
+            // 
+            // group2
+            // 
+            this.group2.Items.Add(this.btnRead);
+            this.group2.Label = "讀取";
+            this.group2.Name = "group2";
+            // 
             // LQRibbon
             // 
             this.Name = "LQRibbon";
@@ -86,6 +102,8 @@
             this.tab1.PerformLayout();
             this.group1.ResumeLayout(false);
             this.group1.PerformLayout();
+            this.group2.ResumeLayout(false);
+            this.group2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -97,6 +115,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnModify10Fields;
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox ebRowCount;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAdd10FieldRow;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRead;
     }
 
     partial class ThisRibbonCollection

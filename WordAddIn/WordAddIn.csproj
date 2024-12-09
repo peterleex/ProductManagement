@@ -209,6 +209,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Field10Exception.cs" />
     <Compile Include="LQDefine.cs" />
     <Compile Include="LQHelper.cs" />
     <Compile Include="LQRibbon.cs">
