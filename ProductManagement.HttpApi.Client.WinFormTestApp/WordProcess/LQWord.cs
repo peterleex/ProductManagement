@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using iText.Layout.Element;
@@ -10,9 +11,9 @@ using static ProductManagement.HttpApi.Client.WinFormTestApp.LQDefine;
 namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 {
 
-    public class LQ10FieldWord : LQ10FieldBase, IDisposable
+    public class LQWord : LQWordBase, IDisposable
     {
-        public LQ10FieldWord(string wordPath)
+        public LQWord(string wordPath)
         {
             try
             {
@@ -37,7 +38,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
         private void LoadParts()
         {
-            documentPart = wordDocument.MainDocumentPart!;
+            MainDocumentPart = wordDocument.MainDocumentPart!;
             documentBody = wordDocument.MainDocumentPart!.Document.Body!;
             footerPart = wordDocument.MainDocumentPart!.FooterParts.First();
             footer = footerPart.Footer;
@@ -127,6 +128,8 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
             if (exInfos.Length > 0)
                 LQHelper.ErrorMessage(exInfos.ToString(), LQMessage(LQCode.C0089));
+
+            //wordDocument.Save();
         }
 
         private void CheckFile()
@@ -175,6 +178,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
                 throw new LQ10FieldException(info);
             }
 
+        }
+
+        internal Guid GetNextBookmarkId()
+        {
+            return Guid.NewGuid();
         }
     }
 }

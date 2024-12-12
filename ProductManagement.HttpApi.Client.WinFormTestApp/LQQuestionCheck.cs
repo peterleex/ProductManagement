@@ -209,11 +209,12 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         private string wordField5Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第5欄.docx";
         private string wordField9Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第9欄.docx";
         private string wordField10Error = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_異常_第10欄.docx";
+        private string wordField06Image = @"D:\DOC\龍騰題庫命題系統\Share\測試\小程式\測試資料\圖片小程式\新七欄\欄位檢查\新七欄_圖片檢查_第6欄.docx";
         private void btnGetWordFooterRightText_Click(object sender, EventArgs e)
         {
             try
             {
-                using var word = new LQ10FieldWord(wordFile);
+                using var word = new LQWord(wordFile);
                 var footerText = word.FileNo;
             }
             catch (Exception ex)
@@ -227,7 +228,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         {
             try
             {
-                using var word = new LQ10FieldWord(wordField1Error);
+                using var word = new LQWord(wordField06Image);
                 word.GetTable();
             }
             catch (Exception ex)

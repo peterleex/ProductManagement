@@ -214,7 +214,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp
         public static System.Drawing.Color SecondaryColor => System.Drawing.Color.FromArgb(237, 226, 221);
         public static System.Drawing.Color WarningColor => System.Drawing.Color.Red;
         public static System.Drawing.Color DefaultColor => System.Drawing.Color.Black;
-
+        public static string ImageType_Jpeg => "image/jpeg";
         public static string Space => " ";
         public const string New = "新增";
         public const string Modify = "修改";

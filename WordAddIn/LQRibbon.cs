@@ -34,7 +34,12 @@ namespace WordAddIn
 
         private void btnRead_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.ReadField01();
+            Globals.ThisAddIn.ReadQuestionOperationInfo();
+        }
+
+        private void btnReadBookmark_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.ReadBookmark();
         }
     }
 }

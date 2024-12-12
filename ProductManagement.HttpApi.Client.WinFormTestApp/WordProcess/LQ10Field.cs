@@ -10,7 +10,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_01 : TextField
     {
         public LQStatusAndQuestionCodes StatusAndQuestionCodes { get; set; } = new LQStatusAndQuestionCodes();
-        public Field_01(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_01(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
         }
@@ -54,7 +54,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_02 : TextField
     {
         public int Seq { get; set; }
-        public Field_02(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_02(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
         }
@@ -81,7 +81,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_03 : TextField
     {
         public LQParaQuestionType ParaQuestionType { get; set; } = new LQParaQuestionType();
-        public Field_03(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_03(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
         }
@@ -113,7 +113,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_04 : TextField
     {
         public DifficultyCode DifficultyCode { get; set; }
-        public Field_04(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_04(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
 
@@ -146,7 +146,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
         private string _currentChapterGroup = string.Empty;
 
-        public Field_05(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_05(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
         }
@@ -255,22 +255,23 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
         private string[] SplitChapterInfo(string str)
         {
-            var elements = str.Split(new char[] { LQDefine.Hyphen, LQDefine.Underscore }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var elements = str.Split([LQDefine.Hyphen, LQDefine.Underscore], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             return elements;
         }
     }
 
     public class Field_06 : CellField
     {
-        public Field_06(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_06(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
+            GetImages();
         }
     }
 
     public class Field_07 : CellField
     {
-        public Field_07(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_07(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
 
@@ -279,7 +280,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
 
     public class Field_08 : CellField
     {
-        public Field_08(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_08(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
 
@@ -289,7 +290,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_09 : TextField
     {
         public LQParaLimitAndFlex ParaLimitAndFlex { get; set; } = new();
-        public Field_09(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_09(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
         }
@@ -336,7 +337,7 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
     public class Field_10 : TextField
     {
         public LQCommentAndAlert CommentAndAlert { get; set; } = new();
-        public Field_10(LQ10FieldWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
+        public Field_10(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         { }
 

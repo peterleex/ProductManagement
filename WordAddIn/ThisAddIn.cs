@@ -147,7 +147,7 @@ namespace WordAddIn
             //ReadField01();
         }
 
-        public void ReadField01()
+        public void ReadQuestionOperationInfo()
         {
             navigationPaneControl.QuestionList.Clear();
 
@@ -174,6 +174,11 @@ namespace WordAddIn
             }
 
             navigationPaneControl.RefreshQuestionListGrid();
+        }
+
+        public void ReadBookmark()
+        {
+            navigationPaneControl.RefreshErrorsGrid();
         }
 
         private string GetPlainTextFromCell(Word.Cell cell)

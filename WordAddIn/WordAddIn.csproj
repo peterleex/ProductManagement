@@ -218,7 +218,9 @@
     <Compile Include="LQRibbon.Designer.cs">
       <DependentUpon>LQRibbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="NavigationPaneControl.cs" />
+    <Compile Include="NavigationPaneControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="NavigationPaneControl.Designer.cs">
       <DependentUpon>NavigationPaneControl.cs</DependentUpon>
     </Compile>

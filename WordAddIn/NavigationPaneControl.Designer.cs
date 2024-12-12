@@ -30,6 +30,7 @@
         {
             this.tcModify10Fields = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.pnlQuery = new System.Windows.Forms.Panel();
             this.txtQuestionCode_SystemCode = new System.Windows.Forms.TextBox();
             this.btnQuery = new System.Windows.Forms.Button();
@@ -38,11 +39,14 @@
             this.ColumnQuestionSystemCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnOperation = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lblInfo = new System.Windows.Forms.Label();
+            this.dgvErrors = new System.Windows.Forms.DataGridView();
+            this.ColumnBookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tcModify10Fields.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.pnlQuery.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuestion)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErrors)).BeginInit();
             this.SuspendLayout();
             // 
             // tcModify10Fields
@@ -68,6 +72,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "修改題目";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblInfo.Location = new System.Drawing.Point(3, 764);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(41, 15);
+            this.lblInfo.TabIndex = 5;
+            this.lblInfo.Text = "label1";
             // 
             // pnlQuery
             // 
@@ -149,23 +163,39 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.dgvErrors);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(450, 599);
+            this.tabPage2.Size = new System.Drawing.Size(546, 782);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "檢查錯誤";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // lblInfo
+            // dgvErrors
             // 
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblInfo.Location = new System.Drawing.Point(3, 764);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(41, 15);
-            this.lblInfo.TabIndex = 5;
-            this.lblInfo.Text = "label1";
+            this.dgvErrors.AllowUserToAddRows = false;
+            this.dgvErrors.AllowUserToDeleteRows = false;
+            this.dgvErrors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvErrors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnBookmarkName});
+            this.dgvErrors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvErrors.Location = new System.Drawing.Point(3, 3);
+            this.dgvErrors.Name = "dgvErrors";
+            this.dgvErrors.ReadOnly = true;
+            this.dgvErrors.RowHeadersVisible = false;
+            this.dgvErrors.RowHeadersWidth = 51;
+            this.dgvErrors.RowTemplate.Height = 27;
+            this.dgvErrors.Size = new System.Drawing.Size(540, 776);
+            this.dgvErrors.TabIndex = 1;
+            // 
+            // ColumnBookmarkName
+            // 
+            this.ColumnBookmarkName.HeaderText = "錯誤列表";
+            this.ColumnBookmarkName.MinimumWidth = 6;
+            this.ColumnBookmarkName.Name = "ColumnBookmarkName";
+            this.ColumnBookmarkName.ReadOnly = true;
+            this.ColumnBookmarkName.Width = 125;
             // 
             // NavigationPaneControl
             // 
@@ -180,6 +210,8 @@
             this.pnlQuery.ResumeLayout(false);
             this.pnlQuery.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuestion)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErrors)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -197,5 +229,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnQuestionSystemCode;
         private System.Windows.Forms.DataGridViewComboBoxColumn ColumnOperation;
         public System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.DataGridView dgvErrors;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBookmarkName;
     }
 }
