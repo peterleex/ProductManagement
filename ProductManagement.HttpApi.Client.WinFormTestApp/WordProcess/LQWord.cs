@@ -33,14 +33,14 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         private void LoadFile(string wordPath)
         {
             WordPath = wordPath;
-            wordDocument = WordprocessingDocument.Open(wordPath, true);
+            WordprocessingDocument = WordprocessingDocument.Open(wordPath, true);
         }
 
         private void LoadParts()
         {
-            MainDocumentPart = wordDocument.MainDocumentPart!;
-            documentBody = wordDocument.MainDocumentPart!.Document.Body!;
-            footerPart = wordDocument.MainDocumentPart!.FooterParts.First();
+            MainDocumentPart = WordprocessingDocument.MainDocumentPart!;
+            documentBody = WordprocessingDocument.MainDocumentPart!.Document.Body!;
+            footerPart = WordprocessingDocument.MainDocumentPart!.FooterParts.First();
             footer = footerPart.Footer;
         }
 
@@ -136,25 +136,25 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         {
             string info;
 
-            if (wordDocument.MainDocumentPart == null)
+            if (WordprocessingDocument.MainDocumentPart == null)
             {
                 info = string.Format(LQMessage(LQCode.C0073));
                 throw new LQ10FieldException(info);
             }
 
-            if (wordDocument.MainDocumentPart.Document.Body == null)
+            if (WordprocessingDocument.MainDocumentPart.Document.Body == null)
             {
                 info = string.Format(LQMessage(LQCode.C0074));
                 throw new LQ10FieldException(info);
             }
 
-            if (!wordDocument.MainDocumentPart.FooterParts.Any())
+            if (!WordprocessingDocument.MainDocumentPart.FooterParts.Any())
             {
                 info = string.Format(LQMessage(LQCode.C0076));
                 throw new LQ10FieldException(info);
             }
 
-            var table = wordDocument.MainDocumentPart.Document.Body
+            var table = WordprocessingDocument.MainDocumentPart.Document.Body
                 .Elements<DocumentFormat.OpenXml.Wordprocessing.Table>()
                 .FirstOrDefault();
             if (table == null)

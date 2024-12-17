@@ -27,7 +27,7 @@ public enum FieldName
 }
 public class LQWordBase
 {
-    public WordprocessingDocument wordDocument = null!;
+    public WordprocessingDocument WordprocessingDocument = null!;
     public MainDocumentPart MainDocumentPart { get; set; } = null!;
     protected Body documentBody = null!;
     protected FooterPart footerPart = null!;
@@ -36,7 +36,12 @@ public class LQWordBase
 
     public void Dispose()
     {
-        wordDocument?.Dispose();
+        WordprocessingDocument?.Dispose();
+    }
+
+    public void Save()
+    {
+        WordprocessingDocument.Save();
     }
 }
 public class TextField : CellField
@@ -108,9 +113,20 @@ public class CellField
 
         PlainText = string.Join(string.Empty, textElements.Select(te => te.Text));
     }
-
-    protected void GetImages()
+    protected void RemoveAllBookmark()
     {
+        var bookmarks = CellValue!.Descendants<BookmarkStart>().ToList();
+        foreach (var bookmark in bookmarks)
+        {
+            var bookmarkEnd = CellValue!.Descendants<BookmarkEnd>()
+                .FirstOrDefault(be => be.Id == bookmark.Id);
+            bookmark.Remove();
+            bookmarkEnd?.Remove();
+        }
+    }
+    protected void CheckWarnningLevel()
+    {
+        // 檢查圖片
         var blips = CellValue!.Descendants<DocumentFormat.OpenXml.Drawing.Blip>().ToArray();
 
         foreach (var blip in blips)
@@ -143,8 +159,145 @@ public class CellField
                 }
             }
         }
-    }
 
+        // 檢查超連結
+        var hyperlinks = CellValue.Descendants<DocumentFormat.OpenXml.Wordprocessing.Hyperlink>().ToArray();
+        foreach (var hyperlink in hyperlinks)
+        {
+            var bookmarkId = Word.GetNextBookmarkId().ToString();
+            var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            //hyperlink.Parent!.InsertBefore(bookmarkStart, hyperlink);
+            //hyperlink.Parent!.InsertAfter(bookmarkEnd, hyperlink);
+        }
+
+        // 檢查表格的欄位是否設定爲「固定欄寬」
+        var tables = CellValue.Descendants<DocumentFormat.OpenXml.Wordprocessing.Table>();
+        foreach (var table in tables)
+        {
+            var hasFixColumnWidth = false;
+
+            foreach (var row in table.Elements<DocumentFormat.OpenXml.Wordprocessing.TableRow>())
+            {
+                foreach (var cell in row.Elements<DocumentFormat.OpenXml.Wordprocessing.TableCell>())
+                {
+                    var cellProperties = cell.TableCellProperties;
+                    if (cellProperties != null)
+                    {
+                        var cellWidth = cellProperties.TableCellWidth;
+                        if (cellWidth != null && cellWidth.Type != null && cellWidth.Type == TableWidthUnitValues.Dxa)
+                        {
+                            hasFixColumnWidth = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasFixColumnWidth)
+                    break;
+            }
+
+            if (hasFixColumnWidth)
+            {
+                //var bookmarkId = Word.GetNextBookmarkId().ToString();
+                //var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+                //var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+                //table.Parent!.InsertBefore(bookmarkStart, table);
+                //table.Parent!.InsertAfter(bookmarkEnd, table);
+            }
+        }
+    }
+    protected void CheckErrorLevel()
+    {
+        // 功能變數 w:instrText
+        var fieldCodes = CellValue!.Descendants<DocumentFormat.OpenXml.Wordprocessing.FieldCode>();
+
+        foreach (var fieldCode in fieldCodes)
+        {
+            //var bookmarkId = Word.GetNextBookmarkId().ToString();
+            //var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            //var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            //fieldCode.Parent!.InsertBefore(bookmarkStart, fieldCode);
+            //fieldCode.Parent!.InsertAfter(bookmarkEnd, fieldCode);
+        }
+
+        // 查找中文
+        var chineseRuns = CellValue!.Descendants<DocumentFormat.OpenXml.Wordprocessing.Run>()
+            .Where(run => Regex.IsMatch(run.InnerText, @"[\u4e00-\u9fa5]"))      // 是否中文的 Regular Expression
+            .Where(run => run.RunProperties?.RunFonts?.EastAsia != "細明體");
+
+        foreach (var run in chineseRuns)
+        {
+            //var bookmarkId = Word.GetNextBookmarkId().ToString();
+            //var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            //var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            //run.Parent!.InsertBefore(bookmarkStart, run);
+            //run.Parent!.InsertAfter(bookmarkEnd, run);
+        }
+
+        // 查找非標楷體的注音聲符
+        var phoneticRuns = CellValue!.Descendants<DocumentFormat.OpenXml.Wordprocessing.Run>()
+            .Where(run => run.RunProperties?.RunFonts?.EastAsia != "標楷體")
+            .Where(run => Regex.IsMatch(run.InnerText, @"[\u3105-\u3129\u02C7\u02CA\u02CB\u02D9]")); // 注音聲符的 Regular Expression
+
+        foreach (var run in phoneticRuns)
+        {
+            //var bookmarkId = Word.GetNextBookmarkId().ToString();
+            //var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            //var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            //run.Parent!.InsertBefore(bookmarkStart, run);
+            //run.Parent!.InsertAfter(bookmarkEnd, run);
+        }
+
+        // 查找所有英數字且字型不是「Times New Roman」的 Run
+        var alphanumericRuns = CellValue!.Descendants<DocumentFormat.OpenXml.Wordprocessing.Run>()
+            .Where(run => Regex.IsMatch(run.InnerText, @"[a-zA-Z0-9]")) // 是否英數字的 Regular Expression
+            .Where(run => run.RunProperties?.RunFonts?.Ascii != "Times New Roman");
+
+        foreach (var run in alphanumericRuns)
+        {
+            //var bookmarkId = Word.GetNextBookmarkId().ToString();
+            //var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            //var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            //run.Parent!.InsertBefore(bookmarkStart, run);
+            //run.Parent!.InsertAfter(bookmarkEnd, run);
+        }
+
+        // 查找所有帶圈數字且字型不是「MS Mincho」「MS Gothic」「Cambria Math」的 Run
+        var circledNumberRuns = CellValue!.Descendants<DocumentFormat.OpenXml.Wordprocessing.Run>()
+            .Where(run => Regex.IsMatch(run.InnerText, @"[\u2460-\u24FF]")) // 帶圈數字的 Regular Expression
+            .Where(run => run.RunProperties?.RunFonts?.Ascii != "MS Mincho" &&
+                          run.RunProperties?.RunFonts?.Ascii != "MS Gothic" &&
+                          run.RunProperties?.RunFonts?.Ascii != "Cambria Math");
+        foreach (var run in circledNumberRuns)
+        {
+            //var bookmarkId = Word.GetNextBookmarkId().ToString();
+            //var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            //var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            //run.Parent!.InsertBefore(bookmarkStart, run);
+            //run.Parent!.InsertAfter(bookmarkEnd, run);
+        }
+
+        // 查找所有包含（　　）符號的 Run
+        var symbolRuns = CellValue!.Descendants<DocumentFormat.OpenXml.Wordprocessing.Run>()
+            .Where(run => run.InnerText == @"（　　）"); // 符號的 Regular Expression
+
+        foreach (var run in symbolRuns)
+        {
+            var bookmarkId = Word.GetNextBookmarkId().ToString();
+            var bookmarkStart = new BookmarkStart() { Name = bookmarkId, Id = bookmarkId };
+            var bookmarkEnd = new BookmarkEnd() { Id = bookmarkId };
+
+            run.Parent!.InsertBefore(bookmarkStart, run);
+            run.Parent!.InsertAfter(bookmarkEnd, run);
+        }
+    }
 
     public bool IsImageCropped(Blip blip)
     {

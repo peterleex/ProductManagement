@@ -265,7 +265,11 @@ namespace ProductManagement.HttpApi.Client.WinFormTestApp.WordProcess
         public Field_06(LQWord word, int rowNumber, int columnNumber, FieldName fieldName, DocumentFormat.OpenXml.Wordprocessing.TableCell cell)
             : base(word, rowNumber, columnNumber, fieldName, cell)
         {
-            GetImages();
+            RemoveAllBookmark();
+            CheckWarnningLevel();
+            CheckErrorLevel();
+
+            Word.Save();
         }
     }
 
